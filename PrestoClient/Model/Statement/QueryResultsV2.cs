@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using BAMCIS.PrestoClient.Model.Client;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,7 +16,7 @@ namespace BAMCIS.PrestoClient.Model.Statement
 
         public IEnumerable<Uri> DataUris { get; set; }
 
-        public QuerySubmissionResultsActions Actions { get; set; }
+        public Actions Actions { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public IEnumerable<List<dynamic>> Data { get; set; }

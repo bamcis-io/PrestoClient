@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using BAMCIS.PrestoClient.Model.Query.QueryDetails.Nodes;
+﻿using BAMCIS.PrestoClient.Model.Execution.PlanFlattener;
+using Newtonsoft.Json;
 using System;
 
 namespace BAMCIS.PrestoClient.Serialization
@@ -8,7 +8,7 @@ namespace BAMCIS.PrestoClient.Serialization
     {
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(QueryPlanNode);
+            return objectType == typeof(PlanNode);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
@@ -18,7 +18,7 @@ namespace BAMCIS.PrestoClient.Serialization
             // have to use in an enum
             string Temp = reader.Value.ToString().ToUpper().Replace('-', '_');
 
-            return Enum.Parse(typeof(QueryNodeType), Temp);
+            return Enum.Parse(typeof(PlanNodeType), Temp);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

@@ -1,4 +1,4 @@
-﻿using BAMCIS.PrestoClient.Model;
+﻿using BAMCIS.PrestoClient.Model.SPI.Type;
 using Newtonsoft.Json;
 using System;
 
@@ -15,7 +15,7 @@ namespace BAMCIS.PrestoClient.Serialization
         {
             TimeZoneKey Key = (TimeZoneKey)value;
 
-            writer.WriteValue(Key.Key);
+            writer.WriteRawValue(Key.Key.ToString());
         }
 
         public override bool CanRead

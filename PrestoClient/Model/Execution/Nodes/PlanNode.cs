@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace BAMCIS.PrestoClient.Model.Execution.PlanFlattener
 {
-    [JsonConverter(typeof(QueryPlanNodeConverter))]
+    [JsonConverter(typeof(PlanNodeConverter))]
     public class PlanNode
     {
         private static readonly Dictionary<Type, PlanNodeType> TypeToDerivedType;

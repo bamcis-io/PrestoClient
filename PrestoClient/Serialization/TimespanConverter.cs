@@ -8,7 +8,7 @@ namespace BAMCIS.PrestoClient.Serialization
     /// Converts the presto timespan string representation into a Timespan object and back. 
     /// Presto uses values like 3.14s, 2h, 1.001ms, 15.73us, etc. 
     /// </summary>
-    public class TimespanConverter : JsonConverter
+    public class TimeSpanConverter : JsonConverter
     {
         /*
          * Match items like

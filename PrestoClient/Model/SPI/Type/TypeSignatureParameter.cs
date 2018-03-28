@@ -18,8 +18,32 @@ namespace BAMCIS.PrestoClient.Model.SPI.Type
 
         #region Constructors
 
+        public TypeSignatureParameter(TypeSignature typeSignature)
+        {
+            this.Kind = ParameterKind.TYPE;
+            this.Value = typeSignature ?? throw new ArgumentNullException("typeSignature");
+        }
+
+        public TypeSignatureParameter(long longLiteral)
+        {
+            this.Kind = ParameterKind.LONG;
+            this.Value = longLiteral;
+        }
+
+        public TypeSignatureParameter(NamedTypeSignature namedTypeSignature)
+        {
+            this.Kind = ParameterKind.NAMED_TYPE;
+            this.Value = namedTypeSignature ?? throw new ArgumentNullException("namedTypeSignature");
+        }
+
+        public TypeSignatureParameter(string variable)
+        {
+            this.Kind = ParameterKind.VARIABLE;
+            this.Value = variable;
+        }
+
         [JsonConstructor]
-        public TypeSignatureParameter(ParameterKind kind, object value)
+        private TypeSignatureParameter(ParameterKind kind, object value)
         {
             this.Kind = kind;
             this.Value = value ?? throw new ArgumentNullException("value", "The value cannot be null"); ;
@@ -74,9 +98,9 @@ namespace BAMCIS.PrestoClient.Model.SPI.Type
             switch (this.Kind)
             {
                 case ParameterKind.TYPE:
-                    return this.GetTypeSignature().IsCalculated();
+                    return this.GetTypeSignature().Calculated;
                 case ParameterKind.NAMED_TYPE:
-                    return this.GetNamedTypeSignature().TypeSignature.IsCalculated();
+                    return this.GetNamedTypeSignature().TypeSignature.Calculated;
                 case ParameterKind.LONG:
                     return false;
                 case ParameterKind.VARIABLE:

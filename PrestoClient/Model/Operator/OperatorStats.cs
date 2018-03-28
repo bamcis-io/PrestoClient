@@ -11,6 +11,8 @@ namespace BAMCIS.PrestoClient.Model.Operator
     /// </summary>
     public class OperatorStats
     {
+        #region Public Properties
+
         public int PipelineId { get; set; }
 
         public int OperatorId { get; set; }
@@ -23,16 +25,16 @@ namespace BAMCIS.PrestoClient.Model.Operator
 
         public long AddInputCalls { get; set; }
 
-        [JsonConverter(typeof(TimespanConverter))]
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan AddInputWall { get; set; }
 
-        [JsonConverter(typeof(TimespanConverter))]
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan AddInputCpu { get; set; }
 
-        [JsonConverter(typeof(TimespanConverter))]
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan AddInputUser { get; set; }
 
-        public string InputDataSize { get; set; }
+        public DataSize InputDataSize { get; set; }
 
         public long InputPositions { get; set; }
 
@@ -40,33 +42,33 @@ namespace BAMCIS.PrestoClient.Model.Operator
 
         public long GetOutputCalls { get; set; }
 
-        [JsonConverter(typeof(TimespanConverter))]
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan GetOutputWall { get; set; }
 
-        [JsonConverter(typeof(TimespanConverter))]
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan GetOutputCpu { get; set; }
 
-        [JsonConverter(typeof(TimespanConverter))]
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan GetOutputUser { get; set; }
 
-        public string OutputDataSize { get; set; }
+        public DataSize OutputDataSize { get; set; }
 
         public long OutputPositions { get; set; }
 
-        public string PhysicalWrittenDataSize { get; set; }
+        public DataSize PhysicalWrittenDataSize { get; set; }
 
-        [JsonConverter(typeof(TimespanConverter))]
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan BlockedWall { get; set; }
 
         public long FinishCalls { get; set; }
 
-        [JsonConverter(typeof(TimespanConverter))]
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan FinishWall { get; set; }
 
-        [JsonConverter(typeof(TimespanConverter))]
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan FinishCpu { get; set; }
 
-        [JsonConverter(typeof(TimespanConverter))]
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan FinishUser { get; set; }
 
         public string UserMemoryReservation { get; set; }
@@ -129,5 +131,12 @@ namespace BAMCIS.PrestoClient.Model.Operator
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public dynamic Info { get; set; }
+
+        #endregion
+
+        #region Constructors
+
+
+        #endregion
     }
 }

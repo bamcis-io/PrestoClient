@@ -1,5 +1,8 @@
 ﻿using BAMCIS.PrestoClient.Model;
+using BAMCIS.PrestoClient.Model.SPI.Type;
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 
 namespace BAMCIS.PrestoClient
 {
@@ -162,6 +165,27 @@ namespace BAMCIS.PrestoClient
         /// The version of the REST API being used, this defaults to V1.
         /// </summary>
         public PrestoApiVersion Version { get; }
+
+        public string Source { get; set; }
+
+        public HashSet<string> ClientTags { get; set; }
+
+        public string ClientInfo { get; set; }
+
+        public TimeZoneKey TimeZone { get; set; }
+
+        public CultureInfo Locale { get; set; }
+
+        public IDictionary<string, string> Properties { get; set; }
+
+        public IDictionary<string, string> PreparedStatements { get; set; }
+
+        public bool Debug { get; set; }
+
+        /// <summary>
+        /// The timeout in seconds for how long to wait for a query to finish
+        /// </summary>
+        public int ClientRequestTimeout { get; set; }
 
         #endregion
 

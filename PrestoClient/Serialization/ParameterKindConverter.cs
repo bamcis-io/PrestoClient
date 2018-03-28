@@ -3,6 +3,8 @@ using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
 using System.Reflection;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace BAMCIS.PrestoClient.Serialization
 {
@@ -39,17 +41,16 @@ namespace BAMCIS.PrestoClient.Serialization
             }
             else
             {
-                foreach (ParameterKind Item in Enum.GetValues(typeof(ParameterKind)))
+                IEnumerable<ParameterKind> MatchingEnums = Enum.GetValues(typeof(ParameterKind)).Cast<ParameterKind>().Where(x => x.GetType().GetCustomAttribute<DescriptionAttribute>().Description == Temp);
+
+                if (MatchingEnums.Any())
                 {
-                    string Desc = Item.GetType().GetCustomAttribute<DescriptionAttribute>().Description;
-
-                    if (Temp == Desc)
-                    {
-                        return Item;
-                    }
+                    return MatchingEnums.First();
                 }
-
-                return ParameterKind.VARIABLE;
+                else
+                {
+                    return ParameterKind.VARIABLE;
+                }                
             }
         }
 
@@ -57,7 +58,7 @@ namespace BAMCIS.PrestoClient.Serialization
         {
             ParameterKind Val = (ParameterKind)value;
 
-            writer.WriteValue(Val.GetType().GetCustomAttribute<DescriptionAttribute>().Description);
+            writer.WriteRawValue(Val.GetType().GetCustomAttribute<DescriptionAttribute>().Description);
         }
     }
 }

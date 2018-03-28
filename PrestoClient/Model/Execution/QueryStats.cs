@@ -20,22 +20,22 @@ namespace BAMCIS.PrestoClient.Model.Execution
 
         public DateTime EndTime { get; set; }
 
-        [JsonConverter(typeof(TimespanConverter))]
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan ElapsedTime { get; set; }
 
-        [JsonConverter(typeof(TimespanConverter))]
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan QueuedTime { get; set; }
 
-        [JsonConverter(typeof(TimespanConverter))]
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan AnalysisTime { get; set; }
 
-        [JsonConverter(typeof(TimespanConverter))]
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan DistributedPlanningTime { get; set; }
 
-        [JsonConverter(typeof(TimespanConverter))]
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan TotalPlanningTime { get; set; }
 
-        [JsonConverter(typeof(TimespanConverter))]
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan FinishingTime { get; set; }
 
         public int TotalTasks { get; set; }
@@ -56,53 +56,53 @@ namespace BAMCIS.PrestoClient.Model.Execution
 
         public double CumulativeMemory { get; set; }
 
-        public string UserMemoryReservation { get; set; }
+        public DataSize UserMemoryReservation { get; set; }
 
-        public string PeakUserMemoryReservation { get; set; }
+        public DataSize PeakUserMemoryReservation { get; set; }
 
-        public string PeakTotalMemoryReservation { get; set; }
+        public DataSize PeakTotalMemoryReservation { get; set; }
 
         public bool Scheduled { get; set; }
 
-        [JsonConverter(typeof(TimespanConverter))]
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan TotalScheduledTime { get; set; }
 
-        [JsonConverter(typeof(TimespanConverter))]
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan TotalCpuTime { get; set; }
 
-        [JsonConverter(typeof(TimespanConverter))]
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan TotalUserTime { get; set; }
 
-        [JsonConverter(typeof(TimespanConverter))]
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan TotalBlockedTime { get; set; }
 
         public bool FullyBlocked { get; set; }
 
         public HashSet<BlockedReason> BlockedReasons { get; set; }
 
-        public string RawInputDataSize { get; set; }
+        public DataSize RawInputDataSize { get; set; }
 
         public long RawInputPositions { get; set; }
 
-        public string ProcessedInputDataSize { get; set; }
+        public DataSize ProcessedInputDataSize { get; set; }
 
         public long ProcessedInputPositions { get; set; }
 
-        public string OutputDataSize { get; set; }
+        public DataSize OutputDataSize { get; set; }
 
         public long OutputPositions { get; set; }
 
-        public string PhysicalWrittenDataSize { get; set; }
+        public DataSize PhysicalWrittenDataSize { get; set; }
 
         public IEnumerable<OperatorStats> OperatorSummaries { get; set; }
 
-        [JsonConverter(typeof(TimespanConverter))]
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan ExecutionTime { get; set; }
 
         /// <summary>
         /// Calculated property on the server side
         /// </summary>
-        public string LogicalWrittenDataSize { get; set; }
+        public DataSize LogicalWrittenDataSize { get; set; }
 
         /// <summary>
         /// Calculated property on the server side

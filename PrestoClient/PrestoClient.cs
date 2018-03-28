@@ -426,7 +426,7 @@ namespace BAMCIS.PrestoClient
         /// </summary>
         /// <param name="queryId">The id of the query to retrieve details about.</param>
         /// <returns>Information about the specified query.</returns>
-        public async Task<GetQueryResponse> GetQuery(string queryId)
+        public async Task<GetQueryV1Response> GetQuery(string queryId)
         {
             HttpClient LocalClient = (this.Configuration.IgnoreSslErrors) ? this.IgnoreSslErrorClient : this.NormalClient;
 
@@ -441,7 +441,7 @@ namespace BAMCIS.PrestoClient
             }
             else
             {
-                GetQueryResponse Result = new GetQueryResponse(await Response.Content.ReadAsStringAsync());
+                GetQueryV1Response Result = new GetQueryV1Response(await Response.Content.ReadAsStringAsync());
                 return Result;
             }
         }
@@ -906,6 +906,12 @@ namespace BAMCIS.PrestoClient
             return true;
         }
 
+        /// <summary>
+        /// TODO: Need to look into the header manipulation here:
+        /// https://github.com/prestodb/presto/blob/5e2e9c45aae7e5bb6bb507b4121c5b0fc51f52ca/presto-client/src/main/java/com/facebook/presto/client/StatementClient.java
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="options"></param>
         private void AddHeaders(ref HttpRequestMessage request, QueryOptions options = null)
         {
             request.Headers.Add("Accept", "application/json");
@@ -931,6 +937,11 @@ namespace BAMCIS.PrestoClient
                 if (!String.IsNullOrEmpty(options.Session))
                 {
                     request.Headers.Add(PrestoHeader.PRESTO_SESSION.Value, options.Session);
+                }
+
+                if (options.ClientTags != null && options.ClientTags.Any())
+                {
+                    request.Headers.Add(PrestoHeader.PRESTO_CLIENT_TAGS.Value, String.Join(",", options.ClientTags));
                 }
             }
         }

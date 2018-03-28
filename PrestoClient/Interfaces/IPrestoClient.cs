@@ -32,7 +32,7 @@ namespace BAMCIS.PrestoClient.Interfaces
 
         Task<ListQueriesV1Response> GetQueries();
 
-        Task<GetQueryResponse> GetQuery(string queryId);
+        Task<GetQueryV1Response> GetQuery(string queryId);
 
         #endregion
 

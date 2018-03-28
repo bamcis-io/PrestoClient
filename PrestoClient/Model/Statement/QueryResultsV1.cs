@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using BAMCIS.PrestoClient.Serialization;
+using BAMCIS.PrestoClient.Model.Client;
 
 namespace BAMCIS.PrestoClient.Model.Statement
 {

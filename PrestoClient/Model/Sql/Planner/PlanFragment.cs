@@ -15,7 +15,7 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner
 
         public PlanFragmentId Id { get; set; }
 
-        [JsonConverter(typeof(QueryPlanNodeConverter))]
+        [JsonConverter(typeof(PlanNodeConverter))]
         public PlanNode Root { get; set; }
 
         public IDictionary<Symbol, string> Symbols { get; set; }

@@ -19,7 +19,7 @@ namespace BAMCIS.PrestoClient.Model.Node
         /// <summary>
         /// The deserialized json. If deserialization fails, this will be null.
         /// </summary>
-        public IEnumerable<PrestoNode> FailedNodes { get; set; }
+        public IEnumerable<HeartbeatFailureDetectorStats> FailedNodes { get; set; }
 
         /// <summary>
         /// Indicates whether deserialization was successful.
@@ -48,7 +48,7 @@ namespace BAMCIS.PrestoClient.Model.Node
             {
                 try
                 {
-                    this.FailedNodes = JsonConvert.DeserializeObject<IEnumerable<PrestoNode>>(this.RawContent);
+                    this.FailedNodes = JsonConvert.DeserializeObject<IEnumerable<HeartbeatFailureDetectorStats>>(this.RawContent);
                     this.DeserializationSucceeded = true;
                     this.LastError = null;
                 }

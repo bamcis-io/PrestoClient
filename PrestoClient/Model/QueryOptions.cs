@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace BAMCIS.PrestoClient.Model
@@ -44,5 +45,7 @@ namespace BAMCIS.PrestoClient.Model
         public string EndSequenceId { get; set; }
 
         public string BufferComplete { get; set; }
+
+        public IEnumerable<string> ClientTags { get; set; }
     }
 }
