@@ -14,7 +14,7 @@ namespace BAMCIS.PrestoClient.Model.Client
     {
         #region Private Fields
 
-        private static readonly Regex PATTERN = new Regex(".*[<>,].*");
+        private static readonly Regex PATTERN = new Regex(".*(?:[<>,].*)?");
 
         #endregion
 

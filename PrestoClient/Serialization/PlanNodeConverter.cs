@@ -1,4 +1,4 @@
-﻿using BAMCIS.PrestoClient.Model.Execution.PlanFlattener;
+﻿using BAMCIS.PrestoClient.Model.Sql.Planner.Plan;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;

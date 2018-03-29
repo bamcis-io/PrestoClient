@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 
-namespace BAMCIS.PrestoClient.Model.Execution.PlanFlattener
+namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
 {
     public class TableScanNode : PlanNode
     {
         public Table Table { get; set; }
 
-        public IEnumerable<string> OutputSymbols { get; set; }
+        public IEnumerable<Symbol> OutputSymbols { get; set; }
 
         /// <summary>
         /// The values of the keys are very dynamic in the serialized json

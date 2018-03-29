@@ -33,7 +33,7 @@ namespace BAMCIS.PrestoClient.Serialization
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            string Temp = reader.ReadAsString();
+            string Temp = reader.Value.ToString();
 
             if (String.IsNullOrEmpty(Temp))
             {
@@ -41,7 +41,7 @@ namespace BAMCIS.PrestoClient.Serialization
             }
             else
             {
-                IEnumerable<ParameterKind> MatchingEnums = Enum.GetValues(typeof(ParameterKind)).Cast<ParameterKind>().Where(x => x.GetType().GetCustomAttribute<DescriptionAttribute>().Description == Temp);
+                IEnumerable<ParameterKind> MatchingEnums = Enum.GetValues(typeof(ParameterKind)).Cast<ParameterKind>().Where(x => x.GetType().GetMember(x.ToString()).FirstOrDefault().GetCustomAttribute<DescriptionAttribute>().Description == Temp);
 
                 if (MatchingEnums.Any())
                 {

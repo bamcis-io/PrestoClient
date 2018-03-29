@@ -30,9 +30,16 @@ namespace BAMCIS.PrestoClient.Serialization
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            string Temp = reader.ReadAsString();
+            if (reader.Value != null)
+            {
+                string Temp = reader.Value.ToString();
 
-            return Activator.CreateInstance(objectType, new string[] { Temp });
+                return Activator.CreateInstance(objectType, new string[] { Temp });
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

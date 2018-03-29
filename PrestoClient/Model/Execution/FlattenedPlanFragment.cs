@@ -1,5 +1,4 @@
-﻿using BAMCIS.PrestoClient.Model.Execution.PlanFlattener;
-using BAMCIS.PrestoClient.Model.Query.QueryDetails.Handles;
+﻿using BAMCIS.PrestoClient.Model.Query.QueryDetails.Handles;
 using BAMCIS.PrestoClient.Model.Sql.Planner;
 using BAMCIS.PrestoClient.Model.Sql.Planner.Plan;
 using System.Collections.Generic;
@@ -17,8 +16,15 @@ namespace BAMCIS.PrestoClient.Model.Execution
 
         public PlanNode Tree { get; set; }
 
-        public IEnumerable<FlattenedNode> Nodes { get; set; }
+        /// <summary>
+        /// TODO: This is supposed to be flattened node, but 
+        /// the type isn't built out completely yet
+        /// </summary>
+        public IEnumerable<PlanNode> Nodes { get; set; }
 
+        /// <summary>
+        /// TODO: Should be <Symbol, string> Problem with Json.NET
+        /// </summary>
         public IDictionary<string, string> Symbols { get; set; }
 
         public ConnectorHandleWrapper Partitioning { get; set; }

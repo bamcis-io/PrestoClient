@@ -197,8 +197,8 @@ namespace BAMCIS.PrestoClient.Model.Execution
             this.CompletedDrivers = completedDrivers;
 
             this.CumulativeMemory = cumulativeMemory;
-            this.TotalMemoryReservation = totalMemoryReservation ?? throw new ArgumentNullException("totalMemoryReservation");
-            this.PeakMemoryReservation = peakMemoryReservation ?? throw new ArgumentNullException("peakMemoryReservation");
+            this.TotalMemoryReservation = totalMemoryReservation;// ?? throw new ArgumentNullException("totalMemoryReservation");
+            this.PeakMemoryReservation = peakMemoryReservation;// ?? throw new ArgumentNullException("peakMemoryReservation");
 
             this.TotalScheduledTime = totalScheduledTime;
             this.TotalCpuTime = totalCpuTime;

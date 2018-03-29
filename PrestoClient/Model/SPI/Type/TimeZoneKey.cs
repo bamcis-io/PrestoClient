@@ -1,6 +1,8 @@
 ﻿using BAMCIS.PrestoClient.Serialization;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BAMCIS.PrestoClient.Model.SPI.Type
 {
@@ -12,7 +14,11 @@ namespace BAMCIS.PrestoClient.Model.SPI.Type
     {
         #region Private Fields
 
-        private static readonly TimeZoneKey[] TIME_ZONE_KEYS = { };
+        public static readonly TimeZoneKey UTC_KEY = new TimeZoneKey("UTC", 0);
+
+        private static readonly HashSet<TimeZoneKey> TIME_ZONE_KEYS = new HashSet<TimeZoneKey>() {
+           UTC_KEY
+        };
 
         #endregion
 
@@ -49,12 +55,12 @@ namespace BAMCIS.PrestoClient.Model.SPI.Type
 
         public static TimeZoneKey GetTimeZoneKey(short key)
         {
-            if (key > TIME_ZONE_KEYS.Length || TIME_ZONE_KEYS[key] == null)
+            if (key > TIME_ZONE_KEYS.Count || TIME_ZONE_KEYS.ElementAt(key) == null)
             {
                 throw new ArgumentOutOfRangeException("key", $"Invalid time zone key {key}.");
             }
 
-            return TIME_ZONE_KEYS[key];
+            return TIME_ZONE_KEYS.ElementAt(key);
         }
 
         #endregion

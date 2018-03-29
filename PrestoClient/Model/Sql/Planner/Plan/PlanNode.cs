@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BAMCIS.PrestoClient.Model.Execution.PlanFlattener
+namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
 {
     [JsonConverter(typeof(PlanNodeConverter))]
     public class PlanNode
@@ -25,7 +25,8 @@ namespace BAMCIS.PrestoClient.Model.Execution.PlanFlattener
                 { typeof(FilterNode), PlanNodeType.FILTER },
                 { typeof(SortNode), PlanNodeType.SORT },
                 { typeof(ProjectNode), PlanNodeType.PROJECT },
-                { typeof(TopNNode), PlanNodeType.TOPN }
+                { typeof(TopNNode), PlanNodeType.TOPN },
+                { typeof(LimitNode), PlanNodeType.LIMIT }
             };
 
             DerivedTypeToType = TypeToDerivedType.ToDictionary(pair => pair.Value, pair => pair.Key);

@@ -6,24 +6,51 @@ using System.Text;
 
 namespace BAMCIS.PrestoClient.Model.Statement
 {
-    public class QueryResultsV2 : QueryResults
+    public class QueryResultsV2 : QueryResults, IQueryData
     {
         #region Public Properties
 
-        public bool NextUriDone { get; set; }
+        public bool NextUriDone { get; }
 
-        public Uri FinalUri { get; set; }
+        public Uri FinalUri { get; }
 
-        public IEnumerable<Uri> DataUris { get; set; }
+        public IEnumerable<Uri> DataUris { get; }
 
-        public Actions Actions { get; set; }
+        public Actions Actions { get; }
 
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public IEnumerable<List<dynamic>> Data { get; set; }
 
         #endregion
 
+        #region Constructors
+
+        [JsonConstructor]
+        public QueryResultsV2(
+            string id,
+            Uri infoUri,
+            Uri finalUri,
+            Uri nextUri,
+            bool nextUriDone,
+            IEnumerable<Column> columns,
+            IEnumerable<Uri> dataUris,
+            Actions actions,
+            QueryError error
+            ) : base(id, infoUri, nextUri, columns, error)
+        {
+            this.FinalUri = finalUri;
+            this.NextUriDone = nextUriDone;
+            this.DataUris = dataUris;
+            this.Actions = actions;
+        }
+
+        #endregion
+
         #region Public Methods
+
+        public IEnumerable<List<dynamic>> GetData()
+        {
+            return this.Data;
+        }
 
         public IEnumerable<string> DataToCsv()
         {

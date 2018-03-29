@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace BAMCIS.PrestoClient.Model.Execution.PlanFlattener
+namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
 {
     [JsonConverter(typeof(StringEnumConverter))]
     public enum PlanNodeType
@@ -14,6 +14,7 @@ namespace BAMCIS.PrestoClient.Model.Execution.PlanFlattener
         TABLESCAN,
         FILTER,
         PROJECT,
-        TOPN
+        TOPN,
+        LIMIT
     }
 }

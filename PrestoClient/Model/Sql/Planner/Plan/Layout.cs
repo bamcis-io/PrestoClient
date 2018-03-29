@@ -1,4 +1,4 @@
-﻿namespace BAMCIS.PrestoClient.Model.Execution.PlanFlattener
+﻿namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
 {
     public class Layout
     {

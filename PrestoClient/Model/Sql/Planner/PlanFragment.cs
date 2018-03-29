@@ -1,7 +1,5 @@
-﻿using BAMCIS.PrestoClient.Model.Execution.PlanFlattener;
-using BAMCIS.PrestoClient.Model.Operator;
+﻿using BAMCIS.PrestoClient.Model.Operator;
 using BAMCIS.PrestoClient.Model.Query.QueryDetails.Handles;
-using BAMCIS.PrestoClient.Model.Sql.Planner;
 using BAMCIS.PrestoClient.Model.Sql.Planner.Plan;
 using BAMCIS.PrestoClient.Serialization;
 using Newtonsoft.Json;
@@ -18,10 +16,13 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner
         [JsonConverter(typeof(PlanNodeConverter))]
         public PlanNode Root { get; set; }
 
-        public IDictionary<Symbol, string> Symbols { get; set; }
+        /// <summary>
+        /// TODO: Should be <Symbol, string> Problem with Json.NET
+        /// </summary>
+        public IDictionary<string, string> Symbols { get; set; }
 
         /// <summary>
-        /// This is supposed to be a PartitioningHandle
+        /// TODO: This is supposed to be a PartitioningHandle, too many dynamic elements
         /// </summary>
         public ConnectorHandleWrapper Partitioning { get; set; }
 

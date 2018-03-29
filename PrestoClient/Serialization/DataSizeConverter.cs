@@ -15,7 +15,7 @@ namespace BAMCIS.PrestoClient.Serialization
 
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(String));
+            return (objectType == typeof(string));
         }
 
         public override bool CanWrite
@@ -44,7 +44,7 @@ namespace BAMCIS.PrestoClient.Serialization
                 double Size = Double.Parse(RegexMatch.Groups[1].Value);
                 string Unit = RegexMatch.Groups[2].Value;
 
-                IEnumerable<DataSizeUnit> MatchingEnums = Enum.GetValues(typeof(DataSizeUnit)).Cast<DataSizeUnit>().Where(x => x.GetType().GetCustomAttribute<DescriptionAttribute>().Description == Unit);
+                IEnumerable<DataSizeUnit> MatchingEnums = Enum.GetValues(typeof(DataSizeUnit)).Cast<DataSizeUnit>().Where(x => x.GetType().GetMember(x.ToString()).FirstOrDefault().GetCustomAttribute<DescriptionAttribute>().Description == Unit);
 
                 if (MatchingEnums.Any())
                 {

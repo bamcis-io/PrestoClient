@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using BAMCIS.PrestoClient.Model.FailureDetector;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 

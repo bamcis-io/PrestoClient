@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using BAMCIS.PrestoClient.Model.Client;
+using Newtonsoft.Json;
 using System;
 
 namespace BAMCIS.PrestoClient.Model.Statement

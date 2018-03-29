@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using BAMCIS.PrestoClient.Serialization;
+using Newtonsoft.Json;
 using System;
 
 namespace BAMCIS.PrestoClient.Model.Sql.Planner
@@ -6,6 +7,7 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner
     /// <summary>
     /// From com.facebook.presto.sql.planner.Symbol.java
     /// </summary>
+    [JsonConverter(typeof(ToStringJsonConverter))]
     public class Symbol : IComparable<Symbol>
     {
         #region Public Properties

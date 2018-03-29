@@ -19,7 +19,7 @@ namespace BAMCIS.PrestoClient.Model.Query
         /// <summary>
         /// The deserialized json. If deserialization fails, this will be null.
         /// </summary>
-        public QueryInfo QueryDetails { get; }
+        public QueryInfo QueryInfo { get; }
 
         /// <summary>
         /// Indicates whether deserialization was successful.
@@ -48,7 +48,7 @@ namespace BAMCIS.PrestoClient.Model.Query
             {
                 try
                 {
-                    this.QueryDetails = JsonConvert.DeserializeObject<QueryInfo>(this.RawContent);
+                    this.QueryInfo = JsonConvert.DeserializeObject<QueryInfo>(this.RawContent);
                     this.DeserializationSucceeded = true;
                     this.LastError = null;
                 }
@@ -56,7 +56,7 @@ namespace BAMCIS.PrestoClient.Model.Query
                 {
                     this.DeserializationSucceeded = false;
                     this.LastError = e;
-                    this.QueryDetails = null;
+                    this.QueryInfo = null;
                 }
             }
         }
