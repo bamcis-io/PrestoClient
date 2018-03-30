@@ -1,29 +1,30 @@
-﻿using BAMCIS.PrestoClient.Model.Sql.Tree;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
 {
     /// <summary>
-    /// From com.facebook.presto.sql.planner.plan.FilterNode.java
+    /// From com.facebook.presto.sql.planner.plan.AssignUniqueId.java
     /// </summary>
-    public class FilterNode : PlanNode
+    public class AssignUniqueId : PlanNode
     {
         #region Public Properties
 
         public PlanNode Source { get; }
 
-        public Expression Predicate { get; }
+        public Symbol IdColumn { get; }
 
         #endregion
 
         #region Constructors
 
         [JsonConstructor]
-        public FilterNode(PlanNodeId id, PlanNode source, Expression predicate) : base(id)
+        public AssignUniqueId(PlanNodeId id, PlanNode source, Symbol idColumn) : base(id)
         {
-            this.Source = source;
-            this.Predicate = predicate;
+            this.Source = source ?? throw new ArgumentNullException("source");
+            this.IdColumn = idColumn ?? throw new ArgumentNullException("idColumn");
         }
 
         #endregion
@@ -32,7 +33,7 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
 
         public override IEnumerable<Symbol> GetOutputSymbols()
         {
-            return this.Source.GetOutputSymbols();
+            return this.Source.GetOutputSymbols().Concat(new Symbol[] { this.IdColumn });
         }
 
         public override IEnumerable<PlanNode> GetSources()

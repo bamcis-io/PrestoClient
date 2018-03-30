@@ -2,9 +2,7 @@
 using BAMCIS.PrestoClient.Interfaces;
 using BAMCIS.PrestoClient.Model;
 using BAMCIS.PrestoClient.Model.Jmx;
-using BAMCIS.PrestoClient.Model.Node;
 using BAMCIS.PrestoClient.Model.Query;
-using BAMCIS.PrestoClient.Model.Query.QueryDetails;
 using BAMCIS.PrestoClient.Model.Statement;
 using BAMCIS.PrestoClient.Model.Thread;
 using System;
@@ -22,6 +20,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Web;
+using BAMCIS.PrestoClient.Model.NodeInfo;
 
 namespace BAMCIS.PrestoClient
 {

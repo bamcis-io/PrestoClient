@@ -1,20 +1,54 @@
-﻿using BAMCIS.PrestoClient.Model.Sql.Planner;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
-{ 
+{
+    /// <summary>
+    /// From com.facebook.presto.sql.planner.plan.ExchangeNode.java
+    /// </summary>
     public class ExchangeNode : PlanNode
     {
-        [JsonProperty(PropertyName = "type")]
-        public string ExchangeType { get; set; }
+        #region Public Properties
 
-        public string Scope { get; set; }
+        public ExchangeType Type { get; }
 
-        public PartitioningScheme PartitioningScheme { get; set; }
+        public ExchangeScope Scope { get; }
+  
+        public IEnumerable<PlanNode> Sources { get; }
 
-        public IEnumerable<PlanNode> Sources { get; set; }
+        public PartitioningScheme PartitioningScheme { get; }
 
-        public string[][] Inputs { get; set; }
+        public IEnumerable<List<Symbol>> Inputs { get; }
+
+        #endregion
+
+        #region Constructors
+
+        [JsonConstructor]
+        public ExchangeNode(PlanNodeId id, ExchangeType type, ExchangeScope scope, PartitioningScheme partitioningScheme, IEnumerable<PlanNode> sources, IEnumerable<List<Symbol>> inputs) : base(id)
+        {
+            this.Type = type;
+            this.Scope = scope;
+            this.PartitioningScheme = partitioningScheme ?? throw new ArgumentNullException("partitioningScheme");
+            this.Sources = sources ?? throw new ArgumentNullException("sources");
+            this.Inputs = inputs ?? throw new ArgumentNullException("inputs");
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public override IEnumerable<PlanNode> GetSources()
+        {
+            return this.Sources;
+        }
+
+        public override IEnumerable<Symbol> GetOutputSymbols()
+        {
+            return this.PartitioningScheme.OutputLayout;
+        }
+
+        #endregion
     }
 }

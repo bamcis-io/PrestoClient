@@ -6,10 +6,14 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
     [JsonConverter(typeof(StringEnumConverter))]
     public enum PlanNodeType
     {
+        AGGREGATION,
+        APPLY,
+        ASSIGN_UNIQUE_ID,
+        DELETE,
+        EXCHANGE,
         BASE,
         REMOTESOURCE,
         SORT,
-        EXCHANGE,
         OUTPUT,
         TABLESCAN,
         FILTER,

@@ -3,12 +3,12 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-namespace BAMCIS.PrestoClient.Model.Node
+namespace BAMCIS.PrestoClient.Model.NodeInfo
 {
     /// <summary>
     /// A response from a request to list the nodes in the cluster
     /// </summary>
-    public class ListNodesV1Response
+    public class ListFailedNodesV1Response
     {
         #region Public Properties
 
@@ -20,7 +20,7 @@ namespace BAMCIS.PrestoClient.Model.Node
         /// <summary>
         /// The deserialized json. If deserialization fails, this will be null.
         /// </summary>
-        public IEnumerable<HeartbeatFailureDetectorStats> Nodes { get; set; }
+        public IEnumerable<HeartbeatFailureDetectorStats> FailedNodes { get; set; }
 
         /// <summary>
         /// Indicates whether deserialization was successful.
@@ -41,7 +41,7 @@ namespace BAMCIS.PrestoClient.Model.Node
         /// Creates a new response from the JSON array string returned from presto.
         /// </summary>
         /// <param name="rawContent">The JSON array of nodes</param>
-        internal ListNodesV1Response(string rawContent)
+        internal ListFailedNodesV1Response(string rawContent)
         {
             this.RawContent = rawContent;
 
@@ -49,7 +49,7 @@ namespace BAMCIS.PrestoClient.Model.Node
             {
                 try
                 {
-                    this.Nodes = JsonConvert.DeserializeObject<IEnumerable<HeartbeatFailureDetectorStats>>(this.RawContent);
+                    this.FailedNodes = JsonConvert.DeserializeObject<IEnumerable<HeartbeatFailureDetectorStats>>(this.RawContent);
                     this.DeserializationSucceeded = true;
                     this.LastError = null;
                 }
@@ -57,7 +57,7 @@ namespace BAMCIS.PrestoClient.Model.Node
                 {
                     this.DeserializationSucceeded = false;
                     this.LastError = e;
-                    this.Nodes = null;
+                    this.FailedNodes = null;
                 }
             }
         }

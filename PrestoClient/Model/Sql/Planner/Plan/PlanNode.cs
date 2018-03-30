@@ -8,7 +8,7 @@ using System.Linq;
 namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
 {
     [JsonConverter(typeof(PlanNodeConverter))]
-    public class PlanNode
+    public abstract class PlanNode
     {
         private static readonly Dictionary<Type, PlanNodeType> TypeToDerivedType;
         private static readonly Dictionary<PlanNodeType, Type> DerivedTypeToType;
@@ -26,15 +26,24 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
                 { typeof(SortNode), PlanNodeType.SORT },
                 { typeof(ProjectNode), PlanNodeType.PROJECT },
                 { typeof(TopNNode), PlanNodeType.TOPN },
-                { typeof(LimitNode), PlanNodeType.LIMIT }
+                { typeof(LimitNode), PlanNodeType.LIMIT },
+                { typeof(AggregationNode), PlanNodeType.AGGREGATION },
+                { typeof(ApplyNode), PlanNodeType.APPLY },
+                { typeof(AssignUniqueId), PlanNodeType.ASSIGN_UNIQUE_ID },
+                { typeof(DeleteNode), PlanNodeType.DELETE }
             };
 
             DerivedTypeToType = TypeToDerivedType.ToDictionary(pair => pair.Value, pair => pair.Key);
         }
 
+        public PlanNode(PlanNodeId id)
+        {
+            this.Id = id ?? throw new ArgumentNullException("id");
+        }
+
         [JsonConverter(typeof(StringEnumConverter))]
         [JsonProperty(PropertyName = "@type")]
-        public PlanNodeType Type
+        public PlanNodeType NodeType
         {
             get
             {
@@ -44,11 +53,23 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
             }
         }
 
-        public string Id { get; set; }
+        public PlanNodeId Id { get; set; }
 
         public static Type GetType(PlanNodeType type)
         {
             return DerivedTypeToType[type];
+        }
+
+
+        // These will be made abstract after all existing node classes are updated
+        public virtual IEnumerable<Symbol> GetOutputSymbols()
+        {
+            return null;
+        }
+
+        public virtual IEnumerable<PlanNode> GetSources()
+        {
+            return null;
         }
     }
 }

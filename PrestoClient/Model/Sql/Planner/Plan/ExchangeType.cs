@@ -4,14 +4,13 @@ using Newtonsoft.Json.Converters;
 namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
 {
     /// <summary>
-    /// From com.facebook.presto.sql.planner.plan.AggregationNode.java (internal class Step)
+    /// From com.facebook.presto.sql.planner.plan.ExchangeNode.java (internal enum Type)
     /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
-    public enum Step
+    public enum ExchangeType
     {
-        SINGLE,
-        PARTIAL,
-        FINAL,
-        INTERMEDIATE
+        GATHER,
+        REPARTITION,
+        REPLICATE
     }
 }

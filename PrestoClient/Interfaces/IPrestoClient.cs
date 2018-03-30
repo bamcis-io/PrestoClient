@@ -1,7 +1,6 @@
 ﻿using BAMCIS.PrestoClient.Model.Jmx;
-using BAMCIS.PrestoClient.Model.Node;
+using BAMCIS.PrestoClient.Model.NodeInfo;
 using BAMCIS.PrestoClient.Model.Query;
-using BAMCIS.PrestoClient.Model.Query.QueryDetails;
 using BAMCIS.PrestoClient.Model.Statement;
 using BAMCIS.PrestoClient.Model.Thread;
 using System.Threading.Tasks;
