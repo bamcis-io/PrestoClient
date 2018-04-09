@@ -1,5 +1,4 @@
 ﻿using BAMCIS.PrestoClient.Model.Client;
-using BAMCIS.PrestoClient.Model.Query;
 using BAMCIS.PrestoClient.Model.SPI;
 using BAMCIS.PrestoClient.Model.SPI.Memory;
 using BAMCIS.PrestoClient.Model.Transaction;

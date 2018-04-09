@@ -26,14 +26,15 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
         public IEnumerable<Symbol> OutputSymbols { get; }
 
         /// <summary>
-        /// TODO: Key is supposed to be Symbol
+        /// TODO: Key is supposed to be Symbol, Key is IColumnHandle
         /// </summary>
-        public IDictionary<string, IColumnHandle> Assignments { get; }
+        public IDictionary<string, dynamic> Assignments { get; }
 
         /// <summary>
         /// TODO: This should be com.facebook.presto.spi.predicate.TupleDomain.java
+        /// of IColumnHandle
         /// </summary>
-        public Tuple<IColumnHandle> CurrentConstraint { get; }
+        public IDictionary<string, dynamic> CurrentConstraint { get; }
 
         #endregion
 
@@ -47,8 +48,8 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
             TableLayoutHandle tableLayout,
             HashSet<Symbol> lookupSymbols,
             IEnumerable<Symbol> outputSymbols,
-            IDictionary<string, IColumnHandle> assignments,
-            Tuple<IColumnHandle> currentConstraint
+            IDictionary<string, dynamic> assignments,
+            IDictionary<string, dynamic> currentConstraint
             ) : base(id)
         {
             this.IndexHandle = indexHandle ?? throw new ArgumentNullException("indexHandle");

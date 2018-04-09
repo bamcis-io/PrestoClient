@@ -4,6 +4,9 @@ using System;
 
 namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
 {
+    /// <summary>
+    /// From com.facebook.presto.sql.planner.plan.PlanFragmentId.java
+    /// </summary>
     [JsonConverter(typeof(ToStringJsonConverter))]
     public class PlanFragmentId
     {
@@ -33,6 +36,33 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
         public override string ToString()
         {
             return this.Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Id.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (this == obj)
+            {
+                return true;
+            }
+            
+            if (obj == null || this.GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            PlanFragmentId That = (PlanFragmentId)obj;
+
+            if (!this.Id.Equals(That.Id))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         #endregion

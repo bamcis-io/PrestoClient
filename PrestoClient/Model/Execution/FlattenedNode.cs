@@ -5,7 +5,7 @@ using System;
 namespace BAMCIS.PrestoClient.Model.Execution
 {
     /// <summary>
-    /// From com.facebook.presto.execution.PlatFlattener.java (internal class FlattendedNode)
+    /// From com.facebook.presto.execution.PlanFlattener.java (internal class FlattendedNode)
     /// </summary>
     [JsonConverter(typeof(ToStringJsonConverter))]
     public class FlattenedNode

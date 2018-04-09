@@ -5,13 +5,15 @@ using System.Collections.Generic;
 namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
 {
     /// <summary>
-    /// From com.facebook.presto.sql.planner.plan.RemoteSourceNode.java
+    /// From com.facebook.presto.sql.planner.plan.TableFinishNode.java
     /// </summary>
-    public class RemoteSourceNode : PlanNode
+    public class TableFinishNode : PlanNode
     {
         #region Public Properties
 
-        public IEnumerable<PlanFragmentId> SourceFragmentIds { get; }
+        public PlanNode Source { get; }
+        
+        public WriterTarget Target { get; }
 
         public IEnumerable<Symbol> Outputs { get; }
 
@@ -20,9 +22,10 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
         #region Constructors
 
         [JsonConstructor]
-        public RemoteSourceNode(PlanNodeId id, IEnumerable<PlanFragmentId> sourceFragmentIds, IEnumerable<Symbol> outputs) : base(id)
+        public TableFinishNode(PlanNodeId id, PlanNode source, WriterTarget target, IEnumerable<Symbol> outputs) : base(id)
         {
-            this.SourceFragmentIds = sourceFragmentIds;
+            this.Source = source ?? throw new ArgumentNullException("source");
+            this.Target = target;
             this.Outputs = outputs ?? throw new ArgumentNullException("outputs");
         }
 
@@ -37,7 +40,7 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
 
         public override IEnumerable<PlanNode> GetSources()
         {
-            return new List<PlanNode>();
+            yield return this.Source;
         }
 
         #endregion

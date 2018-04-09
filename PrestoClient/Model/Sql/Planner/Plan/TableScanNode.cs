@@ -1,26 +1,78 @@
-﻿using System.Collections.Generic;
+﻿using BAMCIS.PrestoClient.Model.Metadata;
+using BAMCIS.PrestoClient.Model.Sql.Tree;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
 {
+    /// <summary>
+    /// From com.facebook.presto.sql.planner.plan.TableScanNode.java
+    /// </summary>
     public class TableScanNode : PlanNode
     {
-        public Table Table { get; set; }
+        #region Public Properties
 
-        public IEnumerable<Symbol> OutputSymbols { get; set; }
+        public TableHandle Table { get; }
 
-        /// <summary>
-        /// The values of the keys are very dynamic in the serialized json
-        /// </summary>
-        public IDictionary<string, dynamic> Assignments { get; set; }
-
-        public Layout Layout { get; set; }
+        public IEnumerable<Symbol> OutputSymbols { get; }
 
         /// <summary>
-        /// The values of the keys are very dynamic in the json serialization
+        /// TODO: Key is Symbol and Value is IColumnHandle
         /// </summary>
-        public IDictionary<string, dynamic> CurrentConstraint { get; set; }
+        public IDictionary<string, dynamic> Assignments { get; }
 
-        public string OriginalConstraint { get; set; }
-        
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        [Optional]
+        public TableLayoutHandle Layout { get; }
+
+        /// <summary>
+        /// TODO: This is a TupleDomain of IColumnHandle
+        /// </summary>
+        public IDictionary<string, dynamic> CurrentConstraint { get; }
+
+        public Expression OriginalConstraint { get; }
+
+        #endregion
+
+        #region Constructors
+
+        [JsonConstructor]
+        public TableScanNode(
+            PlanNodeId id, 
+            TableHandle table, 
+            IEnumerable<Symbol> outputSymbols, 
+            IDictionary<string, dynamic> assignments, 
+            TableLayoutHandle layout,
+            IDictionary<string, dynamic> currentConstraint,
+            Expression originalConstraint
+            ) : base(id)
+        {
+            this.Table = table ?? throw new ArgumentNullException("table");
+            this.OutputSymbols = outputSymbols ?? throw new ArgumentNullException("outputSymbols");
+            this.Assignments = assignments ?? throw new ArgumentNullException("assignments");
+            this.OriginalConstraint = originalConstraint;
+            this.Layout = layout ?? throw new ArgumentNullException("layout");
+            this.CurrentConstraint = currentConstraint ?? throw new ArgumentNullException("currentConstraint");
+
+            ParameterCheck.Check(this.OutputSymbols.All(x => this.Assignments.Keys.Contains(x.ToString())), "Assignments does not cover all of outputs.");
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public override IEnumerable<Symbol> GetOutputSymbols()
+        {
+            return this.OutputSymbols;
+        }
+
+        public override IEnumerable<PlanNode> GetSources()
+        {
+            return new PlanNode[0];
+        }
+
+        #endregion
     }
 }

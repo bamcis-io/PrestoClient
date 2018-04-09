@@ -14,6 +14,14 @@ namespace BAMCIS.PrestoClient.Model
             }
         }
 
+        public static void Check(bool expression, string message)
+        {
+            if (expression == false)
+            {
+                throw new ArgumentException(message);
+            }
+        }
+
         public static void NonNull<T>(T value, string parameterName, string message = "") where T : class
         {
             if (value == null)
