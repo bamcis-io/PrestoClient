@@ -45,9 +45,6 @@ namespace BAMCIS.PrestoClient.Model.Client
 
         public StageStats RootStage { get; }
 
-        /// <summary>
-        /// Calculated property on server
-        /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         [Optional]
         public double ProgressPercentage

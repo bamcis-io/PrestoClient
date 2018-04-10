@@ -39,7 +39,13 @@ namespace BAMCIS.PrestoClient.Model.Execution.Buffer
 
         public override string ToString()
         {
-            return $"PageBufferInfo {{partition={this.Partition}, bufferedPages={this.BufferedPages}, bufferedBytes={this.BufferedBytes}, rowsAdded={this.RowsAdded}, pagesAdded={this.PagesAdded}}}";
+            return StringHelper.Build(this)
+                .Add("partition", this.Partition)
+                .Add("bufferedPages", this.BufferedPages)
+                .Add("bufferedBytes", this.BufferedBytes)
+                .Add("rowsAdded", this.RowsAdded)
+                .Add("pagesAdded", this.PagesAdded)
+                .ToString();
         }
 
         #endregion

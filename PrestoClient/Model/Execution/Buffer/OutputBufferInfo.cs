@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace BAMCIS.PrestoClient.Model.Execution.Buffer
@@ -32,6 +32,7 @@ namespace BAMCIS.PrestoClient.Model.Execution.Buffer
 
         #region Constructors
 
+        [JsonConstructor]
         public OutputBufferInfo(
             string type, 
             BufferState state, 
@@ -61,7 +62,17 @@ namespace BAMCIS.PrestoClient.Model.Execution.Buffer
 
         public override string ToString()
         {
-            return $"OutputBufferInfo {{type={this.Type}, state={this.State}, canAddBuffers={this.CanAddBuffers}, canAddPages={this.CanAddPages}, totalBufferedBytes={this.TotalBufferedBytes}, totalBufferedPages={this.TotalBufferedPages}, totalRowsSent={this.TotalRowsSent}, totalPagesSent={this.TotalPagesSent}, buffers=[{String.Join(",", this.Buffers)}]}}";
+            return StringHelper.Build(this)
+                .Add("type", this.Type)
+                .Add("state", this.State)
+                .Add("canAddBuffers", this.CanAddBuffers)
+                .Add("canAddPages", this.CanAddPages)
+                .Add("totalBufferedBytes", this.TotalBufferedBytes)
+                .Add("totalBufferedPages", this.TotalBufferedPages)
+                .Add("totalRowsSent", this.TotalRowsSent)
+                .Add("totalPagesSent", this.TotalPagesSent)
+                .Add("buffers", this.Buffers)
+                .ToString();
         }
 
         #endregion

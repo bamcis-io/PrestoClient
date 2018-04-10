@@ -104,6 +104,7 @@ namespace BAMCIS.PrestoClient.Model.Execution
 
         #region Constructors
 
+        [JsonConstructor]
         public FlattenedPlanFragment(string textPlan, PlanFragment fragment, IEnumerable<FlattenedNode> nodes)
         {
             if (string.IsNullOrEmpty(textPlan))

@@ -1,4 +1,5 @@
 ﻿using BAMCIS.PrestoClient.Model.Connector;
+using Newtonsoft.Json;
 using System;
 
 namespace BAMCIS.PrestoClient.Model.Execution
@@ -20,6 +21,7 @@ namespace BAMCIS.PrestoClient.Model.Execution
 
         #region Constructors
 
+        [JsonConstructor]
         public Output(ConnectorId connectorId, string schema, string table)
         {
             if (String.IsNullOrEmpty(schema))

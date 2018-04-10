@@ -126,65 +126,18 @@ namespace BAMCIS.PrestoClient.Model.Execution
             this.ScheduleTaskDistribution = scheduleTaskDistribution ?? throw new ArgumentNullException("scheduleTaskDistribution");
             this.AddSplitDistribution = addSplitDistribution ?? throw new ArgumentNullException("addSplitDistribution");
 
-            if (totalTasks < 0)
-            {
-                throw new ArgumentOutOfRangeException("totalTasks", "The total tasks cannot less than 0.");
-            }
-
-            if (runningTasks < 0)
-            {
-                throw new ArgumentOutOfRangeException("runningTasks", "The running tasks cannot less than 0.");
-            }
-
-            if (completedTasks < 0)
-            {
-                throw new ArgumentOutOfRangeException("completedTasks", "The completed tasks cannot less than 0.");
-            }
-
-            if (totalDrivers < 0)
-            {
-                throw new ArgumentOutOfRangeException("totalDrivers", "The total drivers cannot less than 0.");
-            }
-
-            if (queuedDrivers < 0)
-            {
-                throw new ArgumentOutOfRangeException("queuedDrivers", "The queued drivers cannot less than 0.");
-            }
-
-            if (runningDrivers < 0)
-            {
-                throw new ArgumentOutOfRangeException("runningDrivers", "The running drivers cannot less than 0.");
-            }
-
-            if (blockedDrivers < 0)
-            {
-                throw new ArgumentOutOfRangeException("blockedDrivers", "The blocked drivers cannot less than 0.");
-            }
-
-            if (completedDrivers < 0)
-            {
-                throw new ArgumentOutOfRangeException("completedDrivers", "The completed drivers cannot less than 0.");
-            }
-
-            if (cumulativeMemory < 0 || Double.IsInfinity(cumulativeMemory) || Double.IsNaN(cumulativeMemory))
-            {
-                throw new ArgumentException("The value of cumulative memory was invalid.", "cumulativeMemory");
-            }
-
-            if (rawInputPositions < 0)
-            {
-                throw new ArgumentOutOfRangeException("rawInputPositions", "The raw input positions cannot less than 0.");
-            }
-
-            if (processedInputPositions < 0)
-            {
-                throw new ArgumentOutOfRangeException("processedInputPositions", "The processed input positions cannot less than 0.");
-            }
-
-            if (outputPositions < 0)
-            {
-                throw new ArgumentOutOfRangeException("outputPositions", "The output positions cannot less than 0.");
-            }
+            ParameterCheck.OutOfRange(totalTasks >= 0, "totalTasks", "The total tasks cannot less than 0.");
+            ParameterCheck.OutOfRange(runningTasks >= 0, "runningTasks", "The running tasks cannot less than 0.");
+            ParameterCheck.OutOfRange(completedTasks >= 0, "completedTasks", "The completed tasks cannot less than 0.");
+            ParameterCheck.OutOfRange(totalDrivers >= 0, "totalDrivers", "The total drivers cannot less than 0.");
+            ParameterCheck.OutOfRange(queuedDrivers >= 0, "queuedDrivers", "The queued drivers cannot less than 0.");
+            ParameterCheck.OutOfRange(runningDrivers >= 0, "runningDrivers", "The running drivers cannot less than 0.");
+            ParameterCheck.OutOfRange(blockedDrivers >= 0, "blockedDrivers", "The blocked drivers cannot less than 0.");
+            ParameterCheck.OutOfRange(completedDrivers >= 0, "completedDrivers", "The completed drivers cannot less than 0.");
+            ParameterCheck.OutOfRange(cumulativeMemory >= 0 && !Double.IsInfinity(cumulativeMemory) && !Double.IsNaN(cumulativeMemory), "cumulativeMemory", "The value of cumulative memory was invalid.");
+            ParameterCheck.OutOfRange(rawInputPositions >= 0, "rawInputPositions", "The raw input positions cannot less than 0.");
+            ParameterCheck.OutOfRange(processedInputPositions >= 0, "processedInputPositions", "The processed input positions cannot less than 0.");
+            ParameterCheck.OutOfRange(outputPositions >= 0, "outputPositions", "The output positions cannot less than 0.");
 
             this.TotalTasks = totalTasks;
             this.RunningTasks = runningTasks;
@@ -218,7 +171,6 @@ namespace BAMCIS.PrestoClient.Model.Execution
             this.OutputPositions = outputPositions;
             this.OperatorSummaries = operatorSummaries ?? throw new ArgumentNullException("operatorSummaries");
         }
-
 
         #endregion
     }

@@ -1,5 +1,4 @@
-﻿using BAMCIS.PrestoClient.Model.Client;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -8,6 +7,9 @@ namespace BAMCIS.PrestoClient.Model.Client
     /// <summary>
     /// The basis of return data from presto when either submitting a query statement
     /// or following the nextUri return data
+    /// 
+    /// From com.facebook.presto.client.QueryResults.java, but implemented here as a base
+    /// class to be shared between QueryResultsV'X' for later versions.
     /// </summary>
     public abstract class QueryResults
     {

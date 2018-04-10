@@ -140,6 +140,7 @@ namespace BAMCIS.PrestoClient.Model.Execution
 
         #region Constructors
 
+        [JsonConstructor]
         public QueryStats(
             DateTime createTime,
             DateTime executionStartTime,

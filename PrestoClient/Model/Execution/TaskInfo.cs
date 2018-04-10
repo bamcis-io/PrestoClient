@@ -59,7 +59,10 @@ namespace BAMCIS.PrestoClient.Model.Execution
 
         public override string ToString()
         {
-            return $"TaskInfo {{taskId={this.TaskStatus.TaskId}, state={this.TaskStatus.State}}}";
+            return StringHelper.Build(this)
+                .Add("taskId", this.TaskStatus.TaskId)
+                .Add("state", this.TaskStatus.State.ToString())
+                .ToString();
         }
 
         public static TaskInfo CreateInitialTask(TaskId taskId, Uri location, string nodeId, IEnumerable<BufferInfo> bufferStates, TaskStats taskStats)
@@ -75,7 +78,7 @@ namespace BAMCIS.PrestoClient.Model.Execution
                 );
         }
 
-        public TaskInfo withTaskStatus(TaskStatus newTaskStatus)
+        public TaskInfo WithTaskStatus(TaskStatus newTaskStatus)
         {
             return new TaskInfo(newTaskStatus, this.LastHeartbeat, this.OutputBuffers, this.NoMoreSplits, this.Stats, this.NeedsPlan, this.Complete);
         }

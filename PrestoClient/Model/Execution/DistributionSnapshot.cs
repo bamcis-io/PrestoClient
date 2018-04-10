@@ -81,7 +81,22 @@ namespace BAMCIS.PrestoClient.Model.Execution
 
         public override string ToString()
         {
-            return $"DistributionSnapshot {{maxError={this.MaxError}, count={this.Count}, total={this.Total}, p01={this.P01}, p05={this.P05}, p10={this.P10}, p25={this.P25}, p50={this.P50}, p75={this.P75}, p90={this.P90}, p95={this.P95}, p99={this.P99}, min={this.Min}, max={this.Max}}}";
+            return StringHelper.Build(this)
+                .Add("maxError", this.MaxError)
+                .Add("count", this.Count)
+                .Add("total", this.Total)
+                .Add("p01", this.P01)
+                .Add("p05", this.P05)
+                .Add("p10", this.P10)
+                .Add("p25", this.P25)
+                .Add("p50", this.P50)
+                .Add("p75", this.P75)
+                .Add("p90", this.P90)
+                .Add("p95", this.P95)
+                .Add("p99", this.P99)
+                .Add("min", this.Min)
+                .Add("mix", this.Max)
+                .ToString();
         }
 
         #endregion

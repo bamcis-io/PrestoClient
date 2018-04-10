@@ -234,6 +234,8 @@ namespace BAMCIS.PrestoClient.Model.Statement
                 return false;
             }
         }
+
+       
         #endregion
     }
 }

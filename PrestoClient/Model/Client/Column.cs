@@ -21,6 +21,7 @@ namespace BAMCIS.PrestoClient.Model.Client
 
         #region Constructors
 
+        [JsonConstructor]
         public Column(string name, string type, ClientTypeSignature typeSignature)
         {
             if (String.IsNullOrEmpty(name))

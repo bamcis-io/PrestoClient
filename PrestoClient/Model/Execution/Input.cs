@@ -50,9 +50,13 @@ namespace BAMCIS.PrestoClient.Model.Execution
 
         #endregion
 
+        #region Child Classes
+
         public class PrestoQueryConnectorInfo
         {
             public IEnumerable<string> PartitionIds { get; set; }
         }
+
+        #endregion
     }
 }

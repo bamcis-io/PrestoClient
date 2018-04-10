@@ -1,7 +1,6 @@
 ﻿using BAMCIS.PrestoClient.Model.Sql.Planner.Plan;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
 using System;
 
 namespace BAMCIS.PrestoClient.Serialization
@@ -17,6 +16,7 @@ namespace BAMCIS.PrestoClient.Serialization
         {
             JToken Token = JToken.Load(reader);
             JToken TypeToken = Token["@type"];
+
             if (TypeToken == null)
             {
                 throw new InvalidOperationException("Invalid presto query plan node object.");
@@ -26,17 +26,23 @@ namespace BAMCIS.PrestoClient.Serialization
 
             if (existingValue == null || existingValue.GetType() != ActualType)
             {
-                //JsonContract Contract = serializer.ContractResolver.ResolveContract(ActualType);
+                // Don't use this approach, since there are no default constructors
+                // JsonContract Contract = serializer.ContractResolver.ResolveContract(ActualType);
+                // existingValue = Contract.DefaultCreator();
                 return Token.ToObject(ActualType, serializer);
             }
-            /*
-            using (JsonReader DerivedTypeReader = Token.CreateReader())
+            else
             {
-                serializer.Populate(DerivedTypeReader, existingValue);
-            }*/
+                using (JsonReader DerivedTypeReader = Token.CreateReader())
+                {
+                    serializer.Populate(DerivedTypeReader, existingValue);
+                }
 
-            return existingValue;
+                return existingValue;
+            }
         }
+
+        public override bool CanRead => true;
 
         public override bool CanWrite => false;
 

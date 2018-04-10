@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace BAMCIS.PrestoClient.Model.Execution.Buffer
 {
@@ -23,6 +24,7 @@ namespace BAMCIS.PrestoClient.Model.Execution.Buffer
 
         #region Constructors
 
+        [JsonConstructor]
         public BufferInfo(OutputBufferId bufferId, bool finished, int bufferedPages, long pagesSent, PageBufferInfo pageBufferInfo)
         {
             if (bufferedPages < 0)
@@ -48,7 +50,13 @@ namespace BAMCIS.PrestoClient.Model.Execution.Buffer
 
         public override string ToString()
         {
-            return $"BufferInfo {{bufferId={this.BufferId}, finished={this.Finished}, bufferedPages={this.BufferedPages}, pagesSent={this.PagesSent}, pageBufferInfo={this.PageBufferInfo}}}";
+            return StringHelper.Build(this)
+                .Add("bufferId", this.BufferId)
+                .Add("finished", this.Finished)
+                .Add("bufferedPages", this.BufferedPages)
+                .Add("pagesSent", this.PagesSent)
+                .Add("pageBufferInfo", this.PageBufferInfo)
+                .ToString();
         }
 
         #endregion

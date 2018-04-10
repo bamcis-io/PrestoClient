@@ -83,20 +83,9 @@ namespace BAMCIS.PrestoClient.Model.Execution
             DataSize systemMemoryReservation
             )
         {
-            if (version < MIN_VERSION)
-            {
-                throw new ArgumentOutOfRangeException("version", $"The version cannot be less than the minimum version of {MIN_VERSION}.");
-            }
-
-            if (queuedPartitionDrivers < 0)
-            {
-                throw new ArgumentOutOfRangeException("queuedPartitionDrivers", "The queued partition drivers cannot be less than 0.");
-            }
-
-            if (runningPartitionDrivers < 0)
-            {
-                throw new ArgumentOutOfRangeException("runningPartitionDrivers", "The running partition drivers cannot be less than 0.");
-            }
+            ParameterCheck.OutOfRange(version >= MIN_VERSION, "version", $"The version cannot be less than the minimum version of {MIN_VERSION}.");
+            ParameterCheck.OutOfRange(queuedPartitionDrivers >= 0, "queuedPartitionDrivers", "The queued partition drivers cannot be less than 0.");
+            ParameterCheck.OutOfRange(runningPartitionDrivers >= 0, "runningPartitionDrivers", "The running partition drivers cannot be less than 0.");
 
             this.TaskId = taskId ?? throw new ArgumentNullException("taskId");
             this.TaskInstanceId = taskInstanceId;
@@ -121,7 +110,10 @@ namespace BAMCIS.PrestoClient.Model.Execution
 
         public override string ToString()
         {
-            return $"TaskStatus {{taskId={this.TaskId}, state={this.State}}}";
+            return StringHelper.Build(this)
+                .Add("taskId", this.TaskId)
+                .Add("state", this.State)
+                .ToString();
         }
 
         public static TaskStatus InitialTaskStatus(TaskId taskId, Uri location, string nodeId)

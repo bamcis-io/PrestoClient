@@ -148,7 +148,7 @@ namespace BAMCIS.PrestoClient
 
             if (Response.StatusCode != HttpStatusCode.OK)
             {
-                throw new PrestoException(await Response.Content.ReadAsStringAsync(), Response.StatusCode);
+                throw new PrestoWebException(await Response.Content.ReadAsStringAsync(), Response.StatusCode);
             }
             else
             {
@@ -188,7 +188,7 @@ namespace BAMCIS.PrestoClient
 
             if (Response.StatusCode != HttpStatusCode.OK)
             {
-                throw new PrestoException(await Response.Content.ReadAsStringAsync(), Response.StatusCode);
+                throw new PrestoWebException(await Response.Content.ReadAsStringAsync(), Response.StatusCode);
             }
             else
             {
@@ -267,7 +267,7 @@ namespace BAMCIS.PrestoClient
 
             if (Response.StatusCode != HttpStatusCode.OK)
             {
-                throw new PrestoException(await Response.Content.ReadAsStringAsync(), Response.StatusCode);
+                throw new PrestoWebException(await Response.Content.ReadAsStringAsync(), Response.StatusCode);
             }
             else
             {
@@ -339,7 +339,7 @@ namespace BAMCIS.PrestoClient
 
             if (Response.StatusCode != HttpStatusCode.OK)
             {
-                throw new PrestoException(await Response.Content.ReadAsStringAsync(), Response.StatusCode);
+                throw new PrestoWebException(await Response.Content.ReadAsStringAsync(), Response.StatusCode);
             }
             else
             {
@@ -372,7 +372,7 @@ namespace BAMCIS.PrestoClient
             // Expect a 204 response
             if (Response.StatusCode != HttpStatusCode.NoContent)
             {
-                throw new PrestoException(await Response.Content.ReadAsStringAsync(), Response.StatusCode);
+                throw new PrestoWebException(await Response.Content.ReadAsStringAsync(), Response.StatusCode);
             }
         }
 
@@ -394,7 +394,7 @@ namespace BAMCIS.PrestoClient
             // Expect a 200 response
             if (Response.StatusCode != HttpStatusCode.OK)
             {
-                throw new PrestoException(await Response.Content.ReadAsStringAsync(), Response.StatusCode);
+                throw new PrestoWebException(await Response.Content.ReadAsStringAsync(), Response.StatusCode);
             }
             else
             {
@@ -422,7 +422,7 @@ namespace BAMCIS.PrestoClient
             // Expect a 200 response
             if (Response.StatusCode != HttpStatusCode.OK)
             {
-                throw new PrestoException(await Response.Content.ReadAsStringAsync(), Response.StatusCode);
+                throw new PrestoWebException(await Response.Content.ReadAsStringAsync(), Response.StatusCode);
             }
             else
             {
@@ -749,7 +749,7 @@ namespace BAMCIS.PrestoClient
 
             if (Response.StatusCode != HttpStatusCode.OK)
             {
-                throw new PrestoException(await Response.Content.ReadAsStringAsync(), Response.StatusCode);
+                throw new PrestoWebException(await Response.Content.ReadAsStringAsync(), Response.StatusCode);
             }
             else
             {
@@ -815,13 +815,13 @@ namespace BAMCIS.PrestoClient
                         }
                     default:
                         {
-                            throw new PrestoException($"The request to {request.RequestUri} failed.", Response.StatusCode);
+                            throw new PrestoWebException($"The request to {request.RequestUri} failed.", Response.StatusCode);
                         }
                 }
             }
 
             // This will only be reached if the while loop exits
-            throw new PrestoException($"The maximum number of retries, {maxRetries}, for path {request.RequestUri} was exceeded.", Response.StatusCode);
+            throw new PrestoWebException($"The maximum number of retries, {maxRetries}, for path {request.RequestUri} was exceeded.", Response.StatusCode);
         }
 
         /// <summary>

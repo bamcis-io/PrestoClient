@@ -21,6 +21,7 @@ namespace BAMCIS.PrestoClient.Model.Execution
 
         #region Constructors
 
+        [JsonConstructor]
         public StageId(string combinedId)
         {
             string[] Parts = combinedId.Split('.');

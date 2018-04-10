@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace BAMCIS.PrestoClient.Model.Client
 {
+    /// <summary>
+    /// From com.facebook.presto.client.QueryStatusInfo.java
+    /// </summary>
     public interface IQueryStatusInfo
     {
         string GetId();
@@ -11,6 +13,8 @@ namespace BAMCIS.PrestoClient.Model.Client
         Uri GetInfoUri();
 
         Uri GetPartialCancelUri();
+
+        Uri GetNextUri();
 
         IEnumerable<Column> GetColumns();
 

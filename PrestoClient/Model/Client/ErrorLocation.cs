@@ -41,7 +41,10 @@ namespace BAMCIS.PrestoClient.Model.Client
 
         public override string ToString()
         {
-            return $"ErrorLocation {{lineNumber={this.LineNumber}, columnNumber={this.ColumnNumber}}}";
+            return StringHelper.Build(this)
+                .Add("lineNumber", this.LineNumber)
+                .Add("columnNumber", this.ColumnNumber)
+                .ToString();
         }
 
         #endregion

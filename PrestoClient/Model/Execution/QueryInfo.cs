@@ -15,57 +15,57 @@ namespace BAMCIS.PrestoClient.Model.Execution
     {
         #region Public Properties
 
-        public string QueryId { get; set; }
+        public QueryId QueryId { get; }
 
-        public SessionRepresentation Session { get; set; }
+        public SessionRepresentation Session { get; }
 
-        public QueryState State { get; set; }
+        public QueryState State { get; }
 
-        public MemoryPoolId MemoryPool { get; set; }
+        public MemoryPoolId MemoryPool { get; }
 
-        public bool Scheduled { get; set; }
+        public bool Scheduled { get; }
 
-        public Uri Self { get; set; }
+        public Uri Self { get; }
 
-        public IEnumerable<string> FieldNames { get; set; }
+        public IEnumerable<string> FieldNames { get; }
 
-        public string Query { get; set; }
+        public string Query { get; }
 
-        public QueryStats QueryStats { get; set; }
-
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        [Optional]
-        public string SetCatalog { get; set; }
+        public QueryStats QueryStats { get; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         [Optional]
-        public string SetSchema { get; set; }
-
-        public IDictionary<string, string> SetSessionProperties { get; set; }
-
-        public HashSet<string> ResetSessionProperties { get; set; }
-
-        public IDictionary<string, string> AddedPreparedStatements { get; set; }
-
-        public HashSet<string> DeallocatedPreparedStatements { get; set; }
+        public string SetCatalog { get; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         [Optional]
-        public TransactionId StartedTransactionId { get; set; }
+        public string SetSchema { get; }
 
-        public bool ClearTransactionId { get; set; }
+        public IDictionary<string, string> SetSessionProperties { get; }
 
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        [Optional]
-        public string UpdateType { get; set; }
+        public HashSet<string> ResetSessionProperties { get; }
 
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        [Optional]
-        public StageInfo OutputStage { get; set; }
+        public IDictionary<string, string> AddedPreparedStatements { get; }
+
+        public HashSet<string> DeallocatedPreparedStatements { get; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         [Optional]
-        public FailureInfo FailureInfo { get; set; }
+        public TransactionId StartedTransactionId { get; }
+
+        public bool ClearTransactionId { get; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        [Optional]
+        public string UpdateType { get; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        [Optional]
+        public StageInfo OutputStage { get; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        [Optional]
+        public FailureInfo FailureInfo { get; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         [Optional]
@@ -73,39 +73,105 @@ namespace BAMCIS.PrestoClient.Model.Execution
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         [Optional]
-        public ErrorCode ErrorCode { get; set; }
+        public ErrorCode ErrorCode { get; }
 
-        public bool FinalQueryInfo { get; set; }
+        public bool FinalQueryInfo { get; }
 
-        public HashSet<Input> Inputs { get; set; }
-
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        [Optional]
-        public Output Output { get; set; }
+        public HashSet<Input> Inputs { get; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         [Optional]
-        public FlattenedPlan Plan { get; set; }
-
-        public bool CompleteInfo { get; set; }
+        public Output Output { get; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         [Optional]
-        public string ResourceGroupName { get; set; }
+        public FlattenedPlan FlattendedPlan { get; }
+
+        public bool CompleteInfo { get; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        [Optional]
+        public string ResourceGroupName { get; }
 
         #endregion
 
+        #region Constructors
+
+        [JsonConstructor]
+        public QueryInfo(
+            QueryId queryId,
+            SessionRepresentation session,
+            QueryState state,
+            MemoryPoolId memoryPool,
+            bool scheduled,
+            Uri self,
+            IEnumerable<string> fieldNames,
+            string query,
+            QueryStats queryStats,
+            string setCatalog,
+            string setSchema,
+            IDictionary<string, string> setSessionProperties,
+            HashSet<string> resetSessionProperties,
+            IDictionary<string, string> addedPreparedStatements,
+            HashSet<string> deallocatedPreparedStatemetns,
+            TransactionId startedTransactionId,
+            bool clearTransactionId,
+            string updateType,
+            StageInfo outputStage,
+            FailureInfo failureInfo,
+            ErrorCode errorCode,
+            HashSet<Input> inputs,
+            Output output,
+            FlattenedPlan flattenedPlan,
+            bool completeInfo,
+            string resourceGroupName
+            )
+        {
+            if (String.IsNullOrEmpty(query))
+            {
+                throw new ArgumentNullException("query");
+            }
+
+            this.QueryId = queryId ?? throw new ArgumentNullException("queryId");
+            this.Session = session ?? throw new ArgumentNullException("session");
+            this.State = state;
+            this.MemoryPool = memoryPool ?? throw new ArgumentNullException("memoryPool");
+            this.Scheduled = scheduled;
+            this.Self = self ?? throw new ArgumentNullException("self");
+            this.FieldNames = fieldNames ?? throw new ArgumentNullException("fieldNames");
+            this.Query = query;
+            this.QueryStats = queryStats ?? throw new ArgumentNullException("queryStats");
+            this.SetCatalog = setCatalog;
+            this.SetSchema = setSchema;
+            this.SetSessionProperties = setSessionProperties ?? throw new ArgumentNullException("setSessionProperties");
+            this.ResetSessionProperties = resetSessionProperties ?? throw new ArgumentNullException("resetSessionProperties");
+            this.AddedPreparedStatements = addedPreparedStatements ?? throw new ArgumentNullException("addedPreparedStatements");
+            this.DeallocatedPreparedStatements = deallocatedPreparedStatemetns ?? throw new ArgumentNullException("deallocatedPreparedStatements");
+            this.StartedTransactionId = startedTransactionId;
+            this.ClearTransactionId = clearTransactionId;
+            this.UpdateType = updateType;
+            this.OutputStage = outputStage;
+            this.FailureInfo = failureInfo;
+            this.ErrorType = errorCode == null ? ErrorType.NONE : errorCode.Type;
+            this.ErrorCode = errorCode;
+            this.Inputs = inputs ?? throw new ArgumentNullException("inputs");
+            this.Output = output;
+            this.FlattendedPlan = flattenedPlan;
+            this.CompleteInfo = completeInfo;
+            this.ResourceGroupName = resourceGroupName;
+        }
+
+        #endregion
 
         #region Public Methods
 
         public override string ToString()
         {
-            return $"QueryInfo {{queryId={this.QueryId}, state={this.State}, fieldNames=[{String.Join(",", this.FieldNames)}]}}";
-        }
-
-        public bool IsCompleteInfo()
-        {
-            return this.CompleteInfo;
+            return StringHelper.Build(this)
+                .Add("queryId", this.QueryId)
+                .Add("state", this.State)
+                .Add("fieldNames", this.FieldNames)
+                .ToString();
         }
 
         #endregion

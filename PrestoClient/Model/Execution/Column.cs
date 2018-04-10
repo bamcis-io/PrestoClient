@@ -41,7 +41,10 @@ namespace BAMCIS.PrestoClient.Model.Execution
 
         public override string ToString()
         {
-            return $"Column {{name={this.Name}, type={this.Type}}}";
+            return StringHelper.Build(this)
+                .Add("name", this.Name)
+                .Add("type", this.Type)
+                .ToString();
         }
 
         #endregion

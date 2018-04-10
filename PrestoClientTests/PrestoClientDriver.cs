@@ -1,6 +1,5 @@
 using BAMCIS.PrestoClient;
 using BAMCIS.PrestoClient.Interfaces;
-using BAMCIS.PrestoClient.Model.Execution;
 using BAMCIS.PrestoClient.Model.Query;
 using BAMCIS.PrestoClient.Model.Server;
 using BAMCIS.PrestoClient.Model.Statement;

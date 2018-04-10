@@ -4,7 +4,7 @@ using System.Net;
 
 namespace BAMCIS.PrestoClient.Model
 {
-    public class PrestoQueryException : PrestoException
+    public class PrestoQueryException : PrestoWebException
     {
         #region Public Properties
 
@@ -24,7 +24,7 @@ namespace BAMCIS.PrestoClient.Model
 
         #region Constructors
 
-        public PrestoQueryException(QueryError error) : base(error.Message)
+        public PrestoQueryException(QueryError error) : base(error.Message, HttpStatusCode.OK)
         {
             if (error == null)
             {

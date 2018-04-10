@@ -2,6 +2,9 @@
 
 namespace BAMCIS.PrestoClient.Model.Client
 {
+    /// <summary>
+    /// The actions section of the response from a v2 statement execution
+    /// </summary>
     public class Actions
     {
         public string SetTransactionId { get; set; }

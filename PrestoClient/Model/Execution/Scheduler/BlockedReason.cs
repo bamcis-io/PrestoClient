@@ -1,5 +1,12 @@
-﻿namespace BAMCIS.PrestoClient.Model.Execution.Scheduler
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
+namespace BAMCIS.PrestoClient.Model.Execution.Scheduler
 {
+    /// <summary>
+    /// From com.facebook.presto.execution.scheduler.ScheduleResult.java (internal enum BlockedReason)
+    /// </summary>
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum BlockedReason
     {
         /// <summary>
