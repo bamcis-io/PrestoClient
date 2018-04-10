@@ -13,14 +13,17 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
 
         public PlanNode Source { get; }
 
-        public Expression Predicate { get; }
+        /// <summary>
+        /// TODO: Supposed to be Expression
+        /// </summary>
+        public dynamic Predicate { get; }
 
         #endregion
 
         #region Constructors
 
         [JsonConstructor]
-        public FilterNode(PlanNodeId id, PlanNode source, Expression predicate) : base(id)
+        public FilterNode(PlanNodeId id, PlanNode source, dynamic predicate) : base(id)
         {
             this.Source = source;
             this.Predicate = predicate;

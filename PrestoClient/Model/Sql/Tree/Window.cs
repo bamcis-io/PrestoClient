@@ -11,7 +11,10 @@ namespace BAMCIS.PrestoClient.Model.Sql.Tree
     {
         #region Public Properties
 
-        public IEnumerable<Expression> PartitionBy { get; }
+        /// <summary>
+        /// TODO: Supposed to be Expression
+        /// </summary>
+        public IEnumerable<dynamic> PartitionBy { get; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         [Optional]
@@ -25,12 +28,12 @@ namespace BAMCIS.PrestoClient.Model.Sql.Tree
 
         #region Constructors
 
-        public Window(IEnumerable<Expression> partitionBy, OrderBy orderBy, WindowFrame frame) : this(null, partitionBy, orderBy, frame)
+        public Window(IEnumerable<object> partitionBy, OrderBy orderBy, WindowFrame frame) : this(null, partitionBy, orderBy, frame)
         {
         }
 
         [JsonConstructor]
-        public Window(NodeLocation location, IEnumerable<Expression> partitionBy, OrderBy orderBy, WindowFrame frame) : base(location)
+        public Window(NodeLocation location, IEnumerable<object> partitionBy, OrderBy orderBy, WindowFrame frame) : base(location)
         {
             this.PartitionBy = partitionBy ?? throw new ArgumentNullException("partitionBy");
             this.OrderBy = orderBy; // These are actually optional ?? throw new ArgumentNullException("orderBy");

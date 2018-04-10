@@ -9,7 +9,10 @@ namespace BAMCIS.PrestoClient.Model.Sql.Tree
     {
         #region Public Properties
 
-        public Expression SortKey { get; }
+        /// <summary>
+        /// TODO: Supposed to be Expression
+        /// </summary>
+        public dynamic SortKey { get; }
 
         public Ordering Ordering { get; }
 
@@ -19,10 +22,10 @@ namespace BAMCIS.PrestoClient.Model.Sql.Tree
 
         #region Constructors
 
-        public SortItem(Expression sortKey, Ordering ordering, NullOrdering nullOrdering) : this(null, sortKey, ordering, nullOrdering)
+        public SortItem(object sortKey, Ordering ordering, NullOrdering nullOrdering) : this(null, sortKey, ordering, nullOrdering)
         { }
 
-        public SortItem(NodeLocation location, Expression sortKey, Ordering ordering, NullOrdering nullOrdering) : base(location)
+        public SortItem(NodeLocation location, object sortKey, Ordering ordering, NullOrdering nullOrdering) : base(location)
         {
             this.Ordering = ordering;
             this.NullOrdering = nullOrdering;

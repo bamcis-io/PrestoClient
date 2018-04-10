@@ -14,21 +14,24 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
 
         public IEnumerable<Symbol> OutputSymbols { get; }
 
-        public IEnumerable<List<Expression>> Rows { get; }
+        /// <summary>
+        /// TODO: Supposed to be Expression
+        /// </summary>
+        public IEnumerable<List<dynamic>> Rows { get; }
 
         #endregion
 
         #region Constructors
 
         [JsonConstructor]
-        public ValuesNode(PlanNodeId id, IEnumerable<Symbol> outputSymbols, IEnumerable<List<Expression>> rows) : base(id)
+        public ValuesNode(PlanNodeId id, IEnumerable<Symbol> outputSymbols, IEnumerable<List<dynamic>> rows) : base(id)
         {
             this.OutputSymbols = outputSymbols;
             this.Rows = rows;
 
             int OutputSymbolsSize = outputSymbols.Count();
 
-            foreach (List<Expression> Row in this.Rows)
+            foreach (List<dynamic> Row in this.Rows)
             {
                 ParameterCheck.OutOfRange(Row.Count == OutputSymbolsSize || Row.Count == 0, $"Expected row to have {OutputSymbolsSize} values, but row has {Row.Count} values.");
             }

@@ -18,6 +18,7 @@ namespace BAMCIS.PrestoClient.Model.Execution
 
         #region Constructors
 
+        [JsonConstructor]
         public FlattenedNode(string node)
         {
             if (String.IsNullOrEmpty(node))
@@ -36,8 +37,6 @@ namespace BAMCIS.PrestoClient.Model.Execution
         {
             return this.Node;
         }
-
-       
 
         #endregion
     }

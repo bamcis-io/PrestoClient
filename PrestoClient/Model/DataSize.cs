@@ -43,6 +43,40 @@ namespace BAMCIS.PrestoClient.Model
 
         #region Public Methods
 
+        public static DataSize SuccinctBytes(long bytes)
+        {
+            return SuccinctDataSize(bytes, DataSizeUnit.BYTE);
+        }
+
+        public static DataSize SuccinctDataSize(double size, DataSizeUnit unit)
+        {
+            return new DataSize(size, unit).ConvertToMostSuccinctDataSize();
+        }
+
+        public DataSize ConvertToMostSuccinctDataSize()
+        {
+            DataSizeUnit UnitToUse = DataSizeUnit.BYTE;
+
+            foreach (DataSizeUnit UnitToTest in Enum.GetValues(typeof(DataSizeUnit)))
+            {
+                if (this.GetValue(UnitToTest) >= 1.0)
+                {
+                    UnitToUse = UnitToTest;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return this.ConvertTo(UnitToUse);
+        }
+
+        public DataSize ConvertTo(DataSizeUnit unit)
+        {
+            return new DataSize(this.GetValue(unit), unit);
+        }
+
         public override string ToString()
         {
             return $"{this.Size.ToString("0.##")}{this.Unit.GetUnitString()}";
@@ -56,6 +90,15 @@ namespace BAMCIS.PrestoClient.Model
         public int CompareTo(DataSize other)
         {
             return this.GetValue(DataSizeUnit.BYTE).CompareTo(other.GetValue(DataSizeUnit.BYTE));
+        }
+
+        public long ToBytes()
+        {
+            double Bytes = this.GetValue(DataSizeUnit.BYTE);
+
+            ParameterCheck.Check(Bytes <= Int64.MaxValue, "Size in bytes is too large to be represented in bytes as a long.");
+
+            return (long)Bytes;
         }
 
         #endregion

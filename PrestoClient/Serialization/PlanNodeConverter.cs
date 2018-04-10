@@ -26,14 +26,14 @@ namespace BAMCIS.PrestoClient.Serialization
 
             if (existingValue == null || existingValue.GetType() != ActualType)
             {
-                JsonContract Contract = serializer.ContractResolver.ResolveContract(ActualType);
-                existingValue = Contract.DefaultCreator();
+                //JsonContract Contract = serializer.ContractResolver.ResolveContract(ActualType);
+                return Token.ToObject(ActualType, serializer);
             }
-
+            /*
             using (JsonReader DerivedTypeReader = Token.CreateReader())
             {
                 serializer.Populate(DerivedTypeReader, existingValue);
-            }
+            }*/
 
             return existingValue;
         }

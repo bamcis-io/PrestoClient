@@ -13,15 +13,15 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
         #region Public Properties
 
         /// <summary>
-        /// TODO: Key should be Symbol
+        /// TODO: Key should be <Symbol, Expression>
         /// </summary>
-        public IDictionary<string, Expression> assignments { get; }
+        public IDictionary<string, dynamic> assignments { get; }
 
         #endregion
 
         #region Constructors
 
-        public Assignments(IDictionary<string, Expression> assignments)
+        public Assignments(IDictionary<string, dynamic> assignments)
         {
             this.assignments = assignments ?? throw new ArgumentNullException("assignments");
         }
@@ -35,7 +35,7 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
             return this.assignments.Keys.Select(x => new Symbol(x));
         }
 
-        public IEnumerable<Expression> GetExpressions()
+        public IEnumerable<dynamic> GetExpressions()
         {
             return this.assignments.Values;
         }

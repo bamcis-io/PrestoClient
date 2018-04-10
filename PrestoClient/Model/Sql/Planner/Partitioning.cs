@@ -1,4 +1,5 @@
-﻿using BAMCIS.PrestoClient.Model.Query.QueryDetails.Handles;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace BAMCIS.PrestoClient.Model.Sql.Planner
@@ -8,11 +9,35 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner
     /// </summary>
     public class Partitioning
     {
-        /// <summary>
-        /// This is really supposed to be a PartitioningHandle
-        /// </summary>
-        public ConnectorHandleWrapper Handle { get; set; }
+        #region Public Properties
 
-        public IEnumerable<ArgumentBinding> Arguments { get; set; }
+        public PartitioningHandle Handle { get; }
+
+        public IEnumerable<ArgumentBinding> Arguments { get; }
+
+        #endregion
+
+        #region Constructors
+
+        [JsonConstructor]
+        public Partitioning(PartitioningHandle handle, IEnumerable<ArgumentBinding> arguments)
+        {
+            this.Handle = handle ?? throw new ArgumentNullException("handle");
+            this.Arguments = arguments ?? throw new ArgumentNullException("arguments");
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public override string ToString()
+        {
+            return StringHelper.Build(this)
+                .Add("handle", this.Handle)
+                .Add("arguments", this.Arguments)
+                .ToString();
+        }
+
+        #endregion
     }
 }

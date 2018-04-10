@@ -11,5 +11,14 @@
         { }
 
         #endregion
+
+        #region Public Methods
+
+        public override string ToString()
+        {
+            return ExpressionFormatter.FormatExpression(this, new Expression[] { });
+        }
+
+        #endregion
     }
 }

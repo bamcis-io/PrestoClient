@@ -1,6 +1,8 @@
-﻿using BAMCIS.PrestoClient.Model.Query.QueryDetails.Handles;
-using BAMCIS.PrestoClient.Model.Sql.Planner;
+﻿using BAMCIS.PrestoClient.Model.Sql.Planner;
 using BAMCIS.PrestoClient.Model.Sql.Planner.Plan;
+using BAMCIS.PrestoClient.Serialization;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace BAMCIS.PrestoClient.Model.Execution
@@ -8,35 +10,112 @@ namespace BAMCIS.PrestoClient.Model.Execution
     /// <summary>
     /// From com.facebook.presto.execution.PlanFlattener.java (internal class FlattendedPlanFragment)
     /// </summary>
+    [JsonConverter(typeof(FlattenedPlanFragmentConverter))]
     public class FlattenedPlanFragment
     {
-        public string Id { get; set; }
+        #region Public Properties
 
-        public string TextPlan { get; set; }
+        public PlanFragmentId Id
+        {
+            get
+            {
+                return this.Fragment.Id;
+            }
+        }
 
-        public PlanNode Tree { get; set; }
+        public string TextPlan { get; }
+
+        public PlanNode Tree
+        {
+            get
+            {
+                return this.Fragment.Root;
+            }
+        }
+
+        public IEnumerable<FlattenedNode> Nodes { get; }
 
         /// <summary>
-        /// TODO: This is supposed to be flattened node, but 
-        /// the type isn't built out completely yet
+        /// TODO: Should be <Symbol, Type> Problem with Json.NET
         /// </summary>
-        public IEnumerable<PlanNode> Nodes { get; set; }
+        public IDictionary<string, string> Symbols
+        {
+            get
+            {
+                return this.Fragment.Symbols;
+            }
+        }
 
-        /// <summary>
-        /// TODO: Should be <Symbol, string> Problem with Json.NET
-        /// </summary>
-        public IDictionary<string, string> Symbols { get; set; }
+        public PartitioningHandle Partitioning
+        {
+            get
+            {
+                return this.Fragment.Partitioning;
+            }
+        }
 
-        public ConnectorHandleWrapper Partitioning { get; set; }
+        public IEnumerable<PlanNodeId> PartitionedSources
+        {
+            get
+            {
+                return this.Fragment.PartitionedSources;
+            }
+        }
 
-        public IEnumerable<PlanNodeId> PartitionedSources { get; set; }
+        public IEnumerable<string> Types
+        {
+            get
+            {
+                return this.Fragment.Types;
+            }
+        }
 
-        public IEnumerable<string> Types { get; set; }
+        public HashSet<PlanNode> PartitionedSourceNodes
+        {
+            get
+            {
+                return this.Fragment.PartionedSourceNodes;
+            }
+        }
 
-        public IEnumerable<PlanNode> PartitionedSourceNodes { get; set; }
+        public IEnumerable<RemoteSourceNode> RemoteSourceNodes
+        {
+            get
+            {
+                return this.Fragment.RemoteSourceNodes;
+            }
+        }
 
-        public IEnumerable<RemoteSourceNode> RemoteSourceNodes { get; set; }
+        public PartitioningScheme PartitioningScheme
+        {
+            get
+            {
+                return this.Fragment.PartitioningScheme;
+            }
+        }
 
-        public PartitioningScheme PartitioningScheme { get; set; }
+        #endregion
+
+        #region Private Properties
+
+        private PlanFragment Fragment { get; }
+
+        #endregion
+
+        #region Constructors
+
+        public FlattenedPlanFragment(string textPlan, PlanFragment fragment, IEnumerable<FlattenedNode> nodes)
+        {
+            if (string.IsNullOrEmpty(textPlan))
+            {
+                throw new ArgumentNullException("textPlan");
+            }
+
+            this.TextPlan = textPlan;
+            this.Fragment = fragment ?? throw new ArgumentNullException("fragment");
+            this.Nodes = nodes ?? throw new ArgumentNullException("nodes");
+        }
+
+        #endregion 
     }
 }

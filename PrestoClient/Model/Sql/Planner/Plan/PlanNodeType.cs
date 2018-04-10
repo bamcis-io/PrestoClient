@@ -6,19 +6,41 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
     [JsonConverter(typeof(StringEnumConverter))]
     public enum PlanNodeType
     {
+        BASE,
+
         AGGREGATION,
         APPLY,
-        ASSIGN_UNIQUE_ID,
+        ASSIGNUNIQUEID,
         DELETE,
+        DISTINCTLIMIT,
         EXCHANGE,
-        BASE,
-        REMOTESOURCE,
-        SORT,
-        OUTPUT,
-        TABLESCAN,
+        EXPLAINANALYZE,
         FILTER,
+        GROUPID,
+        INDEXJOIN,
+        INDEXSOURCE,
+        INTERSECT,
+        JOIN,
+        LATERALJOIN,
+        LIMIT,
+        MARKDISTINCT,
+        METADATADELETE,
+        OUTPUT,
         PROJECT,
+        REMOTESOURCE,
+        ROWNUMBER,
+        SAMPLE,
+        SCALAR,
+        SEMIJOIN,
+        SORT,
+        TABLECOMMIT,
+        TABLESCAN,
+        TABLEWRITER,
         TOPN,
-        LIMIT
+        TOPNROWNUMBER,
+        UNION,
+        UNNEST,
+        VALUES,
+        WINDOW
     }
 }

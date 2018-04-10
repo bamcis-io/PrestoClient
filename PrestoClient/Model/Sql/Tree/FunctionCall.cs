@@ -14,44 +14,50 @@ namespace BAMCIS.PrestoClient.Model.Sql.Tree
 
         public Window Window { get; }
 
-        public Expression Filter { get; }
+        /// <summary>
+        /// TODO: Supposed to be Expression
+        /// </summary>
+        public dynamic Filter { get; }
 
         public OrderBy OrderBy { get; }
 
         public bool Distinct { get; }
 
-        public IEnumerable<Expression> Arguments { get; }
+        /// <summary>
+        /// TODO: Supposed to be Expression
+        /// </summary>
+        public IEnumerable<dynamic> Arguments { get; }
 
         #endregion
 
         #region Constructors
 
-        public FunctionCall(QualifiedName name, IEnumerable<Expression> arguments)
+        public FunctionCall(QualifiedName name, IEnumerable<object> arguments)
             : this(null, name, null, null, null, false, arguments)
         { }
 
-        public FunctionCall(NodeLocation location, QualifiedName name, IEnumerable<Expression> arguments)
+        public FunctionCall(NodeLocation location, QualifiedName name, IEnumerable<object> arguments)
             : this(null, name, null, null, null, false, arguments)
         { }
 
-        public FunctionCall(QualifiedName name, bool distinct, IEnumerable<Expression> arguments)
+        public FunctionCall(QualifiedName name, bool distinct, IEnumerable<object> arguments)
             : this(null, name, null, null, null, distinct, arguments)
         { }
 
-        public FunctionCall(QualifiedName name, bool distinct, IEnumerable<Expression> arguments, Expression filter)
+        public FunctionCall(QualifiedName name, bool distinct, IEnumerable<object> arguments, object filter)
             : this(null, name, null, filter, null, distinct, arguments)
         { }
 
-        public FunctionCall(QualifiedName name, Window window, bool distinct, IEnumerable<Expression> arguments)
+        public FunctionCall(QualifiedName name, Window window, bool distinct, IEnumerable<object> arguments)
             : this(null, name, window, null, null, distinct, arguments)
         { }
 
-        public FunctionCall(QualifiedName name, Window window, Expression filter, OrderBy orderBy, bool distinct, IEnumerable<Expression> arguments) 
+        public FunctionCall(QualifiedName name, Window window, object filter, OrderBy orderBy, bool distinct, IEnumerable<object> arguments) 
             : this(null, name, window, filter, orderBy, distinct, arguments)
         { }
 
         [JsonConstructor]
-        public FunctionCall(NodeLocation location, QualifiedName name, Window window, Expression filter, OrderBy orderBy, bool distinct, IEnumerable<Expression> arguments) : base(location)
+        public FunctionCall(NodeLocation location, QualifiedName name, Window window, object filter, OrderBy orderBy, bool distinct, IEnumerable<object> arguments) : base(location)
         {
             this.Name = name;
             this.Window = window;

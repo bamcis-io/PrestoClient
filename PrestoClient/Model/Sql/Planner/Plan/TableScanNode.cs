@@ -32,7 +32,10 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
         /// </summary>
         public IDictionary<string, dynamic> CurrentConstraint { get; }
 
-        public Expression OriginalConstraint { get; }
+        /// <summary>
+        /// TODO: Supposed to be Expression
+        /// </summary>
+        public dynamic OriginalConstraint { get; }
 
         #endregion
 
@@ -46,7 +49,7 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
             IDictionary<string, dynamic> assignments, 
             TableLayoutHandle layout,
             IDictionary<string, dynamic> currentConstraint,
-            Expression originalConstraint
+            dynamic originalConstraint
             ) : base(id)
         {
             this.Table = table ?? throw new ArgumentNullException("table");

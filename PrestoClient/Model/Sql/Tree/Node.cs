@@ -24,5 +24,14 @@ namespace BAMCIS.PrestoClient.Model.Sql.Tree
         }
 
         #endregion
+
+        #region Public Methods
+
+        public dynamic Accept(dynamic visitor, dynamic context)
+        {
+            return visitor.VisitNode(this, context);
+        }
+
+        #endregion
     }
 }

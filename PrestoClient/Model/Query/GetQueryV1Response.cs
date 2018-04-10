@@ -1,4 +1,5 @@
 ﻿using BAMCIS.PrestoClient.Model.Execution;
+using BAMCIS.PrestoClient.Serialization;
 using Newtonsoft.Json;
 using System;
 
@@ -48,7 +49,8 @@ namespace BAMCIS.PrestoClient.Model.Query
             {
                 try
                 {
-                    this.QueryInfo = JsonConvert.DeserializeObject<QueryInfo>(this.RawContent);
+                    JsonConverter[] Converters = { new PlanNodeConverter() };
+                    this.QueryInfo = JsonConvert.DeserializeObject<QueryInfo>(this.RawContent, new JsonSerializerSettings() { Converters = Converters });
                     this.DeserializationSucceeded = true;
                     this.LastError = null;
                 }

@@ -14,14 +14,17 @@ namespace BAMCIS.PrestoClient.Model.Metadata
 
         public ConnectorId ConnectorId { get; }
 
-        public IConnectorTableHandle ConnectorHandle { get; }
+        /// <summary>
+        /// TODO: Supposed to be an ITableConnectorHandle
+        /// </summary>
+        public dynamic ConnectorHandle { get; }
 
         #endregion
 
         #region Constructors
 
         [JsonConstructor]
-        public TableHandle(ConnectorId connectorId, IConnectorTableHandle connectorHandle)
+        public TableHandle(ConnectorId connectorId, dynamic connectorHandle)
         {
             this.ConnectorId = connectorId ?? throw new ArgumentNullException("connectorId");
             this.ConnectorHandle = connectorHandle ?? throw new ArgumentNullException("connectorHandle");

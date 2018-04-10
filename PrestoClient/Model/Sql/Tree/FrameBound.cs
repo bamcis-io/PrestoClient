@@ -1,4 +1,6 @@
-﻿namespace BAMCIS.PrestoClient.Model.Sql.Tree
+﻿using Newtonsoft.Json;
+
+namespace BAMCIS.PrestoClient.Model.Sql.Tree
 {
     /// <summary>
     /// From com.facebook.presto.sql.tree.FrameBound.java
@@ -9,9 +11,15 @@
 
         public FrameBoundType Type { get; }
 
-        public Expression Value { get; }
+        /// <summary>
+        /// TODO: Supposed to be Expression
+        /// </summary>
+        public dynamic Value { get; }
 
-        public Expression OriginalValue { get; }
+        /// <summary>
+        /// TODO: Supposed to be Expression
+        /// </summary>
+        public dynamic OriginalValue { get; }
    
         #endregion
 
@@ -23,10 +31,11 @@
         public FrameBound(NodeLocation location, FrameBoundType type) : this(location, type, null, null)
         { }
 
-        public FrameBound(NodeLocation location, FrameBoundType type, Expression value) : this(location, type, value, value)
+        public FrameBound(NodeLocation location, FrameBoundType type, dynamic value) : this(location, type, (object)value, (object)value)
         { }
 
-        public FrameBound(NodeLocation location, FrameBoundType type, Expression value, Expression originalValue) : base(location)
+        [JsonConstructor]
+        public FrameBound(NodeLocation location, FrameBoundType type, dynamic value, dynamic originalValue) : base(location)
         {
             this.Type = type;
             this.Value = value;
