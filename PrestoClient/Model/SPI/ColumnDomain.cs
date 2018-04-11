@@ -7,6 +7,8 @@ namespace BAMCIS.PrestoClient.Model.SPI
     /// From com.facebook.presto.spi.TupleDomain.java (internal class ColumnDomain)
     /// 
     /// Used for serialization only
+    /// 
+    /// TODO: In progress for TupleDomain
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class ColumnDomain<T>

@@ -6,10 +6,26 @@ namespace BAMCIS.PrestoClient.Model.Server
     /// <summary>
     /// A Java thread resource.
     /// From com.facebook.presto.server.ThreadResource.java
+    /// 
+    /// This class is really just a data holder since the actual implementation
+    /// creates and populates the thread info
     /// </summary>
     public class ThreadResource
     {
+        #region Public Properties
+
         public IEnumerable<Info> ThreadInfo { get; private set; }
+
+        #endregion
+
+        #region Constructors
+
+        private ThreadResource()
+        { }
+
+        #endregion
+
+        #region Internal Classes
 
         public class Info
         {
@@ -41,5 +57,7 @@ namespace BAMCIS.PrestoClient.Model.Server
 
             #endregion
         }
+
+        #endregion
     }
 }

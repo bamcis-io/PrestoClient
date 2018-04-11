@@ -21,10 +21,7 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner
         [JsonConstructor]
         public Symbol(string name)
         {
-            if (String.IsNullOrEmpty(name))
-            {
-                throw new ArgumentNullException("name", "The name cannot be null or empty.");
-            }
+            ParameterCheck.NotNullOrEmpty(name, "name");
 
             this.Name = name;
         }

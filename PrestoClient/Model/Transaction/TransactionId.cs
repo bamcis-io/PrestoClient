@@ -48,6 +48,28 @@ namespace BAMCIS.PrestoClient.Model.Transaction
             return this.UUID.ToString();
         }
 
+        public override int GetHashCode()
+        {
+            return this.UUID.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (this == obj)
+            {
+                return true;
+            }
+
+            if (obj == null || this.GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            TransactionId Other = (TransactionId)obj;
+
+            return this.UUID == Other.UUID;
+        }
+
         #endregion
     }
 }

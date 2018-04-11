@@ -1,5 +1,6 @@
 ﻿using BAMCIS.PrestoClient.Model.Execution;
 using BAMCIS.PrestoClient.Model.SPI;
+using BAMCIS.PrestoClient.Model.SPI.Memory;
 using Newtonsoft.Json;
 using System;
 
@@ -12,29 +13,80 @@ namespace BAMCIS.PrestoClient.Model.Server
     /// </summary>
     public class BasicQueryInfo
     {
-        public string QueryId { get; set; }
+        #region Public Properties
 
-        public SessionRepresentation Session { get; set; }
+        public QueryId QueryId { get; }
 
-        public QueryState State { get; set; }
+        public SessionRepresentation Session { get;  }
 
-        public string MemoryPool { get; set; }
+        public QueryState State { get;  }
 
-        public bool Scheduled { get; set; }
+        public MemoryPoolId MemoryPool { get; }
 
-        public Uri Self { get; set; }
+        public bool Scheduled { get; }
 
-        public string Query { get; set; }
+        public Uri Self { get; }
 
-        public BasicQueryStats QueryStats { get; set; }
+        public string Query { get; }
 
-        /// <summary>
-        /// TODO: This should be an enum
-        /// </summary>
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string ErrorType { get; set; }
+        public BasicQueryStats QueryStats { get; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public ErrorCode ErrorCode { get; set; }
+        public ErrorType ErrorType { get; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public ErrorCode ErrorCode { get; }
+
+        #endregion
+
+        #region Constructors
+
+        [JsonConstructor]
+        public BasicQueryInfo(
+            QueryId queryId,
+            SessionRepresentation session,
+            QueryState state,
+            MemoryPoolId memoryPool,
+            bool scheduled,
+            Uri self,
+            string query,
+            BasicQueryStats queryStats,
+            ErrorType errorType,
+            ErrorCode errorCode
+            )
+        {
+            ParameterCheck.NotNullOrEmpty(query, "query");
+
+            this.QueryId = queryId ?? throw new ArgumentNullException("queryId");
+            this.Session = session ?? throw new ArgumentNullException("session");
+            this.State = state;
+            this.MemoryPool = memoryPool;
+            this.ErrorType = errorType;
+            this.ErrorCode = errorCode;
+            this.Scheduled = scheduled;
+            this.Self = self ?? throw new ArgumentNullException("self");
+            this.Query = query;
+            this.QueryStats = queryStats ?? throw new ArgumentNullException("queryStats");
+        }
+
+        public BasicQueryInfo(QueryInfo queryInfo) : 
+            this(queryInfo.QueryId, queryInfo.Session, queryInfo.State, queryInfo.MemoryPool, queryInfo.Scheduled, queryInfo.Self,
+                queryInfo.Query, new BasicQueryStats(queryInfo.QueryStats), queryInfo.ErrorType, queryInfo.ErrorCode)
+        {            
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public override string ToString()
+        {
+            return StringHelper.Build(this)
+                .Add("queryId", this.QueryId)
+                .Add("state", this.State.ToString())
+                .ToString();
+        }
+
+        #endregion
     }
 }

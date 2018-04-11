@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
 
 namespace BAMCIS.PrestoClient.Model.SPI
 {
@@ -23,15 +22,8 @@ namespace BAMCIS.PrestoClient.Model.SPI
         [JsonConstructor]
         public ErrorCode(int code, string name, ErrorType type)
         {
-            if (code < 0)
-            {
-                throw new ArgumentOutOfRangeException("code", "The code cannot be negative");
-            }
-
-            if (String.IsNullOrEmpty(name))
-            {
-                throw new ArgumentNullException("name", "The name cannot be null or empty.");
-            }
+            ParameterCheck.OutOfRange(code >= 0, "code", "The code cannot be negative.");
+            ParameterCheck.NotNullOrEmpty(name, "name");
 
             this.Code = code;
             this.Name = name;

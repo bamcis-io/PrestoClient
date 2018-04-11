@@ -1,9 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BAMCIS.PrestoClient.Model.SPI
 {
+    /// <summary>
+    /// TODO: In progress for TupleDomain
+    /// 
+    /// From com.facebook.presto.spi
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public sealed class Domain<T>
     {
         #region Public Properties

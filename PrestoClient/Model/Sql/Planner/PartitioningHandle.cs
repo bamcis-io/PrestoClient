@@ -33,6 +33,7 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner
 
         #region Constructors
 
+        [JsonConstructor]
         public PartitioningHandle(ConnectorId connectorId, dynamic transactionHandle, dynamic connectorHandle)
         {
             this.ConnectorId = connectorId;

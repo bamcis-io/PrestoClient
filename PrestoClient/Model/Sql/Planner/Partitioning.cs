@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BAMCIS.PrestoClient.Model.Sql.Planner
 {
@@ -29,6 +30,11 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner
         #endregion
 
         #region Public Methods
+
+        public HashSet<Symbol> GetColumns()
+        {
+            return new HashSet<Symbol>(this.Arguments.Where(x => x.IsVariable()).Select(x => x.Column));
+        }
 
         public override string ToString()
         {

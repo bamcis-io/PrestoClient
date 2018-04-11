@@ -7,6 +7,7 @@ namespace BAMCIS.PrestoClient.Model.SPI
     /// <summary>
     /// From com.facebook.presto.spi.TupleDomain.java
     /// Defines a set of valid tuples according to the constraints on each of its constituent columns.
+    /// TODO: In progress
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public sealed class TupleDomain<T>

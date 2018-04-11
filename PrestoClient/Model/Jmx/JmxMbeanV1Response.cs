@@ -34,7 +34,7 @@ namespace BAMCIS.PrestoClient.Model.Jmx
         #endregion
 
         #region Constructors
-
+        
         public JmxMbeanV1Response(string rawContent)
         {
             this.RawContent = rawContent;

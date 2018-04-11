@@ -5,6 +5,8 @@ namespace BAMCIS.PrestoClient.Model.SPI
 {
     /// <summary>
     /// From com.facebook.presto.spi.Marker.java
+    /// 
+    /// TODO: In progress for TupleDomain
     /// </summary>
     public class Marker<T> : IComparable<Marker<T>>
     {

@@ -14,75 +14,75 @@ namespace BAMCIS.PrestoClient.Model.Operator
     {
         #region Public Properties
 
-        public int PipelineId { get; set; }
+        public int PipelineId { get; }
 
-        public DateTime FirstStartTime { get; set; }
+        public DateTime FirstStartTime { get; }
 
-        public DateTime LastStartTime { get; set; }
+        public DateTime LastStartTime { get; }
 
-        public DateTime LastEndTime { get; set; }
+        public DateTime LastEndTime { get; }
 
-        public bool InputPipeline { get; set; }
+        public bool InputPipeline { get; }
 
-        public bool OutputPipeline { get; set; }
+        public bool OutputPipeline { get; }
 
-        public int TotalDrivers { get; set; }
+        public int TotalDrivers { get; }
 
-        public int QueuedDrivers { get; set; }
+        public int QueuedDrivers { get; }
 
-        public int QueuedPartitionedDrivers { get; set; }
+        public int QueuedPartitionedDrivers { get; }
 
-        public int RunningDrivers { get; set; }
+        public int RunningDrivers { get; }
 
-        public int RunningPartitionedDrivers { get; set; }
+        public int RunningPartitionedDrivers { get; }
 
-        public int BlockedDrivers { get; set; }
+        public int BlockedDrivers { get; }
 
-        public int CompletedDrivers { get; set; }
+        public int CompletedDrivers { get; }
 
-        public DataSize UserMemoryReservation { get; set; }
+        public DataSize UserMemoryReservation { get; }
 
-        public DataSize RevocableMemoryReservation { get; set; }
+        public DataSize RevocableMemoryReservation { get; }
 
-        public DataSize SystemMemoryReservation { get; set; }
+        public DataSize SystemMemoryReservation { get; }
 
-        public DistributionSnapshot QueuedTime { get; set; }
+        public DistributionSnapshot QueuedTime { get; }
 
-        public DistributionSnapshot ElapsedTime { get; set; }
-
-        [JsonConverter(typeof(TimeSpanConverter))]
-        public TimeSpan TotalScheduledTime { get; set; }
+        public DistributionSnapshot ElapsedTime { get; }
 
         [JsonConverter(typeof(TimeSpanConverter))]
-        public TimeSpan TotalCpuTime { get; set; }
+        public TimeSpan TotalScheduledTime { get; }
 
         [JsonConverter(typeof(TimeSpanConverter))]
-        public TimeSpan TotalUserTime { get; set; }
+        public TimeSpan TotalCpuTime { get; }
 
         [JsonConverter(typeof(TimeSpanConverter))]
-        public TimeSpan TotalBlockedTime { get; set; }
+        public TimeSpan TotalUserTime { get; }
 
-        public bool FullyBlocked { get; set; }
+        [JsonConverter(typeof(TimeSpanConverter))]
+        public TimeSpan TotalBlockedTime { get; }
 
-        public HashSet<BlockedReason> BlockedReasons { get; set; }
+        public bool FullyBlocked { get; }
 
-        public DataSize RawInputDataSize { get; set; }
+        public HashSet<BlockedReason> BlockedReasons { get; }
 
-        public long RawInputPositions { get; set; }
+        public DataSize RawInputDataSize { get; }
 
-        public DataSize ProcessedInputDataSize { get; set; }
+        public long RawInputPositions { get; }
 
-        public long ProcessedInputPositions { get; set; }
+        public DataSize ProcessedInputDataSize { get; }
 
-        public DataSize OutputDataSize { get; set; }
+        public long ProcessedInputPositions { get; }
 
-        public long OutputPositions { get; set; }
+        public DataSize OutputDataSize { get; }
 
-        public DataSize PhysicalWrittenDataSize { get; set; }
+        public long OutputPositions { get; }
 
-        public IEnumerable<OperatorStats> OperatorSummaries { get; set; }
+        public DataSize PhysicalWrittenDataSize { get; }
 
-        public IEnumerable<DriverStats> Drivers { get; set; }
+        public IEnumerable<OperatorStats> OperatorSummaries { get; }
+
+        public IEnumerable<DriverStats> Drivers { get; }
 
         #endregion
 

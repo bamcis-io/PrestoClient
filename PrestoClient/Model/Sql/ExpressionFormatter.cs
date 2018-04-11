@@ -7,6 +7,8 @@ namespace BAMCIS.PrestoClient.Model.Sql
 {
     /// <summary>
     /// From com.facebook.presto.sql.ExpressionFormatter.java
+    /// 
+    /// TODO: In progress for TupleDomain
     /// </summary>
     public class ExpressionFormatter
     {

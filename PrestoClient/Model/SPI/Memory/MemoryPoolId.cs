@@ -1,6 +1,5 @@
 ﻿using BAMCIS.PrestoClient.Serialization;
 using Newtonsoft.Json;
-using System;
 
 namespace BAMCIS.PrestoClient.Model.SPI.Memory
 {
@@ -18,10 +17,7 @@ namespace BAMCIS.PrestoClient.Model.SPI.Memory
         [JsonConstructor]
         public MemoryPoolId(string id)
         {
-            if (String.IsNullOrEmpty(id))
-            {
-                throw new ArgumentNullException("id", "The id cannot be null or empty");
-            }
+            ParameterCheck.NotNullOrEmpty(id, "id");
 
             this.Id = id;
         }

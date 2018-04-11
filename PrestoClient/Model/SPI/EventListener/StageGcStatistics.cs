@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Newtonsoft.Json;
 
 namespace BAMCIS.PrestoClient.Model.SPI.EventListener
 {
@@ -29,6 +27,7 @@ namespace BAMCIS.PrestoClient.Model.SPI.EventListener
 
         #region Constructors 
 
+        [JsonConstructor]
         public StageGcStatistics(
             int stageId,
             int tasks,

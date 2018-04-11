@@ -16,9 +16,13 @@ namespace BAMCIS.PrestoClient.Model.SPI
         /// as the default since enums aren't nullable
         /// </summary>
         NONE,
+
         USER_ERROR,
+
         INTERNAL_ERROR,
+
         INSUFFICIENT_RESOURCES,
+
         EXTERNAL
     }
 }

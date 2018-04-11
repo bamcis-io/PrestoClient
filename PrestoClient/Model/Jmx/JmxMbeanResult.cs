@@ -4,6 +4,8 @@ namespace BAMCIS.PrestoClient.Model.Jmx
 {
     public class JmxMbeanV1Result
     {
+        #region Public Properties
+
         public string ObjectName { get; set; }
 
         public string ClassName { get; set; }
@@ -13,5 +15,7 @@ namespace BAMCIS.PrestoClient.Model.Jmx
         public IEnumerable<JmxMbeanAttribute> Attributes { get; set; }
 
         public IEnumerable<JmxMbeanOperation> Operations { get; set; }
+
+        #endregion
     }
 }

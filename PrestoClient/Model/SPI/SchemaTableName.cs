@@ -21,15 +21,8 @@ namespace BAMCIS.PrestoClient.Model.SPI
         [JsonConstructor]
         public SchemaTableName(string schemaName, string tableName)
         {
-            if (String.IsNullOrEmpty(schemaName))
-            {
-                throw new ArgumentNullException("schemaName");
-            }
-
-            if (String.IsNullOrEmpty(tableName))
-            {
-                throw new ArgumentNullException("tableName");
-            }
+            ParameterCheck.NotNullOrEmpty(schemaName, "schemaName");
+            ParameterCheck.NotNullOrEmpty(tableName, "tableName");
 
             this.SchemaName = schemaName.ToLower();
             this.TableName = tableName.ToLower();

@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace BAMCIS.PrestoClient.Model.SPI.Type
 {
+    /// <summary>
+    /// From com.facebook.presto.spi.type.Type.java
+    /// </summary>
     public interface IType
     {
         /// <summary>

@@ -2,6 +2,8 @@
 {
     public class JmxMbeanAttribute
     {
+        #region Public Properties
+
         public string Name { get; set; }
 
         /// <summary>
@@ -19,5 +21,7 @@
         /// This will be the Java type defined in the "Type" property
         /// </summary>
         public dynamic Value { get; set; }
+
+        #endregion
     }
 }

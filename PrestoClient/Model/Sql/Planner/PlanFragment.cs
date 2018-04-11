@@ -1,6 +1,5 @@
 ﻿using BAMCIS.PrestoClient.Model.Operator;
 using BAMCIS.PrestoClient.Model.Sql.Planner.Plan;
-using BAMCIS.PrestoClient.Serialization;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -15,22 +14,22 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner
     {
         #region Public Properties
 
-        public PlanFragmentId Id { get; set; }
+        public PlanFragmentId Id { get; }
 
-        public PlanNode Root { get; set; }
+        public PlanNode Root { get; }
 
         /// <summary>
         /// TODO: Should be <Symbol, string> Problem with Json.NET
         /// </summary>
-        public IDictionary<string, string> Symbols { get; set; }
+        public IDictionary<string, string> Symbols { get; }
 
-        public PartitioningHandle Partitioning { get; set; }
+        public PartitioningHandle Partitioning { get; }
 
-        public IEnumerable<PlanNodeId> PartitionedSources { get; set; }
+        public IEnumerable<PlanNodeId> PartitionedSources { get; }
 
-        public PartitioningScheme PartitioningScheme { get; set; }
+        public PartitioningScheme PartitioningScheme { get; }
 
-        public PipelineExecutionStrategy PipelineExecutionStrategy { get; set; }
+        public PipelineExecutionStrategy PipelineExecutionStrategy { get; }
 
         [JsonIgnore]
         public IEnumerable<string> Types { get; }

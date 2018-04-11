@@ -2,6 +2,10 @@
 
 namespace BAMCIS.PrestoClient.Model.SPI
 {
+    /// <summary>
+    /// TODO: In progress for TupleDomain
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public sealed class SerializableNativeValue<T>
     {
         #region Public Properties

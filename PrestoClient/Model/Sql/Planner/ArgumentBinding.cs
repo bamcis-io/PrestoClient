@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace BAMCIS.PrestoClient.Model.Sql.Planner
 {
@@ -17,6 +18,7 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner
 
         #region Constructors
 
+        [JsonConstructor]
         public ArgumentBinding(Symbol column, object constant)
         {
             if ((column != null) == (constant != null))

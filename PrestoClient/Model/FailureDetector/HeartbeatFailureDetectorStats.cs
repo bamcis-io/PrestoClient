@@ -8,10 +8,21 @@ namespace BAMCIS.PrestoClient.Model.FailureDetector
 {
     /// <summary>
     /// Stats about the heartbeat of a Presto node
-    /// From com.facebook.presto.failureDetector.HeartbeatFailureDetectors.java (internal class Stats)
+    /// From com.facebook.presto.failureDetector.HeartbeatFailureDetector.java (internal class Stats)
+    /// 
+    /// This class provides mostly a holder for data than a direct port of the code since the actual 
+    /// values are generated from the decay counters, which are not set from the json deserialization.
     /// </summary>
     public class HeartbeatFailureDetectorStats
     {
+        #region Private Fields
+
+        private readonly DecayCounter _RecentRequests = new DecayCounter(ExponentialDecay.OneMinute());
+        private readonly DecayCounter _RecentFailures = new DecayCounter(ExponentialDecay.OneMinute());
+        private readonly DecayCounter _RecentSuccesses = new DecayCounter(ExponentialDecay.OneMinute());
+
+        #endregion
+
         #region Public Properties
 
         /// <summary>
@@ -87,6 +98,12 @@ namespace BAMCIS.PrestoClient.Model.FailureDetector
             RecentFailuresByType = new Dictionary<string, double>();
         }
 
+        /// <summary>
+        /// Creates a new presto node information object
+        /// with the supplied Uri.
+        /// </summary>
+        /// <param name="uri"></param>
+        [JsonConstructor]
         public HeartbeatFailureDetectorStats(Uri uri) : this()
         {
             this.Uri = uri;
@@ -98,13 +115,13 @@ namespace BAMCIS.PrestoClient.Model.FailureDetector
 
         public void RecordStart()
         {
-            this.RecentRequests += 1;
+            this._RecentRequests.Add(1);
             this.LastRequestTime = new DateTime();
         }
 
         public void RecordSuccess()
         {
-            this.RecentSuccesses += 1;
+            this._RecentSuccesses.Add(1);
             this.LastResponseTime = new DateTime();
         }
 

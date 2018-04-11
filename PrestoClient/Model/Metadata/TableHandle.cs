@@ -1,5 +1,4 @@
 ﻿using BAMCIS.PrestoClient.Model.Connector;
-using BAMCIS.PrestoClient.Model.SPI;
 using Newtonsoft.Json;
 using System;
 

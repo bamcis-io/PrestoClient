@@ -31,7 +31,5 @@ namespace BAMCIS.PrestoClient.Model.Server
         }
 
         #endregion
-
-
     }
 }

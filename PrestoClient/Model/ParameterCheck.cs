@@ -29,5 +29,13 @@ namespace BAMCIS.PrestoClient.Model
                 throw new ArgumentNullException(parameterName, message);
             }
         }
+
+        public static void NotNullOrEmpty(string value, string parameterName, string message = "")
+        {
+            if (String.IsNullOrEmpty(value))
+            {
+                throw new ArgumentNullException(parameterName, message);
+            }
+        }
     }
 }

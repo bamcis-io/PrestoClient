@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
-using BAMCIS.PrestoClient.Serialization;
-using System;
+﻿using BAMCIS.PrestoClient.Model.Execution.Scheduler;
 using BAMCIS.PrestoClient.Model.Sql.Planner.Plan;
-using BAMCIS.PrestoClient.Model.Execution.Scheduler;
+using BAMCIS.PrestoClient.Serialization;
+using Newtonsoft.Json;
+using System;
 
 namespace BAMCIS.PrestoClient.Model.Operator
 {
@@ -13,73 +13,73 @@ namespace BAMCIS.PrestoClient.Model.Operator
     {
         #region Public Properties
 
-        public int PipelineId { get; set; }
+        public int PipelineId { get; }
 
-        public int OperatorId { get; set; }
+        public int OperatorId { get; }
 
-        public PlanNodeId PlanNodeId { get; set; }
+        public PlanNodeId PlanNodeId { get; }
 
-        public string OperatorType { get; set; }
+        public string OperatorType { get; }
 
-        public long TotalDrivers { get; set; }
+        public long TotalDrivers { get; }
 
-        public long AddInputCalls { get; set; }
-
-        [JsonConverter(typeof(TimeSpanConverter))]
-        public TimeSpan AddInputWall { get; set; }
+        public long AddInputCalls { get; }
 
         [JsonConverter(typeof(TimeSpanConverter))]
-        public TimeSpan AddInputCpu { get; set; }
+        public TimeSpan AddInputWall { get; }
 
         [JsonConverter(typeof(TimeSpanConverter))]
-        public TimeSpan AddInputUser { get; set; }
-
-        public DataSize InputDataSize { get; set; }
-
-        public long InputPositions { get; set; }
-
-        public double SumSquaredInputPositions { get; set; }
-
-        public long GetOutputCalls { get; set; }
+        public TimeSpan AddInputCpu { get; }
 
         [JsonConverter(typeof(TimeSpanConverter))]
-        public TimeSpan GetOutputWall { get; set; }
+        public TimeSpan AddInputUser { get; }
+
+        public DataSize InputDataSize { get; }
+
+        public long InputPositions { get; }
+
+        public double SumSquaredInputPositions { get; }
+
+        public long GetOutputCalls { get; }
 
         [JsonConverter(typeof(TimeSpanConverter))]
-        public TimeSpan GetOutputCpu { get; set; }
+        public TimeSpan GetOutputWall { get; }
 
         [JsonConverter(typeof(TimeSpanConverter))]
-        public TimeSpan GetOutputUser { get; set; }
-
-        public DataSize OutputDataSize { get; set; }
-
-        public long OutputPositions { get; set; }
-
-        public DataSize PhysicalWrittenDataSize { get; set; }
+        public TimeSpan GetOutputCpu { get; }
 
         [JsonConverter(typeof(TimeSpanConverter))]
-        public TimeSpan BlockedWall { get; set; }
+        public TimeSpan GetOutputUser { get; }
 
-        public long FinishCalls { get; set; }
+        public DataSize OutputDataSize { get; }
 
-        [JsonConverter(typeof(TimeSpanConverter))]
-        public TimeSpan FinishWall { get; set; }
+        public long OutputPositions { get; }
 
-        [JsonConverter(typeof(TimeSpanConverter))]
-        public TimeSpan FinishCpu { get; set; }
+        public DataSize PhysicalWrittenDataSize { get; }
 
         [JsonConverter(typeof(TimeSpanConverter))]
-        public TimeSpan FinishUser { get; set; }
+        public TimeSpan BlockedWall { get; }
 
-        public string UserMemoryReservation { get; set; }
+        public long FinishCalls { get; }
 
-        public string RevocableMemoryReservation { get; set; }
+        [JsonConverter(typeof(TimeSpanConverter))]
+        public TimeSpan FinishWall { get; }
 
-        public string SystemMemoryReservation { get; set; }
+        [JsonConverter(typeof(TimeSpanConverter))]
+        public TimeSpan FinishCpu { get; }
+
+        [JsonConverter(typeof(TimeSpanConverter))]
+        public TimeSpan FinishUser { get; }
+
+        public DataSize UserMemoryReservation { get; }
+
+        public DataSize RevocableMemoryReservation { get; }
+
+        public DataSize SystemMemoryReservation { get; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         [Optional]
-        public BlockedReason BlockedReason { get; set; }
+        public BlockedReason BlockedReason { get; }
 
         /// <summary>
         /// This property is only present with certain types of
@@ -89,7 +89,7 @@ namespace BAMCIS.PrestoClient.Model.Operator
         /// "info": {
         ///   "@type": "splitOperator",
         ///   "splitInfo": {
-        ///     "path": "s3a://presto-test-haken/test/test.avro",
+        ///     "path": "s3a://filename.avro",
         ///     "start": 0,
         ///     "length": 218,
         ///     "fileSize": 218,
@@ -126,16 +126,136 @@ namespace BAMCIS.PrestoClient.Model.Operator
         /// 
         /// Thus, this property is deserialized as dynamic.
         /// 
-        /// The actual property type is OperatorInfo, which is a wrapper for
-        /// the JSON subtypes in Java
+        /// TODO: The actual property type is IOperatorInfo
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public dynamic Info { get; set; }
+        public dynamic Info { get; }
 
         #endregion
 
         #region Constructors
 
+        [JsonConstructor]
+        public OperatorStats(
+            int pipelineId,
+            int operatorId,
+            PlanNodeId planNodeId,
+            string operatorType,
+
+            long totalDrivers,
+
+            long addInputCalls,
+            TimeSpan addInputWall,
+            TimeSpan addInputCpu,
+            TimeSpan addInputUser,
+            DataSize inputDataSize,
+            long inputPositions,
+            double sumSquaredInputPositions,
+
+            long getOuputCalls,
+            TimeSpan getOutputWall,
+            TimeSpan getOutputCpu,
+            TimeSpan getOutputUser,
+            DataSize outputDataSize,
+            long outputPositions,
+
+            DataSize physicalWrittenDataSize,
+
+            TimeSpan blockedWall,
+
+            long finishCalls,
+            TimeSpan finishWall,
+            TimeSpan finishCpu,
+            TimeSpan finishUser,
+
+            DataSize userMemoryReservation,
+            DataSize revocableMemoryReservation,
+            DataSize systemMemoryReservation,
+            BlockedReason blockedReason,
+
+            dynamic info
+            )
+        {
+            ParameterCheck.OutOfRange(operatorId >= 0, "Operator id cannot be negative.");
+            ParameterCheck.NotNullOrEmpty(operatorType, "operatorType");
+            ParameterCheck.OutOfRange(inputPositions >= 0, "inputPositions", "Input positions cannot be negative.");
+            ParameterCheck.OutOfRange(outputPositions >= 0, "outputPositions", "Output positions cannot be negative.");
+
+            this.OperatorId = operatorId;
+            this.PlanNodeId = planNodeId ?? throw new ArgumentNullException("planNodeId");
+            this.OperatorType = operatorType;
+
+            this.TotalDrivers = totalDrivers;
+
+            this.AddInputCalls = addInputCalls;
+            this.AddInputWall = addInputWall;
+            this.AddInputCpu = addInputCpu;
+            this.AddInputUser = addInputUser;
+            this.InputDataSize = inputDataSize ?? throw new ArgumentNullException("inputDataSize");
+            this.InputPositions = inputPositions;
+            this.SumSquaredInputPositions = sumSquaredInputPositions;
+
+            this.GetOutputCalls = getOuputCalls;
+            this.GetOutputWall = getOutputWall;
+            this.GetOutputCpu = getOutputCpu;
+            this.GetOutputUser = getOutputUser;
+            this.OutputDataSize = outputDataSize ?? throw new ArgumentNullException("outputDataSize");
+            this.OutputPositions = outputPositions;
+
+            this.PhysicalWrittenDataSize = physicalWrittenDataSize ?? throw new ArgumentNullException("physicalWrittenDataSize");
+
+            this.BlockedWall = blockedWall;
+
+            this.FinishCalls = finishCalls;
+            this.FinishWall = finishWall;
+            this.FinishCpu = finishCpu;
+            this.FinishUser = finishUser;
+
+            this.UserMemoryReservation = userMemoryReservation ?? throw new ArgumentNullException("userMemoryReservation");
+            this.RevocableMemoryReservation = revocableMemoryReservation ?? throw new ArgumentNullException("revocableMemoryReservation");
+            this.SystemMemoryReservation = systemMemoryReservation ?? throw new ArgumentNullException("systemMemoryReservation");
+            this.BlockedReason = blockedReason;
+
+            this.Info = info;
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public OperatorStats Summarize()
+        {
+            return new OperatorStats(
+                    this.PipelineId,
+                    this.OperatorId,
+                    this.PlanNodeId,
+                    this.OperatorType,
+                    this.TotalDrivers,
+                    this.AddInputCalls,
+                    this.AddInputWall,
+                    this.AddInputCpu,
+                    this.AddInputUser,
+                    this.InputDataSize,
+                    this.InputPositions,
+                    this.SumSquaredInputPositions,
+                    this.GetOutputCalls,
+                    this.GetOutputWall,
+                    this.GetOutputCpu,
+                    this.GetOutputUser,
+                    this.OutputDataSize,
+                    this.OutputPositions,
+                    this.PhysicalWrittenDataSize,
+                    this.BlockedWall,
+                    this.FinishCalls,
+                    this.FinishWall,
+                    this.FinishCpu,
+                    this.FinishUser,
+                    this.UserMemoryReservation,
+                    this.RevocableMemoryReservation,
+                    this.SystemMemoryReservation,
+                    this.BlockedReason,
+                    (this.Info != null /* && this.Info.IsFinal() */) ? this.Info : null);
+        }
 
         #endregion
     }

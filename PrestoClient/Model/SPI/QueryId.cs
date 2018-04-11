@@ -49,10 +49,7 @@ namespace BAMCIS.PrestoClient.Model.SPI
 
         public static bool ValidateId(string id)
         {
-            if (String.IsNullOrEmpty(id))
-            {
-                throw new ArgumentNullException("id", "The id cannot be null or empty");
-            }
+            ParameterCheck.NotNullOrEmpty(id, "id");
 
             return ID_PATTERN.IsMatch(id);
         }

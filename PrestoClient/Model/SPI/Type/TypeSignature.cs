@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,11 +21,11 @@ namespace BAMCIS.PrestoClient.Model.SPI.Type
 
         #region Public Properties
 
-        public string Base { get; set; }
+        public string Base { get; }
 
-        public IEnumerable<TypeSignatureParameter> Parameters { get; set; }
+        public IEnumerable<TypeSignatureParameter> Parameters { get; }
 
-        public bool Calculated { get; set; }
+        public bool Calculated { get; }
 
         #endregion
 
@@ -34,12 +35,10 @@ namespace BAMCIS.PrestoClient.Model.SPI.Type
         {
         }
 
+        [JsonConstructor]
         public TypeSignature(string @base, IEnumerable<TypeSignatureParameter> parameters)
         {
-            if (String.IsNullOrEmpty(@base))
-            {
-                throw new ArgumentNullException("base");
-            }
+            ParameterCheck.NotNullOrEmpty(@base, "base");
 
             this.Base = @base;
             this.Parameters = parameters ?? throw new ArgumentNullException("parameters");
@@ -47,7 +46,6 @@ namespace BAMCIS.PrestoClient.Model.SPI.Type
         }
 
         #endregion
-
 
         #region Public Methods
 

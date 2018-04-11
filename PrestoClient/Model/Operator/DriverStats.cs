@@ -1,4 +1,5 @@
 ﻿using BAMCIS.PrestoClient.Model.Execution.Scheduler;
+using BAMCIS.PrestoClient.Serialization;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -18,8 +19,10 @@ namespace BAMCIS.PrestoClient.Model.Operator
 
         public DateTime EndTime { get; }
 
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan QueuedTime { get; }
 
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan ElapsedTime { get; }
 
         public DataSize UserMemoryReservation { get; }
@@ -28,12 +31,16 @@ namespace BAMCIS.PrestoClient.Model.Operator
 
         public DataSize SystemMemoryReservation { get; }
 
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan TotalScheduledTime { get; }
 
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan TotalCpuTime { get; }
 
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan TotalUserTime { get; }
 
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan TotalBlockedTime { get; }
 
         public bool FullyBlocked { get; }
@@ -44,6 +51,7 @@ namespace BAMCIS.PrestoClient.Model.Operator
 
         public long RawInputPositions { get; }
 
+        [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan RawInputReadTime { get; }
 
         public DataSize ProcessedInputDataSize { get; }

@@ -4,6 +4,8 @@ namespace BAMCIS.PrestoClient.Model.SPI
 {
     /// <summary>
     /// From com.facebook.presto.spi.Range.java
+    /// 
+    /// TODO: In progress for TupleDomain
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public sealed class Range<T>
