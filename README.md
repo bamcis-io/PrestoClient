@@ -8,7 +8,7 @@ This demonstrates creating a new client config, initializing an IPrestoClient, a
 returned data can be formatted in CSV or JSON. Additionally, all of the raw data is returned from the server
 in case the deserialization process fails in .NET, the user can still access and manipulate the returned data.
 
-     PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Table)
+     PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", "cars")
             {
                 Host = "localhost",
                 Port = 8080
