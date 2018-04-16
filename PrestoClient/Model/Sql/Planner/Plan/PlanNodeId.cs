@@ -40,7 +40,7 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
 
         public override int GetHashCode()
         {
-            return this.Id.GetHashCode();
+            return Hashing.Hash(this.Id);
         }
 
         public override bool Equals(object obj)

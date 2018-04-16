@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace BAMCIS.PrestoClient.Model.Sql.Tree
+﻿namespace BAMCIS.PrestoClient.Model.Sql.Tree
 {
     /// <summary>
-    /// TODO: In progress for TupleDomain
+    /// From com;facebook.presto.sql.tree.AstVisitor.java
+    /// 
+    /// TODO: Not completely implemented, just enough to support Expression
+    /// string formatting
     /// </summary>
     /// <typeparam name="R"></typeparam>
     /// <typeparam name="C"></typeparam>
@@ -17,21 +15,19 @@ namespace BAMCIS.PrestoClient.Model.Sql.Tree
             return Process(node, default(C));
         }
 
-        /// <summary>
-        /// This is a hack just to compile, it's 
-        /// not actually called anywhere yet
-        /// </summary>
-        /// <param name="node"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
         public R Process(Node node, C context)
         {
             return node.Accept(this, context);
         }
 
-        protected virtual R VisitNode(Node node, C context)
+        internal protected virtual R VisitNode(Node node, C context)
         {
             return default(R);
+        }
+
+        internal protected virtual R VisitExpression(Expression node, C context)
+        {
+            return VisitNode(node, context);
         }
     }
 }

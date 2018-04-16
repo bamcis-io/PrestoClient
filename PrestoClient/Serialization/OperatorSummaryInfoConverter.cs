@@ -1,13 +1,13 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
-using BAMCIS.PrestoClient.Model.Query.QueryDetails.Operators;
 using System;
 
 namespace BAMCIS.PrestoClient.Serialization
 {
     public class OperatorSummaryInfoConverter : JsonConverter
     {
+        
         public override bool CanConvert(Type objectType)
         {
             return objectType == typeof(OperatorSummaryInfo);

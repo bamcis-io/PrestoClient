@@ -13,6 +13,8 @@ namespace PrestoClient.Tests
 {
     public class PrestoClientDriver
     {
+        private static string Table = "cars";
+
         public PrestoClientDriver()
         { }
 
@@ -20,7 +22,7 @@ namespace PrestoClient.Tests
         public async Task TestExecuteStatement()
         {
             //ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", "maven") {
+            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Table) {
                 Host = "localhost",
                 Port = 8080
             };
@@ -39,7 +41,7 @@ namespace PrestoClient.Tests
         public async Task TestQueryResultDataToJson()
         {
             //ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", "maven")
+            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Table)
             {
                 Host = "localhost",
                 Port = 8080
@@ -61,7 +63,7 @@ namespace PrestoClient.Tests
         public async Task TestQueryResultDataToCsv()
         {
             //ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", "maven")
+            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Table)
             {
                 Host = "localhost",
                 Port = 8080
@@ -83,7 +85,7 @@ namespace PrestoClient.Tests
         public async Task TestListQueries()
         {
             //ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", "maven")
+            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Table)
             {
                 Host = "localhost",
                 Port = 8080
@@ -101,7 +103,7 @@ namespace PrestoClient.Tests
         public async Task TestGetQuery()
         {
             //ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", "maven")
+            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Table)
             {
                 Host = "localhost",
                 Port = 8080

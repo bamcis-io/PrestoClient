@@ -3,6 +3,9 @@ using Newtonsoft.Json.Converters;
 
 namespace BAMCIS.PrestoClient.Model.SPI.Block
 {
+    /// <summary>
+    /// From com.facebook.presto.spi.block.SortOrder.java
+    /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
     public enum SortOrder
     {

@@ -80,7 +80,7 @@ namespace BAMCIS.PrestoClient.Model.SPI.Type
 
         public override int GetHashCode()
         {
-            return this._Length.GetHashCode();
+            return Hashing.Hash(this._Length);
         }
 
         public string DisplayName()

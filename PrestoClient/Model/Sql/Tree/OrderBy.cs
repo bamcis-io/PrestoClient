@@ -30,7 +30,28 @@ namespace BAMCIS.PrestoClient.Model.Sql.Tree
 
         #region Public Methods
 
-        public IEnumerable<Node> GetChildren()
+        public override bool Equals(object obj)
+        {
+            if (this == obj)
+            {
+                return true;
+            }
+
+            if ((obj == null) || (this.GetType() != obj.GetType()))
+            {
+                return false;
+            }
+
+            OrderBy Other = (OrderBy)obj;
+            return Object.Equals(this.SortItems, Other.SortItems);
+        }
+
+        public override int GetHashCode()
+        {
+            return Hashing.Hash(this.SortItems);
+        }
+
+        public override IEnumerable<Node> GetChildren()
         {
             return this.SortItems;
         }

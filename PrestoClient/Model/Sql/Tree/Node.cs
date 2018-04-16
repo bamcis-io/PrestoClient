@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace BAMCIS.PrestoClient.Model.Sql.Tree
 {
@@ -27,10 +28,19 @@ namespace BAMCIS.PrestoClient.Model.Sql.Tree
 
         #region Public Methods
 
-        public dynamic Accept(dynamic visitor, dynamic context)
+        internal protected virtual R Accept<R, C>(AstVisitor<R, C> visitor, C context)
         {
             return visitor.VisitNode(this, context);
         }
+
+        public abstract IEnumerable<Node> GetChildren();
+
+        // Force subclasses to have a proper equals and hashcode implementation
+        public abstract override int GetHashCode();
+
+        public abstract override bool Equals(object obj);
+
+        public abstract override string ToString();
 
         #endregion
     }

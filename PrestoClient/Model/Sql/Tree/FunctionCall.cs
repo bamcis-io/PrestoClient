@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace BAMCIS.PrestoClient.Model.Sql.Tree
@@ -65,6 +66,60 @@ namespace BAMCIS.PrestoClient.Model.Sql.Tree
             this.OrderBy = orderBy;
             this.Distinct = distinct;
             this.Arguments = arguments;
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        public override IEnumerable<Node> GetChildren()
+        {
+            if (this.Window != null)
+            {
+                yield return this.Window;
+            }
+
+            if (this.Filter != null)
+            {
+                yield return this.Filter;
+            }
+
+            foreach (SortItem Item in this.OrderBy.SortItems)
+            {
+                yield return Item;
+            }
+
+            foreach (Expression Item in this.Arguments)
+            {
+                yield return Item;
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (this == obj)
+            {
+                return true;
+            }
+
+            if ((obj == null) || (this.GetType() != obj.GetType()))
+            {
+                return false;
+            }
+
+            FunctionCall Other = (FunctionCall)obj;
+
+            return object.Equals(this.Name, Other.Name) &&
+                    object.Equals(this.Window, Other.Window) &&
+                    object.Equals(this.Filter, Other.Filter) &&
+                    object.Equals(this.OrderBy, Other.OrderBy) &&
+                    object.Equals(this.Distinct, Other.Distinct) &&
+                    object.Equals(this.Arguments, Other.Arguments);
+        }
+
+        public override int GetHashCode()
+        {
+            return Hashing.Hash(this.Name, this.Distinct, this.Window, this.Filter, this.OrderBy, this.Arguments);
         }
 
         #endregion

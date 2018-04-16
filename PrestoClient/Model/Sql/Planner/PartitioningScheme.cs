@@ -79,7 +79,7 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner
 
         public override int GetHashCode()
         {
-            return this.Partitioning.GetHashCode() + this.OutputLayout.GetHashCode() + this.ReplicateNullsAndAny.GetHashCode() + this.BucketToPartition.GetHashCode();
+            return Hashing.Hash(this.Partitioning, this.OutputLayout, this.ReplicateNullsAndAny, this.BucketToPartition);
         }
 
         public override string ToString()

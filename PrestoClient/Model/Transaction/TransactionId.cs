@@ -50,7 +50,7 @@ namespace BAMCIS.PrestoClient.Model.Transaction
 
         public override int GetHashCode()
         {
-            return this.UUID.GetHashCode();
+            return Hashing.Hash(this.UUID);
         }
 
         public override bool Equals(object obj)

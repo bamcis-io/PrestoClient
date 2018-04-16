@@ -109,7 +109,7 @@ namespace BAMCIS.PrestoClient.Model
         {
             if (this.Value != null)
             {
-                return this.Value.GetHashCode();
+                return Hashing.Hash(this.Value);
             }
             else
             {

@@ -7,11 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrestoClient", "PrestoClien
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{908B7EAB-6D98-41B8-A11B-8C7513A60C7A}"
 	ProjectSection(SolutionItems) = preProject
+		ApacheAcknowledgement.txt = ApacheAcknowledgement.txt
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrestoClient.Tests", "PrestoClientTests\PrestoClient.Tests.csproj", "{133789AA-ADB6-4C81-B5F9-FD18F42CB9AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrestoClient.Tests", "PrestoClientTests\PrestoClient.Tests.csproj", "{133789AA-ADB6-4C81-B5F9-FD18F42CB9AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

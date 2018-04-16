@@ -47,6 +47,7 @@ namespace BAMCIS.PrestoClient.Model.Execution
 
         public IDictionary<string, string> AddedPreparedStatements { get; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public HashSet<string> DeallocatedPreparedStatements { get; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -146,7 +147,7 @@ namespace BAMCIS.PrestoClient.Model.Execution
             this.SetSessionProperties = setSessionProperties ?? throw new ArgumentNullException("setSessionProperties");
             this.ResetSessionProperties = resetSessionProperties ?? throw new ArgumentNullException("resetSessionProperties");
             this.AddedPreparedStatements = addedPreparedStatements ?? throw new ArgumentNullException("addedPreparedStatements");
-            this.DeallocatedPreparedStatements = deallocatedPreparedStatemetns ?? throw new ArgumentNullException("deallocatedPreparedStatements");
+            this.DeallocatedPreparedStatements = deallocatedPreparedStatemetns; // ?? throw new ArgumentNullException("deallocatedPreparedStatements");
             this.StartedTransactionId = startedTransactionId;
             this.ClearTransactionId = clearTransactionId;
             this.UpdateType = updateType;

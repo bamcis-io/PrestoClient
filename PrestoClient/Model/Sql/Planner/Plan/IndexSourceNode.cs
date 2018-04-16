@@ -1,5 +1,6 @@
 ﻿using BAMCIS.PrestoClient.Model.Metadata;
 using BAMCIS.PrestoClient.Model.SPI;
+using BAMCIS.PrestoClient.Model.SPI.Predicate;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -31,10 +32,9 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
         public IDictionary<string, dynamic> Assignments { get; }
 
         /// <summary>
-        /// TODO: This should be com.facebook.presto.spi.predicate.TupleDomain.java
-        /// of IColumnHandle
+        /// TODO: TupleDomain<IColumnHandle>
         /// </summary>
-        public IDictionary<string, dynamic> CurrentConstraint { get; }
+        public TupleDomainPlaceHolder<dynamic> CurrentConstraint { get; }
 
         #endregion
 
@@ -49,7 +49,7 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
             HashSet<Symbol> lookupSymbols,
             IEnumerable<Symbol> outputSymbols,
             IDictionary<string, dynamic> assignments,
-            IDictionary<string, dynamic> currentConstraint
+            TupleDomainPlaceHolder<dynamic> currentConstraint
             ) : base(id)
         {
             this.IndexHandle = indexHandle ?? throw new ArgumentNullException("indexHandle");

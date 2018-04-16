@@ -44,11 +44,12 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
 
         public override int GetHashCode()
         {
-            return this.Type.GetHashCode() +
-                this.StartType.GetHashCode() +
-                this.EndType.GetHashCode() +
-                ((this.StartValue != null) ? this.StartValue.GetHashCode() : 0) +
-                ((this.EndValue != null) ? this.EndValue.GetHashCode() : 0);
+            return Hashing.Hash(
+                this.Type,
+                this.StartType,
+                this.EndType,
+                this.StartValue,
+                this.EndValue);
         }
 
         public override bool Equals(object obj)
@@ -63,13 +64,13 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
                 return false;
             }
 
-            Frame other = (Frame)obj;
+            Frame Other = (Frame)obj;
 
-            return object.Equals(this.Type, other.Type) &&
-                    object.Equals(this.StartType, other.StartType) &&
-                    object.Equals(this.StartValue, other.StartValue) &&
-                    object.Equals(this.EndType, other.EndType) &&
-                    object.Equals(this.EndValue, other.EndValue);
+            return object.Equals(this.Type, Other.Type) &&
+                    object.Equals(this.StartType, Other.StartType) &&
+                    object.Equals(this.StartValue, Other.StartValue) &&
+                    object.Equals(this.EndType, Other.EndType) &&
+                    object.Equals(this.EndValue, Other.EndValue);
         }
 
         #endregion

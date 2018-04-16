@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace BAMCIS.PrestoClient.Model.Sql.Tree
 {
@@ -37,6 +38,40 @@ namespace BAMCIS.PrestoClient.Model.Sql.Tree
         #endregion
 
         #region Public Methods
+
+        public override IEnumerable<Node> GetChildren()
+        {
+            yield return this.Start;
+
+            if (this.End != null)
+            {
+                yield return this.End;
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (this == obj)
+            {
+                return true;
+            }
+
+            if ((obj == null) || (this.GetType() != obj.GetType()))
+            {
+                return false;
+            }
+
+            WindowFrame Other = (WindowFrame)obj;
+
+            return Object.Equals(this.Type, Other.Type) &&
+                    Object.Equals(this.Start, Other.Start) &&
+                    Object.Equals(this.End, Other.End);
+        }
+
+        public override int GetHashCode()
+        {
+            return Hashing.Hash(this.Type, this.Start, this.End);
+        }
 
         public override string ToString()
         {

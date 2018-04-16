@@ -34,7 +34,7 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
 
         public override int GetHashCode()
         {
-            return ((this.OrderingScheme != null) ? this.OrderingScheme.GetHashCode() : 0) + this.PartitionBy.GetHashCode();
+            return Hashing.Hash(this.OrderingScheme, this.PartitionBy);
         }
 
         public override bool Equals(object obj)

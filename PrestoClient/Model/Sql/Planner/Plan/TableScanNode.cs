@@ -1,4 +1,6 @@
 ﻿using BAMCIS.PrestoClient.Model.Metadata;
+using BAMCIS.PrestoClient.Model.SPI;
+using BAMCIS.PrestoClient.Model.SPI.Predicate;
 using BAMCIS.PrestoClient.Model.Sql.Tree;
 using Newtonsoft.Json;
 using System;
@@ -28,9 +30,9 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
         public TableLayoutHandle Layout { get; }
 
         /// <summary>
-        /// TODO: This is a TupleDomain of IColumnHandle
+        /// TODO: TupleDomain<IColumnHandle>
         /// </summary>
-        public IDictionary<string, dynamic> CurrentConstraint { get; }
+        public TupleDomainPlaceHolder<dynamic> CurrentConstraint { get; }
 
         /// <summary>
         /// TODO: Supposed to be Expression
@@ -48,7 +50,7 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
             IEnumerable<Symbol> outputSymbols, 
             IDictionary<string, dynamic> assignments, 
             TableLayoutHandle layout,
-            IDictionary<string, dynamic> currentConstraint,
+            TupleDomainPlaceHolder<dynamic> currentConstraint,
             dynamic originalConstraint
             ) : base(id)
         {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BAMCIS.PrestoClient.Model.Sql.Tree
 {
@@ -36,7 +37,40 @@ namespace BAMCIS.PrestoClient.Model.Sql.Tree
 
         #region Public Methods
 
-        public IEnumerable<Node> GetChildren()
+        public override bool Equals(object obj)
+        {
+            if (this == obj)
+            {
+                return true;
+            }
+
+            if (obj == null || this.GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            SortItem Other = (SortItem)obj;
+
+            return Object.Equals(this.SortKey, Other.SortKey) &&
+                    (this.Ordering == Other.Ordering) &&
+                    (this.NullOrdering == Other.NullOrdering);
+        }
+
+        public override int GetHashCode()
+        {
+            return Hashing.Hash(this.SortKey, this.Ordering, this.NullOrdering);
+        }
+
+        public override string ToString()
+        {
+            return StringHelper.Build(this)
+                .Add("sortKey", this.SortKey)
+                .Add("ordering", this.Ordering)
+                .Add("nullOrdering", this.NullOrdering)
+                .ToString();
+        }
+
+        public override IEnumerable<Node> GetChildren()
         {
             return new Node[] { this.SortKey };
         }

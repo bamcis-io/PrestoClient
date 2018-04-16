@@ -44,7 +44,40 @@ namespace BAMCIS.PrestoClient.Model.Sql.Tree
 
         #region Public Properties
 
-        public IEnumerable<Node> GetChildren()
+        public override bool Equals(object obj)
+        {
+            if (this == obj)
+            {
+                return true;
+            }
+
+            if ((obj == null) || (this.GetType() != obj.GetType()))
+            {
+                return false;
+            }
+
+            Window Other = (Window)obj;
+
+            return Object.Equals(this.PartitionBy, Other.PartitionBy) &&
+                    Object.Equals(this.OrderBy, Other.OrderBy) &&
+                    Object.Equals(this.Frame, Other.Frame);
+        }
+
+        public override int GetHashCode()
+        {
+            return Hashing.Hash(this.PartitionBy, this.OrderBy, this.Frame);
+        }
+
+        public override string ToString()
+        {
+            return StringHelper.Build(this)
+                .Add("partitionBy", this.PartitionBy)
+                .Add("orderBy", this.OrderBy)
+                .Add("frame", this.Frame)
+                .ToString();
+        }
+
+        public override IEnumerable<Node> GetChildren()
         {
             foreach (Node Item in this.PartitionBy)
             {

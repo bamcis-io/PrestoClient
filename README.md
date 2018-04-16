@@ -8,19 +8,22 @@ This demonstrates creating a new client config, initializing an IPrestoClient, a
 returned data can be formatted in CSV or JSON. Additionally, all of the raw data is returned from the server
 in case the deserialization process fails in .NET, the user can still access and manipulate the returned data.
 
-     PrestoClientConfig Opts = new PrestoClientConfig("hive", "cars");
-     Opts.Host = "localhost";
-     Opts.Port = 8080;
-     IPrestoClient Client = new PrestoClient.PrestoClient(Opts);
+     PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Table)
+            {
+                Host = "localhost",
+                Port = 8080
+            };
+     IPrestoClient Client = new PrestodbClient(Config);
 
-     ExecuteQueryV1Request Req = new ExecuteQueryV1Request("select * from tracklets limit 5");
-     ExecuteQueryV1Response Res = await Client.ExecuteQueryV1(Req);
+     ExecuteQueryV1Request Request = new ExecuteQueryV1Request("select * from tracklets limit 5;");
 
-     Console.WriteLine(String.Join("\n", Res.Response.DataToCsv()));
+     ExecuteQueryV1Response QueryResponse = await Client.ExecuteQueryV1(Request);
+
+     Console.WriteLine(String.Join("\n", QueryResponse.Response.DataToCsv()));
      Console.WriteLine("-------------------------------------------------------------------");
-	 Console.WriteLine(String.Join("\n", Res.Response.DataToJson()));
+	 Console.WriteLine(String.Join("\n", QueryResponse.Response.DataToJson()));
 
 ## Revision History
 
-### 0.0.0.0
-This is currently a work in progress
+### 0.197.0
+Initial release of the client compatible with Presto version 0.197.

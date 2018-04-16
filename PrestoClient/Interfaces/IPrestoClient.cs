@@ -1,6 +1,7 @@
 ﻿using BAMCIS.PrestoClient.Model.Jmx;
 using BAMCIS.PrestoClient.Model.NodeInfo;
 using BAMCIS.PrestoClient.Model.Query;
+using BAMCIS.PrestoClient.Model.SPI;
 using BAMCIS.PrestoClient.Model.Statement;
 using BAMCIS.PrestoClient.Model.Thread;
 using System.Threading.Tasks;
@@ -65,6 +66,13 @@ namespace BAMCIS.PrestoClient.Interfaces
         /// <param name="queryId">The id of the query</param>
         /// <returns>Detailed summary of the query</returns>
         Task<GetQueryV1Response> GetQuery(string queryId);
+
+        /// <summary>
+        /// Gets a detailed summary of the specified query
+        /// </summary>
+        /// <param name="queryId">The id of the query</param>
+        /// <returns>Detailed summary of the query</returns>
+        Task<GetQueryV1Response> GetQuery(QueryId queryId);
 
         #endregion
 

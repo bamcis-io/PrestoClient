@@ -21,6 +21,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Web;
 using BAMCIS.PrestoClient.Model.NodeInfo;
+using BAMCIS.PrestoClient.Model.SPI;
 
 namespace BAMCIS.PrestoClient
 {
@@ -429,6 +430,17 @@ namespace BAMCIS.PrestoClient
                 GetQueryV1Response Result = new GetQueryV1Response(await Response.Content.ReadAsStringAsync());
                 return Result;
             }
+        }
+
+        /// <summary>
+        /// If you are looking to gather very detailed statistics about a
+        /// query, this is the service you would call.
+        /// </summary>
+        /// <param name="queryId">The id of the query to retrieve details about.</param>
+        /// <returns>Information about the specified query.</returns>
+        public async Task<GetQueryV1Response> GetQuery(QueryId queryId)
+        {
+            return await this.GetQuery(queryId.ToString());
         }
 
         #endregion

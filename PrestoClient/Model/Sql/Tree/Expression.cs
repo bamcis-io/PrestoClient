@@ -14,6 +14,11 @@
 
         #region Public Methods
 
+        internal protected override R Accept<R, C>(AstVisitor<R, C> visitor, C context)
+        {
+            return visitor.VisitExpression(this, context);
+        }
+
         public override string ToString()
         {
             return ExpressionFormatter.FormatExpression(this, new Expression[] { });

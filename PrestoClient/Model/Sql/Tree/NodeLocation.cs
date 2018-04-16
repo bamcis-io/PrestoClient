@@ -7,12 +7,23 @@ namespace BAMCIS.PrestoClient.Model.Sql.Tree
     /// </summary>
     public sealed class NodeLocation
     {
+        #region Private Fields
+
+        private int CharPositionInLine;
+
+        #endregion
+
         #region Public Properties
 
         public int Line { get; }
 
-        [JsonProperty(PropertyName = "columnNumber")]
-        public int CharPositionInLine { get; }
+        public int ColumnNumber
+        {
+            get
+            {
+                return this.CharPositionInLine + 1;
+            }
+        }
 
         #endregion
 
@@ -22,7 +33,9 @@ namespace BAMCIS.PrestoClient.Model.Sql.Tree
         public NodeLocation(int line, int columnNumber)
         {
             this.Line = line;
-            this.CharPositionInLine = columnNumber;
+            // This is done for serialization purposes, since the serialized
+            // data will show the column number, not char position
+            this.CharPositionInLine = columnNumber - 1;
         }
 
         #endregion
