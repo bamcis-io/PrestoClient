@@ -4,17 +4,20 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>PrestoClient</AssemblyName>
     <RootNamespace>BAMCIS.PrestoClient</RootNamespace>
-    <Version>1.0.0.0</Version>
+    <Version>0.197.0</Version>
     <Authors>Michael Haken</Authors>
     <Company>bamcis.io</Company>
-    <PackageReleaseNotes>This is a very alpha version of a .NET client for Prestodb. It was developed against Presto version 0.196 and 0.197.</PackageReleaseNotes>
+    <PackageReleaseNotes>This is a presto db .NET client for Presto version 0.197.</PackageReleaseNotes>
     <Copyright>2018 BAMCIS</Copyright>
     <PackageProjectUrl>https://github.com/bamcis-io/PrestoClient</PackageProjectUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageTags>Presto Prestodb</PackageTags>
+    <RepositoryUrl>https://github.com/bamcis-io/PrestoClient</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <Description>A .NET Core client for Presto.</Description>
+    <PackageLicenseUrl>https://github.com/bamcis-io/PrestoClient/blob/master/LICENSE</PackageLicenseUrl>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Serialization\OperatorSummaryInfoConverter.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
