@@ -34,7 +34,7 @@ namespace BAMCIS.PrestoClient.Model.SPI.Type
             return this.Signature.ToString();
         }
 
-        public System.Type GetJavaType()
+        public virtual System.Type GetJavaType()
         {
             return this.JavaType;
         }
@@ -44,7 +44,7 @@ namespace BAMCIS.PrestoClient.Model.SPI.Type
             return new IType[0];
         }
 
-        public TypeSignature GetTypeSignature()
+        public virtual TypeSignature GetTypeSignature()
         {
             return this.Signature;
         }
@@ -83,96 +83,96 @@ namespace BAMCIS.PrestoClient.Model.SPI.Type
             return Hashing.Hash(this.Signature);
         }
 
-        public long Hash(IBlock block, int position)
+        public virtual long Hash(IBlock block, int position)
         {
             throw new InvalidOperationException($"{this.GetTypeSignature()} type is not comparable.");
         }
 
-        public int CompareTo(IBlock leftBlock, int leftPosition, IBlock rightBlock, int rightPosition)
+        public virtual int CompareTo(IBlock leftBlock, int leftPosition, IBlock rightBlock, int rightPosition)
         {
             throw new InvalidOperationException($"{this.GetTypeSignature()} type is not orderable.");
         }
 
-        public bool EqualTo(IBlock leftBlock, int leftPosition, IBlock rightBlock, int rightPosition)
+        public virtual bool EqualTo(IBlock leftBlock, int leftPosition, IBlock rightBlock, int rightPosition)
         {
             throw new InvalidOperationException($"{this.GetTypeSignature()} type is not comparable.");
         }
 
-        public bool GetBoolean(IBlock block, int position)
+        public virtual bool GetBoolean(IBlock block, int position)
         {
             throw new InvalidOperationException(this.GetType().Name);
         }
 
-        public void WriteBoolean(IBlockBuilder blockBuilder, bool value)
+        public virtual void WriteBoolean(IBlockBuilder blockBuilder, bool value)
         {
             throw new InvalidOperationException(this.GetType().Name);
         }
 
-        public long GetLong(IBlock block, int position)
+        public virtual long GetLong(IBlock block, int position)
         {
             throw new InvalidOperationException(this.GetType().Name);
         }
 
-        public void WriteLong(IBlockBuilder blockBuilder, long value)
+        public virtual void WriteLong(IBlockBuilder blockBuilder, long value)
         {
             throw new InvalidOperationException(this.GetType().Name);
         }
 
-        public double GetDouble(IBlock block, int position)
+        public virtual double GetDouble(IBlock block, int position)
         {
             throw new InvalidOperationException(this.GetType().Name);
         }
 
-        public void WriteDouble(IBlockBuilder blockBuilder, double value)
+        public virtual void WriteDouble(IBlockBuilder blockBuilder, double value)
         {
             throw new InvalidOperationException(this.GetType().Name);
         }
 
-        public Slice GetSlice(IBlock block, int position)
+        public virtual Slice GetSlice(IBlock block, int position)
         {
             throw new InvalidOperationException(this.GetType().Name);
         }
 
-        public void WriteSlice(IBlockBuilder blockBuilder, Slice value)
+        public virtual void WriteSlice(IBlockBuilder blockBuilder, Slice value)
         {
             throw new InvalidOperationException(this.GetType().Name);
         }
 
-        public void WriteSlice(IBlockBuilder blockBuilder, Slice value, int offset, int length)
+        public virtual void WriteSlice(IBlockBuilder blockBuilder, Slice value, int offset, int length)
         {
             throw new InvalidOperationException(this.GetType().Name);
         }
 
-        public object GetObject(IBlock block, int position)
+        public virtual object GetObject(IBlock block, int position)
         {
             throw new InvalidOperationException(this.GetType().Name);
         }
 
-        public void WriteObject(IBlockBuilder blockBuilder, object value)
+        public virtual void WriteObject(IBlockBuilder blockBuilder, object value)
         {
             throw new InvalidOperationException(this.GetType().Name);
+        }
+
+        public virtual IBlockBuilder CreateBlockBuilder(BlockBuilderStatus blockBuilderStatus, int expectedEntries)
+        {
+            return this.CreateBlockBuilder(blockBuilderStatus, expectedEntries, 0);
         }
 
         #endregion
 
         #region Not Implemented Interface Methods
 
-        public void AppendTo(IBlock block, int position, IBlockBuilder blockBuilder)
+        public virtual void AppendTo(IBlock block, int position, IBlockBuilder blockBuilder)
         {
             throw new NotImplementedException();
         }
 
-        public IBlockBuilder CreateBlockBuilder(BlockBuilderStatus blockBuilderStatus, int expectedEntries)
-        {
-            return this.CreateBlockBuilder(blockBuilderStatus, expectedEntries, 0);
-        }
-
-        public IBlockBuilder CreateBlockBuilder(BlockBuilderStatus blockBuilderStatus, int expectedEntries, int expectedBytesPerEntry)
+        public virtual IBlockBuilder CreateBlockBuilder(BlockBuilderStatus blockBuilderStatus, int expectedEntries, int expectedBytesPerEntry)
         {
             throw new NotImplementedException();
         }
 
-        public object GetObjectValue(IConnectorSession session, IBlock block, int position)
+        public virtual object GetObjectValue(IConnectorSession session, IBlock block, int position)
         {
             throw new NotImplementedException();
         }
