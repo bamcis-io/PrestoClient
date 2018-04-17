@@ -152,7 +152,12 @@ namespace BAMCIS.PrestoClient.Model.Statement
                     {
                         Column Col = this.Columns[Counter++];
 
-                        object Value = PrestoTypeMapping.Convert(Column.ToString(), Col.TypeSignature.RawType);
+                        object Value = null;
+
+                        if (Column != null)
+                        {
+                            Value = PrestoTypeMapping.Convert(Column.ToString(), Col.TypeSignature.RawType);
+                        }
 
                         Wrapper["data"][RowCounter].Add(Col.Name, Value);
                     }
