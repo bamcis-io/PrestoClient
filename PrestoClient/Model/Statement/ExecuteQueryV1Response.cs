@@ -151,8 +151,12 @@ namespace BAMCIS.PrestoClient.Model.Statement
                     foreach (dynamic Column in Row)
                     {
                         Column Col = this.Columns[Counter++];
+                        object Value = null;
 
-                        object Value = PrestoTypeMapping.Convert(Column.ToString(), Col.TypeSignature.RawType);
+                        if (Column != null)
+                        {
+                            Value = PrestoTypeMapping.Convert(Column.ToString(), Col.TypeSignature.RawType);
+                        }
 
                         Wrapper["data"][RowCounter].Add(Col.Name, Value);
                     }

@@ -99,7 +99,7 @@ namespace BAMCIS.PrestoClient.Model.SPI
                 {
                     Port = Int32.Parse(PortString);
                 }
-                catch (FormatException e)
+                catch (FormatException)
                 {
                     throw new ArgumentException($"Unparseable port number: {hostPortString}");
                 }

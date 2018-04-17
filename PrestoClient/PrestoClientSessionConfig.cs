@@ -31,7 +31,6 @@ namespace BAMCIS.PrestoClient
 
         private string _Catalog;
         private string _Schema;
-        private string _Host;
         private string _User;
         private int _Port;
         private int _CheckInterval;

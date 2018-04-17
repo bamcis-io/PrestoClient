@@ -84,10 +84,6 @@ namespace BAMCIS.PrestoClient.Model.Execution
         [Optional]
         public Output Output { get; }
 
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        [Optional]
-        public FlattenedPlan FlattendedPlan { get; }
-
         public bool CompleteInfo { get; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -123,7 +119,6 @@ namespace BAMCIS.PrestoClient.Model.Execution
             ErrorCode errorCode,
             HashSet<Input> inputs,
             Output output,
-            FlattenedPlan flattenedPlan,
             bool completeInfo,
             string resourceGroupName
             )
@@ -157,7 +152,6 @@ namespace BAMCIS.PrestoClient.Model.Execution
             this.ErrorCode = errorCode;
             this.Inputs = inputs ?? throw new ArgumentNullException("inputs");
             this.Output = output;
-            this.FlattendedPlan = flattenedPlan;
             this.CompleteInfo = completeInfo;
             this.ResourceGroupName = resourceGroupName;
         }

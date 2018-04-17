@@ -43,6 +43,14 @@ namespace BAMCIS.PrestoClient.Model
 
         public int Size { get; }
 
+        public int Length
+        {
+            get
+            {
+                return Size;
+            }
+        }
+
         /// <summary>
         /// Bytes retained by the slice
         /// </summary>
@@ -108,9 +116,63 @@ namespace BAMCIS.PrestoClient.Model
             this.Reference = (offset == 0 && length == @base.Length) ? COMPACT : NOT_COMPACT;
         }
 
+        #endregion
+
+        #region Public Methods
+
         public int CompareTo(Slice other)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// A slice is considered compact if the base object is an array and it contains the whole array.
+        /// As a result, it cannot be a view of a bigger slice.
+        /// </summary>
+        /// <returns></returns>
+        public bool IsCompact()
+        {
+            return this.Reference == COMPACT;
+        }
+
+        public void SetBytes(int index, Slice source)
+        {
+            this.SetBytes(index, source, 0, source.Length);
+        }
+
+        public void SetBytes(int index, Slice source, int sourceIndex, int length)
+        {
+            Preconditions.CheckPositionIndexes(sourceIndex, sourceIndex + length, source.Length);
+
+            throw new NotImplementedException();
+            //CopyMemory(source.base, source.Address + sourceIndex, base, this.Address + index, length);
+        }
+
+        public void SetBytes(int index, byte[] source)
+        {
+            this.SetBytes(index, source, 0, source.Length);
+        }
+
+        public void SetBytes(int index, byte[] source, int sourceIndex, int length)
+        {
+            Preconditions.CheckPositionIndexes(sourceIndex, sourceIndex + length, source.Length);
+
+            throw new NotImplementedException();
+            //CopyMemory(source, (long)ARRAY_BYTE_BASE_OFFSET + sourceIndex, base, this.Address + index, length);
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private static void CopyMemory(object src, long srcAddress, object dest, long destAddress, int length)
+        {
+            // The Unsafe Javadoc specifies that the transfer size is 8 iff length % 8 == 0
+            // so ensure that we copy big chunks whenever possible, even at the expense of two separate copy operations
+            int bytesToCopy = length - (length % 8);
+
+            // This is a bad workaround for a real implementation using unsafe code.
+            dest = src;
         }
 
         #endregion

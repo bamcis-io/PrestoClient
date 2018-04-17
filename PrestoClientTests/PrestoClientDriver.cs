@@ -13,7 +13,7 @@ namespace PrestoClient.Tests
 {
     public class PrestoClientDriver
     {
-        private static string Table = "cars";
+        private static string Table = "maven";
 
         public PrestoClientDriver()
         { }
