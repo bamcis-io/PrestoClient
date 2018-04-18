@@ -14,10 +14,9 @@ namespace BAMCIS.PrestoClient.Serialization
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            JToken Token = JToken.Load(reader);
-            JToken TypeToken = Token["@type"];
+            JObject Token = JObject.Load(reader);
 
-            if (TypeToken == null)
+            if (!Token.TryGetValue("@type", StringComparison.OrdinalIgnoreCase, out JToken TypeToken))
             {
                 throw new InvalidOperationException("Invalid presto query plan node object.");
             }

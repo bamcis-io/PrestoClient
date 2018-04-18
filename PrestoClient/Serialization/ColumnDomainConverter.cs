@@ -26,14 +26,14 @@ namespace BAMCIS.PrestoClient.Serialization
         /// <returns></returns>
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {               
-            JToken Token = JToken.Load(reader);
-            JToken Column = Token["column"];
-            string ColumnType = Column["@type"].ToObject<string>();
+            JObject Token = JObject.Load(reader);
+            JObject Column = Token.GetValue("column", StringComparison.OrdinalIgnoreCase) as JObject;
+            string ColumnType = Column.GetValue("@type", StringComparison.OrdinalIgnoreCase).ToObject<string>(serializer);
 
-            JToken Domain = Token["domain"];
-            bool NullAllowed = Domain["nullAllowed"].ToObject<bool>();
-            string DomainType = Domain["values"]["@type"].ToObject<string>();
-            string ItemType = Domain["values"]["type"].ToObject<string>();
+            JObject Domain = Token.GetValue("domain", StringComparison.OrdinalIgnoreCase) as JObject;
+            bool NullAllowed = Domain.GetValue("nullAllowed", StringComparison.OrdinalIgnoreCase).ToObject<bool>(serializer);
+            string DomainType = (Domain.GetValue("values", StringComparison.OrdinalIgnoreCase) as JObject).GetValue("@type", StringComparison.OrdinalIgnoreCase).ToObject<string>(serializer);
+            string ItemType = (Domain.GetValue("values", StringComparison.OrdinalIgnoreCase) as JObject).GetValue("type", StringComparison.OrdinalIgnoreCase).ToObject<string>(serializer);
 
             throw new NotImplementedException();
         }

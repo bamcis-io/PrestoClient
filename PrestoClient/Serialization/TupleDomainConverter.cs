@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace BAMCIS.PrestoClient.Serialization
 {
@@ -28,8 +27,8 @@ namespace BAMCIS.PrestoClient.Serialization
         /// <returns></returns>
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            JToken Token = JToken.Load(reader);
-            IEnumerable<ColumnDomain<T>> Domains = Token["columnDomains"].ToObject<IEnumerable<ColumnDomain<T>>>();
+            JObject Token = JObject.Load(reader);
+            IEnumerable<ColumnDomain<T>> Domains = Token.GetValue("columnDomains", StringComparison.OrdinalIgnoreCase).ToObject<IEnumerable<ColumnDomain<T>>>();
 
             return TupleDomain<T>.FromColumnDomains(Domains);
         }

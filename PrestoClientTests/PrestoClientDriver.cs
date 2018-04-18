@@ -1,4 +1,3 @@
-using BAMCIS.PrestoClient;
 using BAMCIS.PrestoClient.Interfaces;
 using BAMCIS.PrestoClient.Model.Query;
 using BAMCIS.PrestoClient.Model.Server;
@@ -9,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace PrestoClient.Tests
+namespace BAMCIS.PrestoClient.Tests
 {
     public class PrestoClientDriver
     {
