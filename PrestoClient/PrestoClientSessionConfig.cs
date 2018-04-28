@@ -101,11 +101,6 @@ namespace BAMCIS.PrestoClient
             }
             set
             {
-                if (String.IsNullOrEmpty(value))
-                {
-                    throw new ArgumentNullException("Catalog", "The catalog cannot be null or empty.");
-                }
-
                 this._Catalog = value;
             }
         }
@@ -121,11 +116,6 @@ namespace BAMCIS.PrestoClient
             }
             set
             {
-                if (String.IsNullOrEmpty(value))
-                {
-                    throw new ArgumentNullException("Schema", "The schema cannot be null or empty.");
-                }
-
                 this._Schema = value;
             }
         }

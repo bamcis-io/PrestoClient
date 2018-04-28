@@ -827,7 +827,7 @@ namespace BAMCIS.PrestoClient
                         }
                     default:
                         {
-                            throw new PrestoWebException($"The request to {request.RequestUri} failed.", Response.StatusCode);
+                            throw new PrestoWebException($"The request to {request.RequestUri} failed, message:{await Response.Content.ReadAsStringAsync()}", Response.StatusCode);
                         }
                 }
             }
