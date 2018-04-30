@@ -13,16 +13,59 @@ namespace PrestoClient.Tests
 {
     public class PrestoClientDriver
     {
-        private static string Table = "cars";
+        private static string Schema = "cars";
+        private static string S3_Location = "";
 
         public PrestoClientDriver()
         { }
 
         [Fact]
+        public async Task CreateSchema()
+        {
+            // ARRANGE
+            PrestoClientSessionConfig Config = new PrestoClientSessionConfig()
+            {
+                Host = "localhost",
+                Port = 8080
+            };
+
+            IPrestoClient Client = new PrestodbClient(Config);
+
+            ExecuteQueryV1Request Req = new ExecuteQueryV1Request($"CREATE SCHEMA IF NOT EXISTS hive.{Schema}");
+
+            // ACT
+            ExecuteQueryV1Response Res = await Client.ExecuteQueryV1(Req);
+
+            // ASSERT
+            Assert.True(Res.QueryClosed == true);
+        }
+
+        [Fact]
+        public async Task CreateTable()
+        {
+            // ARRANGE
+            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Schema)
+            {
+                Host = "localhost",
+                Port = 8080
+            };
+
+            IPrestoClient Client = new PrestodbClient(Config);
+
+            ExecuteQueryV1Request Req = new ExecuteQueryV1Request($"CREATE TABLE IF NOT EXISTS tracklets (id bigint, objectclass varchar, length double, trackdata array(varchar), platform varchar,spectrum varchar, timestamp bigint) WITH (format = 'AVRO', external_location = '{S3_Location}');");
+
+            // ACT
+            ExecuteQueryV1Response Res = await Client.ExecuteQueryV1(Req);
+
+            // ASSERT
+            Assert.True(Res.QueryClosed == true);
+        }
+
+        [Fact]
         public async Task TestExecuteStatement()
         {
             //ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Table)
+            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Schema)
             {
                 Host = "localhost",
                 Port = 8080
@@ -39,10 +82,50 @@ namespace PrestoClient.Tests
         }
 
         [Fact]
+        public async Task TestExecuteStatementOrderBy()
+        {
+            //ARRANGE
+            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Schema)
+            {
+                Host = "localhost",
+                Port = 8080
+            };
+            IPrestoClient Client = new PrestodbClient(Config);
+
+            ExecuteQueryV1Request Req = new ExecuteQueryV1Request("select * from tracklets ORDER BY length limit 5;");
+
+            // ACT
+            ExecuteQueryV1Response Res = await Client.ExecuteQueryV1(Req);
+
+            // ASSERT
+            Assert.True(Res.QueryClosed == true);
+        }
+
+        [Fact]
+        public async Task TestExecuteStatementWhere()
+        {
+            //ARRANGE
+            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Schema)
+            {
+                Host = "localhost",
+                Port = 8080
+            };
+            IPrestoClient Client = new PrestodbClient(Config);
+
+            ExecuteQueryV1Request Req = new ExecuteQueryV1Request("select id,length,objectclass from tracklets WHERE length > 1000 LIMIT 5;");
+
+            // ACT
+            ExecuteQueryV1Response Res = await Client.ExecuteQueryV1(Req);
+
+            // ASSERT
+            Assert.True(Res.QueryClosed == true);
+        }
+
+        [Fact]
         public async Task TestQueryResultDataToJson()
         {
             //ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Table)
+            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Schema)
             {
                 Host = "localhost",
                 Port = 8080
@@ -64,7 +147,7 @@ namespace PrestoClient.Tests
         public async Task TestQueryResultDataToCsv()
         {
             //ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Table)
+            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Schema)
             {
                 Host = "localhost",
                 Port = 8080
@@ -86,7 +169,7 @@ namespace PrestoClient.Tests
         public async Task TestListQueries()
         {
             //ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Table)
+            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Schema)
             {
                 Host = "localhost",
                 Port = 8080
@@ -104,7 +187,7 @@ namespace PrestoClient.Tests
         public async Task TestGetQuery()
         {
             //ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Table)
+            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Schema)
             {
                 Host = "localhost",
                 Port = 8080
