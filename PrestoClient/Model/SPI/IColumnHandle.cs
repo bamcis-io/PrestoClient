@@ -6,7 +6,7 @@ namespace BAMCIS.PrestoClient.Model.SPI
     /// <summary>
     /// From com.facebook.presto.spi.ColumnHandle.java
     /// </summary>
-    [JsonConverter(typeof(EmptyInterfaceConverter))]
+    [JsonConverter(typeof(DynamicInterfaceConverter))]
     public interface IColumnHandle
     {
         // Intentionally empty

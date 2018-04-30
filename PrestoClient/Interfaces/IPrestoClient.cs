@@ -85,7 +85,7 @@ namespace BAMCIS.PrestoClient.Interfaces
         /// <returns>The response from the statement</returns>
         Task<ExecuteQueryV1Response> ExecuteQueryV1(ExecuteQueryV1Request request);
 
-        // Not yet available as of Presto 0.197
+        // Not yet available as of Presto 0.198
         // Task<ExecuteQueryResponse<QueryResultsV2>> ExecuteQueryV2(ExecuteQueryV2Request request);
 
         #endregion

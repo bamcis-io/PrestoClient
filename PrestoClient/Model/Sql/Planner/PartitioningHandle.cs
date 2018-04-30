@@ -16,7 +16,7 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner
         public ConnectorId ConnectorId { get; }
 
         /// <summary>
-        /// This should be an IConnectorTransactionHandle, but all of the 
+        /// TODO: This should be an IConnectorTransactionHandle, but all of the 
         /// classes that implement this interface have not been created
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -24,7 +24,7 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner
         public dynamic TransactionHandle { get; }
 
         /// <summary>
-        /// This should be an IConnectorHandle, but all of the classes
+        /// TODO: This should be an IConnectorHandle, but all of the classes
         /// that implement this interface have not been created
         /// </summary>
         public dynamic ConnectorHandle { get; }

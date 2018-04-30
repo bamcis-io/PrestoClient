@@ -827,7 +827,7 @@ namespace BAMCIS.PrestoClient
                         }
                     default:
                         {
-                            throw new PrestoWebException($"The request to {request.RequestUri} failed.", Response.StatusCode);
+                            throw new PrestoWebException($"The request to {request.RequestUri} failed, message:{await Response.Content.ReadAsStringAsync()}", Response.StatusCode);
                         }
                 }
             }
@@ -892,6 +892,12 @@ namespace BAMCIS.PrestoClient
             if (String.IsNullOrEmpty(this.Configuration.User))
             {
                 ex = new ArgumentNullException("user", "The user was not specified.");
+                return false;
+            }
+
+            if (String.IsNullOrEmpty(this.Configuration.Catalog) && !String.IsNullOrEmpty(this.Configuration.Schema))
+            {
+                ex = new ArgumentException("The Schema cannot be set without setting the catalog.");
                 return false;
             }
 

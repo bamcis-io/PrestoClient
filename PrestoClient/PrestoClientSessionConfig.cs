@@ -29,8 +29,6 @@ namespace BAMCIS.PrestoClient
 
         #region Private Fields
 
-        private string _Catalog;
-        private string _Schema;
         private string _User;
         private int _Port;
         private int _CheckInterval;
@@ -92,42 +90,12 @@ namespace BAMCIS.PrestoClient
         /// <summary>
         /// The catalog to use for interaction with presto.
         /// </summary>
-        public string Catalog
-        {
-            get
-            {
-                return this._Catalog;
-            }
-            set
-            {
-                if (String.IsNullOrEmpty(value))
-                {
-                    throw new ArgumentNullException("Catalog", "The catalog cannot be null or empty.");
-                }
-
-                this._Catalog = value;
-            }
-        }
+        public string Catalog { get; set; }
 
         /// <summary>
         /// The schema to connect to in presto. This defaults to 'default'.
         /// </summary>
-        public string Schema
-        {
-            get
-            {
-                return this._Schema;
-            }
-            set
-            {
-                if (String.IsNullOrEmpty(value))
-                {
-                    throw new ArgumentNullException("Schema", "The schema cannot be null or empty.");
-                }
-
-                this._Schema = value;
-            }
-        }
+        public string Schema { get; set; }
 
         /// <summary>
         /// The amount of time in milliseconds that the client will wait in between
@@ -202,7 +170,8 @@ namespace BAMCIS.PrestoClient
         /// See https://prestodb.io/docs/current/admin/properties.html for information on
         /// available properties that can be set
         /// </summary>
-        public IDictionary<string, string> Properties {
+        public IDictionary<string, string> Properties
+        {
 
             get
             {
@@ -301,7 +270,6 @@ namespace BAMCIS.PrestoClient
             this.Host = _DEFAULT_HOST;
             this.Port = _DEFAULT_PORT;
             this.User = Environment.GetEnvironmentVariable("USERNAME") ?? Environment.GetEnvironmentVariable("USER");
-            this.Schema = "default";
             this.CheckInterval = _QUERY_STATE_CHECK_INTERVAL;
             this.IgnoreSslErrors = false;
             this.UseSsl = false;

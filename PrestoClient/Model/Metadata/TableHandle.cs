@@ -14,7 +14,7 @@ namespace BAMCIS.PrestoClient.Model.Metadata
         public ConnectorId ConnectorId { get; }
 
         /// <summary>
-        /// TODO: Supposed to be an ITableConnectorHandle
+        /// TODO: Supposed to be an IConnectorTableHandle
         /// </summary>
         public dynamic ConnectorHandle { get; }
 
