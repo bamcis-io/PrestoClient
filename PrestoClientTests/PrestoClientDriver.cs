@@ -1,3 +1,4 @@
+using BAMCIS.PrestoClient;
 using BAMCIS.PrestoClient.Interfaces;
 using BAMCIS.PrestoClient.Model.Query;
 using BAMCIS.PrestoClient.Model.Server;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace BAMCIS.PrestoClient.Tests
+namespace PrestoClient.Tests
 {
     public class PrestoClientDriver
     {
@@ -21,7 +22,8 @@ namespace BAMCIS.PrestoClient.Tests
         public async Task TestExecuteStatement()
         {
             //ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Table) {
+            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Table)
+            {
                 Host = "localhost",
                 Port = 8080
             };
@@ -51,7 +53,7 @@ namespace BAMCIS.PrestoClient.Tests
 
             // ACT
             ExecuteQueryV1Response Res = await Client.ExecuteQueryV1(Req);
-          
+
             string Json = Res.DataToJson();
 
             // ASSERT

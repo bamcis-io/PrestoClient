@@ -203,7 +203,8 @@ namespace BAMCIS.PrestoClient
         /// See https://prestodb.io/docs/current/admin/properties.html for information on
         /// available properties that can be set
         /// </summary>
-        public IDictionary<string, string> Properties {
+        public IDictionary<string, string> Properties
+        {
 
             get
             {

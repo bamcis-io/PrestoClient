@@ -3,7 +3,7 @@ using System;
 
 namespace BAMCIS.PrestoClient.Serialization
 {
-    public class EmptyInterfaceConverter : JsonConverter
+    public class DynamicInterfaceConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {

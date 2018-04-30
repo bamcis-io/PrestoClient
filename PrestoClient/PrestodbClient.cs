@@ -523,10 +523,10 @@ namespace BAMCIS.PrestoClient
                     // finished, use  a while loop since the data may have 
                     // all been returned in the first request and no nextUri
                     // property was returned
-                    while (Path != null && 
-                        ((this.Configuration.ClientRequestTimeout > 0) ? 
-                        SW.Elapsed.TotalSeconds <= this.Configuration.ClientRequestTimeout : 
-                        true 
+                    while (Path != null &&
+                        ((this.Configuration.ClientRequestTimeout > 0) ?
+                        SW.Elapsed.TotalSeconds <= this.Configuration.ClientRequestTimeout :
+                        true
                         ))
                     {
                         // Put a pause in between each call to reduce CPU usage
@@ -827,7 +827,7 @@ namespace BAMCIS.PrestoClient
                         }
                     default:
                         {
-                            throw new PrestoWebException($"The request to {request.RequestUri} failed.", Response.StatusCode);
+                            throw new PrestoWebException($"The request to {request.RequestUri} failed, message:{await Response.Content.ReadAsStringAsync()}", Response.StatusCode);
                         }
                 }
             }
@@ -892,6 +892,12 @@ namespace BAMCIS.PrestoClient
             if (String.IsNullOrEmpty(this.Configuration.User))
             {
                 ex = new ArgumentNullException("user", "The user was not specified.");
+                return false;
+            }
+
+            if (String.IsNullOrEmpty(this.Configuration.Catalog) && !String.IsNullOrEmpty(this.Configuration.Schema))
+            {
+                ex = new ArgumentException("The Schema cannot be set without setting the catalog.");
                 return false;
             }
 
