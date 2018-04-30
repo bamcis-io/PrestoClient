@@ -14,6 +14,7 @@ namespace PrestoClient.Tests
     public class PrestoClientDriver
     {
         private static string Schema = "cars";
+        private static string S3_Location = "";
 
         public PrestoClientDriver()
         { }
@@ -51,7 +52,7 @@ namespace PrestoClient.Tests
 
             IPrestoClient Client = new PrestodbClient(Config);
 
-            ExecuteQueryV1Request Req = new ExecuteQueryV1Request($"CREATE TABLE IF NOT EXISTS tracklets (id bigint, objectclass varchar, length double, trackdata array(varchar), platform varchar,spectrum varchar, timestamp bigint) WITH (format = 'AVRO', external_location = 's3a://presto-test-haken/tracklets/');");
+            ExecuteQueryV1Request Req = new ExecuteQueryV1Request($"CREATE TABLE IF NOT EXISTS tracklets (id bigint, objectclass varchar, length double, trackdata array(varchar), platform varchar,spectrum varchar, timestamp bigint) WITH (format = 'AVRO', external_location = '{S3_Location}');");
 
             // ACT
             ExecuteQueryV1Response Res = await Client.ExecuteQueryV1(Req);
