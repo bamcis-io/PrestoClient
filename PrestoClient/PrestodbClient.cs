@@ -19,7 +19,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
-using System.Web;
 using BAMCIS.PrestoClient.Model.NodeInfo;
 using BAMCIS.PrestoClient.Model.SPI;
 
@@ -1024,7 +1023,7 @@ namespace BAMCIS.PrestoClient
             {
                 foreach (KeyValuePair<string, string> Statement in PreparedStatements)
                 {
-                    request.Headers.Add(PrestoHeader.PRESTO_PREPARED_STATEMENT.Value, $"{HttpUtility.UrlDecode(Statement.Key)}={HttpUtility.UrlDecode(Statement.Value)}");
+                    request.Headers.Add(PrestoHeader.PRESTO_PREPARED_STATEMENT.Value, $"{WebUtility.UrlDecode(Statement.Key)}={WebUtility.UrlDecode(Statement.Value)}");
                 }
             }
 
