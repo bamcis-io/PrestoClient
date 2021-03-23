@@ -137,13 +137,25 @@ namespace BAMCIS.PrestoClient
         /// </returns>
         public async Task<ListThreadsV1Response> ListThreads()
         {
+            return await ListThreads(CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Gets information about the in use threads in the cluster.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        /// <returns>
+        /// Information about all of the threads and their state.
+        /// </returns>
+        public async Task<ListThreadsV1Response> ListThreads(CancellationToken cancellationToken)
+        {
             HttpClient LocalClient = (this.Configuration.IgnoreSslErrors) ? this.IgnoreSslErrorClient : this.NormalClient;
 
             Uri Path = this.BuildUri("/thread");
 
             HttpRequestMessage Request = this.BuildRequest(Path, HttpMethod.Get);
 
-            HttpResponseMessage Response = await LocalClient.SendAsync(Request);
+            HttpResponseMessage Response = await LocalClient.SendAsync(Request,cancellationToken);
 
             string Json = await Response.Content.ReadAsStringAsync();
 
@@ -166,6 +178,17 @@ namespace BAMCIS.PrestoClient
         /// <returns>The web page html/javascript/css.</returns>
         public async Task<string> GetThreadUIHtml()
         {
+            return await GetThreadUIHtml(CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Gets the web ui html that displays information about the threads
+        /// in the cluster and optionally opens that web page.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        /// <returns>The web page html/javascript/css.</returns>
+        public async Task<string> GetThreadUIHtml(CancellationToken cancellationToken)
+        {
             HttpClient LocalClient = (this.Configuration.IgnoreSslErrors) ? this.IgnoreSslErrorClient : this.NormalClient;
 
             StringBuilder SB = new StringBuilder();
@@ -183,7 +206,7 @@ namespace BAMCIS.PrestoClient
 
             Uri Path = new Uri(SB.ToString());
 
-            HttpResponseMessage Response = await LocalClient.GetAsync(Path);
+            HttpResponseMessage Response = await LocalClient.GetAsync(Path, cancellationToken);
 
             string Html = await Response.Content.ReadAsStringAsync();
 
@@ -210,13 +233,26 @@ namespace BAMCIS.PrestoClient
         /// </returns>
         public async Task<ListNodesV1Response> ListNodes()
         {
+            return await ListNodes(CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Gets the worker nodes in a presto cluster
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        /// <returns>
+        /// Information about all of the worker nodes. If the request is unsuccessful, 
+        /// a PrestoException is thrown.
+        /// </returns>
+        public async Task<ListNodesV1Response> ListNodes(CancellationToken cancellationToken)
+        {
             HttpClient LocalClient = (this.Configuration.IgnoreSslErrors) ? this.IgnoreSslErrorClient : this.NormalClient;
 
             Uri Path = this.BuildUri("/node");
 
             HttpRequestMessage Request = this.BuildRequest(Path, HttpMethod.Get);
 
-            HttpResponseMessage Response = await LocalClient.SendAsync(Request);
+            HttpResponseMessage Response = await LocalClient.SendAsync(Request, cancellationToken);
 
             string Json = await Response.Content.ReadAsStringAsync();
 
@@ -287,6 +323,19 @@ namespace BAMCIS.PrestoClient
         /// </returns>
         public async Task<ListFailedNodesV1Response> ListFailedNodes()
         {
+            return await ListFailedNodes(CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Gets any failed nodes in a presto cluster.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        /// <returns>
+        /// Information about the failed nodes. If there are no failed nodes, 
+        /// the FailedNodes property will be null.
+        /// </returns>
+        public async Task<ListFailedNodesV1Response> ListFailedNodes(CancellationToken cancellationToken)
+        {
             HttpClient LocalClient = (this.Configuration.IgnoreSslErrors) ? this.IgnoreSslErrorClient : this.NormalClient;
 
             StringBuilder SB = new StringBuilder();
@@ -304,7 +353,7 @@ namespace BAMCIS.PrestoClient
 
             Uri Path = new Uri(SB.ToString());
 
-            HttpResponseMessage Response = await LocalClient.GetAsync(Path);
+            HttpResponseMessage Response = await LocalClient.GetAsync(Path, cancellationToken);
 
             string Json = await Response.Content.ReadAsStringAsync();
 
@@ -358,9 +407,19 @@ namespace BAMCIS.PrestoClient
         /// Kills an active query statement
         /// </summary>
         /// <param name="queryId">The Id of the query to kill</param>
-        /// <param name="options">The header options to supply with the request to kill the query</param>
         /// <returns>No value is returned, but the method will throw an exception if it was not successful</returns>
         public async Task KillQuery(string queryId)
+        {
+            await KillQuery(queryId, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Kills an active query statement
+        /// </summary>
+        /// <param name="queryId">The Id of the query to kill</param>
+        /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        /// <returns>No value is returned, but the method will throw an exception if it was not successful</returns>
+        public async Task KillQuery(string queryId, CancellationToken cancellationToken)
         {
             HttpClient localClient = (this.Configuration.IgnoreSslErrors) ? this.IgnoreSslErrorClient : this.NormalClient;
 
@@ -368,7 +427,7 @@ namespace BAMCIS.PrestoClient
 
             HttpRequestMessage Request = this.BuildRequest(Path, HttpMethod.Delete);
 
-            HttpResponseMessage Response = await localClient.SendAsync(Request);
+            HttpResponseMessage Response = await localClient.SendAsync(Request, cancellationToken);
 
             // Expect a 204 response
             if (Response.StatusCode != HttpStatusCode.NoContent)
@@ -384,13 +443,24 @@ namespace BAMCIS.PrestoClient
         /// <returns></returns>
         public async Task<ListQueriesV1Response> GetQueries()
         {
+            return await GetQueries(CancellationToken.None);
+        }
+
+        /// <summary>
+        /// This service returns information and statistics about queries that
+        /// are currently being executed on a Presto coordinator.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        /// <returns></returns>
+        public async Task<ListQueriesV1Response> GetQueries(CancellationToken cancellationToken)
+        {
             HttpClient LocalClient = (this.Configuration.IgnoreSslErrors) ? this.IgnoreSslErrorClient : this.NormalClient;
 
             Uri Path = this.BuildUri($"/query");
 
             HttpRequestMessage Request = this.BuildRequest(Path, HttpMethod.Get);
 
-            HttpResponseMessage Response = await LocalClient.SendAsync(Request);
+            HttpResponseMessage Response = await LocalClient.SendAsync(Request, cancellationToken);
 
             // Expect a 200 response
             if (Response.StatusCode != HttpStatusCode.OK)
@@ -412,13 +482,25 @@ namespace BAMCIS.PrestoClient
         /// <returns>Information about the specified query.</returns>
         public async Task<GetQueryV1Response> GetQuery(string queryId)
         {
+            return await GetQuery(queryId, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// If you are looking to gather very detailed statistics about a
+        /// query, this is the service you would call.
+        /// </summary>
+        /// <param name="queryId">The id of the query to retrieve details about.</param>
+        /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        /// <returns>Information about the specified query.</returns>
+        public async Task<GetQueryV1Response> GetQuery(string queryId, CancellationToken CancellationToken)
+        {
             HttpClient LocalClient = (this.Configuration.IgnoreSslErrors) ? this.IgnoreSslErrorClient : this.NormalClient;
 
             Uri Path = this.BuildUri($"/query/{queryId}");
 
             HttpRequestMessage Request = this.BuildRequest(Path, HttpMethod.Get);
 
-            HttpResponseMessage Response = await LocalClient.GetAsync(Path);
+            HttpResponseMessage Response = await LocalClient.GetAsync(Path, CancellationToken);
 
             // Expect a 200 response
             if (Response.StatusCode != HttpStatusCode.OK)
@@ -440,7 +522,19 @@ namespace BAMCIS.PrestoClient
         /// <returns>Information about the specified query.</returns>
         public async Task<GetQueryV1Response> GetQuery(QueryId queryId)
         {
-            return await this.GetQuery(queryId.ToString());
+            return await GetQuery(queryId, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// If you are looking to gather very detailed statistics about a
+        /// query, this is the service you would call.
+        /// </summary>
+        /// <param name="queryId">The id of the query to retrieve details about.</param>
+        /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        /// <returns>Information about the specified query.</returns>
+        public async Task<GetQueryV1Response> GetQuery(QueryId queryId, CancellationToken cancellationToken)
+        {
+            return await this.GetQuery(queryId.ToString(), cancellationToken);
         }
 
         #endregion
@@ -454,6 +548,18 @@ namespace BAMCIS.PrestoClient
         /// <param name="request">The query execution request.</param>
         /// <returns>The resulting response object from the query.</returns>
         public async Task<ExecuteQueryV1Response> ExecuteQueryV1(ExecuteQueryV1Request request)
+        {
+            return await ExecuteQueryV1(request, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Submits a statement to Presto for execution. The Presto client 
+        /// executes queries on behalf of a user against a catalog and a schema.
+        /// </summary>
+        /// <param name="request">The query execution request.</param>
+        /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        /// <returns>The resulting response object from the query.</returns>
+        public async Task<ExecuteQueryV1Response> ExecuteQueryV1(ExecuteQueryV1Request request, CancellationToken cancellationToken)
         {
             // Check the required configuration items before running the query
             if (!CheckConfiguration(out Exception Ex))
@@ -486,7 +592,7 @@ namespace BAMCIS.PrestoClient
 
             // This is the original submission result, will contain the nextUri
             // property to follow in order to get the results
-            HttpResponseMessage ResponseMessage = await this.MakeHttpRequest(LocalClient, Request);
+            HttpResponseMessage ResponseMessage = await this.MakeHttpRequest(LocalClient, Request, cancellationToken: cancellationToken);
 
             // This doesn't really do anything but evaluate the headers right now
             this.ProcessResponseHeaders(ResponseMessage);
@@ -539,7 +645,7 @@ namespace BAMCIS.PrestoClient
                         // the MakeRequest method will throw an exception
                         Request = BuildRequest(Path, HttpMethod.Get);
 
-                        ResponseMessage = await this.MakeHttpRequest(LocalClient, Request);
+                        ResponseMessage = await this.MakeHttpRequest(LocalClient, Request, cancellationToken: cancellationToken);
 
                         this.ProcessResponseHeaders(ResponseMessage);
 
@@ -568,7 +674,7 @@ namespace BAMCIS.PrestoClient
                     bool Closed = false;
 
                     // Explicitly closes the query
-                    ResponseMessage = await LocalClient.SendAsync(new HttpRequestMessage(HttpMethod.Delete, LastUri));
+                    ResponseMessage = await LocalClient.SendAsync(new HttpRequestMessage(HttpMethod.Delete, LastUri), cancellationToken);
 
                     // If a 204 is not returned, the query was not successfully closed
                     if (ResponseMessage.StatusCode == HttpStatusCode.NoContent)
@@ -603,6 +709,22 @@ namespace BAMCIS.PrestoClient
         /// retrieved from the data uris.
         /// </returns>
         private async Task<ExecuteQueryResponse<QueryResultsV2>> ExecuteQueryV2(ExecuteQueryV2Request request)
+        {
+            return await ExecuteQueryV2(request, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// This API is not yet available in Presto as of version 0.197
+        /// Submits a statement to Presto for execution. The Presto client
+        /// executes queries on behalf of a user against a catalog and a schema.
+        /// </summary>
+        /// <param name="request">The query execution request</param>
+        /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        /// <returns>
+        /// The final query response object where NextUri was null with all of the data
+        /// retrieved from the data uris.
+        /// </returns>
+        private async Task<ExecuteQueryResponse<QueryResultsV2>> ExecuteQueryV2(ExecuteQueryV2Request request, CancellationToken cancellationToken)
         {
             #region Standard Stuff
 
@@ -661,7 +783,7 @@ namespace BAMCIS.PrestoClient
                     Request = new HttpRequestMessage(HttpMethod.Get, NextUri);
                 }
 
-                HttpResponseMessage Response = await this.MakeHttpRequest(LocalClient, Request);
+                HttpResponseMessage Response = await this.MakeHttpRequest(LocalClient, Request, cancellationToken: cancellationToken);
 
                 string raw = await Response.Content.ReadAsStringAsync();
 
@@ -688,7 +810,7 @@ namespace BAMCIS.PrestoClient
                                     while (NextDataUri != null)
                                     {
                                         HttpRequestMessage DataRequest = new HttpRequestMessage(HttpMethod.Get, NextDataUri);
-                                        HttpResponseMessage DataResponse = await LocalClient.SendAsync(DataRequest);
+                                        HttpResponseMessage DataResponse = await LocalClient.SendAsync(DataRequest, cancellationToken);
                                         GetDataV2Response DataItem = JsonConvert.DeserializeObject<GetDataV2Response>(await DataResponse.Content.ReadAsStringAsync());
 
                                         foreach (List<dynamic> Row in DataItem.Data)
@@ -727,7 +849,7 @@ namespace BAMCIS.PrestoClient
             QueryResponse.Response.Data = DataRows.ToList();
 
             // Explicitly closes the query
-            HttpResponseMessage ClosureResponse = await LocalClient.SendAsync(new HttpRequestMessage(HttpMethod.Delete, LastUri));
+            HttpResponseMessage ClosureResponse = await LocalClient.SendAsync(new HttpRequestMessage(HttpMethod.Delete, LastUri), cancellationToken);
 
             // If a 204 is not returned, the query was not successfully closed
             if (ClosureResponse.StatusCode == HttpStatusCode.NoContent)
@@ -742,7 +864,23 @@ namespace BAMCIS.PrestoClient
 
         #region JMX
 
+        /// <summary>
+        /// Gets details about a specified Jmx Mbean
+        /// </summary>
+        /// <param name="request">The request details</param>
+        /// <returns>Details about the specified Jmx Mbean</returns>
         public async Task<JmxMbeanV1Response> GetJmxMbean(JmxMbeanV1Request request)
+        {
+            return await GetJmxMbean(request, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Gets details about a specified Jmx Mbean
+        /// </summary>
+        /// <param name="request">The request details</param>
+        /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        /// <returns>Details about the specified Jmx Mbean</returns>
+        public async Task<JmxMbeanV1Response> GetJmxMbean(JmxMbeanV1Request request, CancellationToken cancellationToken)
         {
             // Check the required configuration items before running the query
             if (!CheckConfiguration(out Exception Ex))
@@ -757,7 +895,7 @@ namespace BAMCIS.PrestoClient
             HttpRequestMessage Request = this.BuildRequest(Path, HttpMethod.Get);
 
             // Submit the request for details on the requested object name
-            HttpResponseMessage Response = await this.MakeHttpRequest(Request);
+            HttpResponseMessage Response = await this.MakeHttpRequest(Request, cancellationToken);
 
             if (Response.StatusCode != HttpStatusCode.OK)
             {
@@ -782,13 +920,15 @@ namespace BAMCIS.PrestoClient
         /// </summary>
         /// <param name="client">The http client to use to make the request.</param>
         /// <param name="request">The request to send.</param>
+        /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
         /// <param name="maxRetries">The maximum number of times the method will try to contact the server
         /// if a service unavailable response code is returned.</param>
         /// <returns>The http response message from the request.</returns>
-        private async Task<HttpResponseMessage> MakeHttpRequest(HttpRequestMessage request, uint maxRetries = 5)
+        private async Task<HttpResponseMessage> MakeHttpRequest(HttpRequestMessage request, CancellationToken cancellationToken, uint maxRetries = 5)
         {
-            return await this.MakeHttpRequest(this.Configuration.IgnoreSslErrors ? this.IgnoreSslErrorClient : this.NormalClient, request, maxRetries);
+            return await this.MakeHttpRequest(this.Configuration.IgnoreSslErrors ? this.IgnoreSslErrorClient : this.NormalClient, request, cancellationToken, maxRetries);
         }
+
 
         /// <summary>
         /// Makes a request with the provided client and request message and
@@ -796,17 +936,18 @@ namespace BAMCIS.PrestoClient
         /// </summary>
         /// <param name="client">The http client to use to make the request.</param>
         /// <param name="request">The request to send.</param>
+        /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
         /// <param name="maxRetries">The maximum number of times the method will try to contact the server
         /// if a service unavailable response code is returned.</param>
         /// <returns>The http response message from the request.</returns>
-        private async Task<HttpResponseMessage> MakeHttpRequest(HttpClient client, HttpRequestMessage request, uint maxRetries = 5)
+        private async Task<HttpResponseMessage> MakeHttpRequest(HttpClient client, HttpRequestMessage request, CancellationToken cancellationToken, uint maxRetries = 5)
         {
             HttpResponseMessage Response = null;
             uint Counter = 0;
 
             while (Counter < maxRetries)
             {
-                Response = await client.SendAsync(request);
+                Response = await client.SendAsync(request, cancellationToken);
 
                 switch (Response.StatusCode)
                 {
