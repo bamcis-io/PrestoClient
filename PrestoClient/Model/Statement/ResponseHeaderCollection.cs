@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http.Headers;
-using System.Web;
 
 namespace BAMCIS.PrestoClient.Model.Statement
 {
@@ -86,14 +86,14 @@ namespace BAMCIS.PrestoClient.Model.Statement
                         continue;
                     }
 
-                    AddedPrepare.Add(HttpUtility.UrlDecode(Parts[0]), HttpUtility.UrlDecode(Parts[1]));
+                    AddedPrepare.Add(WebUtility.UrlDecode(Parts[0]), WebUtility.UrlDecode(Parts[1]));
                 }
             }
 
             // Get the deallocated prepared statements
             if (headers.TryGetValues(PrestoHeader.PRESTO_DEALLOCATED_PREPARE.Value, out Temp))
             {
-                this.DeallocatedPreparedStatements = new HashSet<string>(Temp.Select(x => HttpUtility.UrlDecode(x)));
+                this.DeallocatedPreparedStatements = new HashSet<string>(Temp.Select(x => WebUtility.UrlDecode(x)));
             }
             else
             {

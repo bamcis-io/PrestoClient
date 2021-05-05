@@ -20,6 +20,31 @@ namespace PrestoClient.Tests
         { }
 
         [Fact]
+        public async Task TestPassword()
+        {
+            // ARRANGE
+            PrestoClientSessionConfig config = new PrestoClientSessionConfig()
+            {
+                Host = "localhost",
+                Port = 8080,
+                Password = "password1!2@3#4$AA"
+            };
+
+            IPrestoClient client = new PrestodbClient(config);
+
+            // ACT
+            ExecuteQueryV1Request req = new ExecuteQueryV1Request($"CREATE SCHEMA IF NOT EXISTS hive.{Schema}");
+
+            //mock.Verify(x => x.ExecuteQueryV1(captor.Capture()));
+            //req.
+            
+            ExecuteQueryV1Response res = await client.ExecuteQueryV1(req);
+
+            // ASSERT
+            Assert.NotNull(res);
+        }
+
+        [Fact]
         public async Task CreateSchema()
         {
             // ARRANGE

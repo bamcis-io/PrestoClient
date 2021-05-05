@@ -19,7 +19,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
-using System.Web;
 using BAMCIS.PrestoClient.Model.NodeInfo;
 using BAMCIS.PrestoClient.Model.SPI;
 
@@ -547,7 +546,7 @@ namespace BAMCIS.PrestoClient
         /// </summary>
         /// <param name="request">The query execution request.</param>
         /// <returns>The resulting response object from the query.</returns>
-        public async Task<ExecuteQueryV1Response> ExecuteQueryV1(ExecuteQueryV1Request request)
+        public virtual async Task<ExecuteQueryV1Response> ExecuteQueryV1(ExecuteQueryV1Request request)
         {
             return await ExecuteQueryV1(request, CancellationToken.None);
         }
@@ -942,18 +941,18 @@ namespace BAMCIS.PrestoClient
         /// <returns>The http response message from the request.</returns>
         private async Task<HttpResponseMessage> MakeHttpRequest(HttpClient client, HttpRequestMessage request, CancellationToken cancellationToken, uint maxRetries = 5)
         {
-            HttpResponseMessage Response = null;
+            HttpResponseMessage response = null;
             uint Counter = 0;
 
             while (Counter < maxRetries)
             {
-                Response = await client.SendAsync(request, cancellationToken);
+                response = await client.SendAsync(request, cancellationToken);
 
-                switch (Response.StatusCode)
+                switch (response.StatusCode)
                 {
                     case HttpStatusCode.OK:
                         {
-                            return Response;
+                            return response;
                         }
                     case HttpStatusCode.ServiceUnavailable:
                         {
@@ -968,13 +967,13 @@ namespace BAMCIS.PrestoClient
                         }
                     default:
                         {
-                            throw new PrestoWebException($"The request to {request.RequestUri} failed, message:{await Response.Content.ReadAsStringAsync()}", Response.StatusCode);
+                            throw new PrestoWebException($"The request to {request.RequestUri} failed, message:{await response.Content.ReadAsStringAsync()}", response.StatusCode);
                         }
                 }
             }
 
             // This will only be reached if the while loop exits
-            throw new PrestoWebException($"The maximum number of retries, {maxRetries}, for path {request.RequestUri} was exceeded.", Response.StatusCode);
+            throw new PrestoWebException($"The maximum number of retries, {maxRetries}, for path {request.RequestUri} was exceeded.", response.StatusCode);
         }
 
         /// <summary>
@@ -1165,7 +1164,7 @@ namespace BAMCIS.PrestoClient
             {
                 foreach (KeyValuePair<string, string> Statement in PreparedStatements)
                 {
-                    request.Headers.Add(PrestoHeader.PRESTO_PREPARED_STATEMENT.Value, $"{HttpUtility.UrlDecode(Statement.Key)}={HttpUtility.UrlDecode(Statement.Value)}");
+                    request.Headers.Add(PrestoHeader.PRESTO_PREPARED_STATEMENT.Value, $"{WebUtility.UrlDecode(Statement.Key)}={WebUtility.UrlDecode(Statement.Value)}");
                 }
             }
 
@@ -1196,23 +1195,28 @@ namespace BAMCIS.PrestoClient
         /// <returns></returns>
         private HttpRequestMessage BuildRequest(Uri url, HttpMethod method, HttpContent content = null)
         {
-            HttpRequestMessage Request = new HttpRequestMessage(method, url);
+            HttpRequestMessage request = new HttpRequestMessage(method, url);
 
             if (content != null)
             {
-                Request.Content = content;
+                request.Content = content;
             }
 
-            Request.Headers.Add("Accept", "application/json");
-            Request.Headers.Add("User-Agent", $"bamcis_presto_dotnet_core_sdk/{AssemblyVersion}");
-            Request.Headers.Add(PrestoHeader.PRESTO_SOURCE.Value, "bamcis_presto_dotnet_core_sdk");
+            request.Headers.Add("Accept", "application/json");
+            request.Headers.Add("User-Agent", $"bamcis_presto_dotnet_core_sdk/{AssemblyVersion}");
+            request.Headers.Add(PrestoHeader.PRESTO_SOURCE.Value, "bamcis_presto_dotnet_core_sdk");
 
             if (!String.IsNullOrEmpty(this.Configuration.User))
             {
-                Request.Headers.Add(PrestoHeader.PRESTO_USER.Value, this.Configuration.User);
+                request.Headers.Add(PrestoHeader.PRESTO_USER.Value, this.Configuration.User.Replace(":", ""));
+
+                if (!String.IsNullOrEmpty(this.Configuration.Password))
+                {
+                    request.Headers.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"{this.Configuration.User.Replace(":", "")}:{this.Configuration.Password}")));
+                }
             }
 
-            return Request;
+            return request;
         }
 
         /// <summary>
