@@ -405,7 +405,7 @@ namespace BAMCIS.PrestoClient
         /// <summary>
         /// Kills an active query statement
         /// </summary>
-        /// <param name="queryId">The Id of the query to kill</param>
+        /// <param name="queryId">The id of the query to kill</param>
         /// <returns>No value is returned, but the method will throw an exception if it was not successful</returns>
         public async Task KillQuery(string queryId)
         {
@@ -436,21 +436,21 @@ namespace BAMCIS.PrestoClient
         }
 
         /// <summary>
-        /// This service returns information and statistics about queries that
-        /// are currently being executed on a Presto coordinator.
+        /// This method returns information and statistics about queries that
+        /// are currently being executed on a Presto coordinator that have not been purged
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Details on the queries</returns>
         public async Task<ListQueriesV1Response> GetQueries()
         {
             return await GetQueries(CancellationToken.None);
         }
 
         /// <summary>
-        /// This service returns information and statistics about queries that
-        /// are currently being executed on a Presto coordinator.
+        /// This method returns information and statistics about queries that
+        /// are currently being executed on a Presto coordinator that have not been purged
         /// </summary>
         /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
-        /// <returns></returns>
+        /// <returns>Details on the queries</returns>
         public async Task<ListQueriesV1Response> GetQueries(CancellationToken cancellationToken)
         {
             HttpClient LocalClient = (this.Configuration.IgnoreSslErrors) ? this.IgnoreSslErrorClient : this.NormalClient;
@@ -474,23 +474,21 @@ namespace BAMCIS.PrestoClient
         }
 
         /// <summary>
-        /// If you are looking to gather very detailed statistics about a
-        /// query, this is the service you would call.
+        /// Gets a detailed summary of the specified query
         /// </summary>
         /// <param name="queryId">The id of the query to retrieve details about.</param>
-        /// <returns>Information about the specified query.</returns>
+        /// <returns>Detailed summary of the query</returns>
         public async Task<GetQueryV1Response> GetQuery(string queryId)
         {
             return await GetQuery(queryId, CancellationToken.None);
         }
 
         /// <summary>
-        /// If you are looking to gather very detailed statistics about a
-        /// query, this is the service you would call.
+        /// Gets a detailed summary of the specified query
         /// </summary>
         /// <param name="queryId">The id of the query to retrieve details about.</param>
         /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
-        /// <returns>Information about the specified query.</returns>
+        /// <returns>Detailed summary of the query</returns>
         public async Task<GetQueryV1Response> GetQuery(string queryId, CancellationToken CancellationToken)
         {
             HttpClient LocalClient = (this.Configuration.IgnoreSslErrors) ? this.IgnoreSslErrorClient : this.NormalClient;
@@ -514,23 +512,21 @@ namespace BAMCIS.PrestoClient
         }
 
         /// <summary>
-        /// If you are looking to gather very detailed statistics about a
-        /// query, this is the service you would call.
+        /// Gets a detailed summary of the specified query
         /// </summary>
         /// <param name="queryId">The id of the query to retrieve details about.</param>
-        /// <returns>Information about the specified query.</returns>
+        /// <returns>Detailed summary of the query</returns>
         public async Task<GetQueryV1Response> GetQuery(QueryId queryId)
         {
             return await GetQuery(queryId, CancellationToken.None);
         }
 
         /// <summary>
-        /// If you are looking to gather very detailed statistics about a
-        /// query, this is the service you would call.
+        /// Gets a detailed summary of the specified query
         /// </summary>
         /// <param name="queryId">The id of the query to retrieve details about.</param>
         /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
-        /// <returns>Information about the specified query.</returns>
+        /// <returns>Detailed summary of the query</returns>
         public async Task<GetQueryV1Response> GetQuery(QueryId queryId, CancellationToken cancellationToken)
         {
             return await this.GetQuery(queryId.ToString(), cancellationToken);
@@ -541,7 +537,7 @@ namespace BAMCIS.PrestoClient
         #region Statements
 
         /// <summary>
-        /// Submits a statement to Presto for execution. The Presto client 
+        /// Submits a Presto SQL statement for execution. The Presto client 
         /// executes queries on behalf of a user against a catalog and a schema.
         /// </summary>
         /// <param name="request">The query execution request.</param>
@@ -552,7 +548,7 @@ namespace BAMCIS.PrestoClient
         }
 
         /// <summary>
-        /// Submits a statement to Presto for execution. The Presto client 
+        /// Submits a Presto SQL statement for execution. The Presto client 
         /// executes queries on behalf of a user against a catalog and a schema.
         /// </summary>
         /// <param name="request">The query execution request.</param>
@@ -695,7 +691,6 @@ namespace BAMCIS.PrestoClient
                 }
             }
         }
-
 
         /// <summary>
         /// This API is not yet available in Presto as of version 0.197
