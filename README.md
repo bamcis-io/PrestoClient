@@ -26,6 +26,9 @@ Console.WriteLine(String.Join("\n", queryResponse.Response.DataToJson()));
 
 ## Revision History
 
+### 0.198.5
+Converted `Thread.Sleep` to `Task.Delay`.
+
 ### 0.198.4-beta
 Added `CancellationToken` support to all client methods.
 
