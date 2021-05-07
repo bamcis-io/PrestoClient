@@ -631,7 +631,7 @@ namespace BAMCIS.PrestoClient
                         ))
                     {
                         // Put a pause in between each call to reduce CPU usage
-                        Thread.Sleep(this.Configuration.CheckInterval);
+                        await Task.Delay(this.Configuration.CheckInterval, cancellationToken);
 
                         // This is the last non-null uri
                         LastUri = Path;
@@ -954,7 +954,7 @@ namespace BAMCIS.PrestoClient
                             // Retry with an exponential backoff
                             int Milliseconds = (int)Math.Floor(Math.Pow(2, Counter) * 1000);
                             Milliseconds += new Random().Next(0, 1000);
-                            Thread.Sleep(Milliseconds);
+                            await Task.Delay(Milliseconds, cancellationToken);
 
                             Counter++;
 
