@@ -34,6 +34,7 @@ namespace BAMCIS.PrestoClient
         private int _CheckInterval;
         private HashSet<string> _ClientTags;
         private IDictionary<string, string> _Properties;
+        private IDictionary<string, string> _Headers;
 
         #endregion
 
@@ -212,6 +213,50 @@ namespace BAMCIS.PrestoClient
                 }
 
                 this._Properties = value;
+            }
+        }
+
+        /// <summary>
+        /// Headers to be appended to each request made to presto db.
+        /// For example: { "X-Trino-Catalog", "hive" }
+        /// </summary>
+        public IDictionary<string, string> Headers
+        {
+
+            get
+            {
+                return this._Headers;
+            }
+            set
+            {
+                foreach (KeyValuePair<string, string> Item in value)
+                {
+                    if (String.IsNullOrEmpty(Item.Key))
+                    {
+                        throw new ArgumentNullException("Headers", "Header key name is empty.");
+                    }
+
+                    if (Item.Key.Contains("="))
+                    {
+                        throw new FormatException($"Header key name must not contain '=' : {Item.Key}");
+                    }
+
+                    string AsciiKey = Encoding.ASCII.GetString(Encoding.ASCII.GetBytes(Item.Key));
+
+                    if (!AsciiKey.Equals(Item.Key))
+                    {
+                        throw new FormatException($"Header key name contains non US_ASCII characters: {Item.Key}");
+                    }
+
+                    string AsciiValue = Encoding.ASCII.GetString(Encoding.ASCII.GetBytes(Item.Value));
+
+                    if (!AsciiValue.Equals(Item.Value))
+                    {
+                        throw new FormatException($"Header value contains non US_ASCII characters: {Item.Value}");
+                    }
+                }
+
+                this._Headers = value;
             }
         }
 

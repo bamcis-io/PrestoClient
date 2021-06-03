@@ -1163,10 +1163,20 @@ namespace BAMCIS.PrestoClient
                 }
             }
 
-            // If any session or query client tags were provided, add tem
+            // If any session or query client tags were provided, add them
             if (Tags.Any())
             {
                 request.Headers.Add(PrestoHeader.PRESTO_CLIENT_TAGS.Value, String.Join(",", Tags));
+            }
+
+            // Add custom headers to the request
+            if (this.Configuration.Headers != null)
+            {
+                foreach (var header in this.Configuration.Headers)
+                {
+                    // "If the specified header is already present, values are added to the comma-separated list of values associated with the header."
+                    request.Headers.Add(header.Key, header.Value);
+                }
             }
         }
 
