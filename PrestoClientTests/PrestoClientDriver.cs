@@ -14,7 +14,6 @@ namespace PrestoClient.Tests
     public class PrestoClientDriver
     {
         private static string Schema = "cars";
-        private static string S3_Location = "";
 
         public PrestoClientDriver()
         { }
@@ -33,7 +32,7 @@ namespace PrestoClient.Tests
             IPrestoClient client = new PrestodbClient(config);
 
             // ACT
-            ExecuteQueryV1Request req = new ExecuteQueryV1Request($"CREATE SCHEMA IF NOT EXISTS hive.{Schema}");
+            ExecuteQueryV1Request req = new ExecuteQueryV1Request($"CREATE SCHEMA IF NOT EXISTS memory.{Schema}");
 
             //mock.Verify(x => x.ExecuteQueryV1(captor.Capture()));
             //req.
@@ -51,12 +50,12 @@ namespace PrestoClient.Tests
             PrestoClientSessionConfig Config = new PrestoClientSessionConfig()
             {
                 Host = "localhost",
-                Port = 8080
+                Port = 8080,
             };
 
             IPrestoClient Client = new PrestodbClient(Config);
 
-            ExecuteQueryV1Request Req = new ExecuteQueryV1Request($"CREATE SCHEMA IF NOT EXISTS hive.{Schema}");
+            ExecuteQueryV1Request Req = new ExecuteQueryV1Request($"CREATE SCHEMA IF NOT EXISTS memory.{Schema}");
 
             // ACT
             ExecuteQueryV1Response Res = await Client.ExecuteQueryV1(Req);
@@ -69,7 +68,7 @@ namespace PrestoClient.Tests
         public async Task CreateTable()
         {
             // ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Schema)
+            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("memory", Schema)
             {
                 Host = "localhost",
                 Port = 8080
@@ -77,7 +76,7 @@ namespace PrestoClient.Tests
 
             IPrestoClient Client = new PrestodbClient(Config);
 
-            ExecuteQueryV1Request Req = new ExecuteQueryV1Request($"CREATE TABLE IF NOT EXISTS tracklets (id bigint, objectclass varchar, length double, trackdata array(varchar), platform varchar,spectrum varchar, timestamp bigint) WITH (format = 'AVRO', external_location = '{S3_Location}');");
+            ExecuteQueryV1Request Req = new ExecuteQueryV1Request($"CREATE TABLE IF NOT EXISTS tracklets (id bigint, objectclass varchar, length double, trackdata array(varchar), platform varchar,spectrum varchar, timestamp bigint);");
 
             // ACT
             ExecuteQueryV1Response Res = await Client.ExecuteQueryV1(Req);
@@ -90,13 +89,13 @@ namespace PrestoClient.Tests
         public async Task TestExecuteStatement()
         { 
             //ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Schema) {
+            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("tpch", Schema) {
                 Host = "localhost",
-                Port = 8080
+                Port = 8080,
             };
             IPrestoClient Client = new PrestodbClient(Config);
 
-            ExecuteQueryV1Request Req = new ExecuteQueryV1Request("select * from tracklets limit 5;");
+            ExecuteQueryV1Request Req = new ExecuteQueryV1Request("SELECT * FROM tiny.region");
 
             // ACT
             ExecuteQueryV1Response Res = await Client.ExecuteQueryV1(Req);
@@ -109,14 +108,14 @@ namespace PrestoClient.Tests
         public async Task TestExecuteStatementOrderBy()
         {
             //ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Schema)
+            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("tpch", Schema)
             {
                 Host = "localhost",
                 Port = 8080
             };
             IPrestoClient Client = new PrestodbClient(Config);
 
-            ExecuteQueryV1Request Req = new ExecuteQueryV1Request("select * from tracklets ORDER BY length limit 5;");
+            ExecuteQueryV1Request Req = new ExecuteQueryV1Request("SELECT * FROM tiny.customer ORDER BY name limit 5");
 
             // ACT
             ExecuteQueryV1Response Res = await Client.ExecuteQueryV1(Req);
@@ -129,14 +128,14 @@ namespace PrestoClient.Tests
         public async Task TestExecuteStatementWhere()
         {
             //ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Schema)
+            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("tpch", Schema)
             {
                 Host = "localhost",
                 Port = 8080
             };
             IPrestoClient Client = new PrestodbClient(Config);
 
-            ExecuteQueryV1Request Req = new ExecuteQueryV1Request("select id,length,objectclass from tracklets WHERE length > 1000 LIMIT 5;");
+            ExecuteQueryV1Request Req = new ExecuteQueryV1Request("select custkey, name, address from tiny.customer WHERE custkey > 500 LIMIT 5;");
 
             // ACT
             ExecuteQueryV1Response Res = await Client.ExecuteQueryV1(Req);
@@ -149,14 +148,14 @@ namespace PrestoClient.Tests
         public async Task TestQueryResultDataToJson()
         {
             //ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Schema)
+            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("tpch", Schema)
             {
                 Host = "localhost",
                 Port = 8080
             };
             IPrestoClient Client = new PrestodbClient(Config);
 
-            ExecuteQueryV1Request Req = new ExecuteQueryV1Request("select * from tracklets limit 5;");
+            ExecuteQueryV1Request Req = new ExecuteQueryV1Request("SELECT * FROM tiny.region");
 
             // ACT
             ExecuteQueryV1Response Res = await Client.ExecuteQueryV1(Req);
@@ -171,14 +170,14 @@ namespace PrestoClient.Tests
         public async Task TestQueryResultDataToCsv()
         {
             //ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Schema)
+            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("tpch", Schema)
             {
                 Host = "localhost",
                 Port = 8080
             };
             IPrestoClient Client = new PrestodbClient(Config);
 
-            ExecuteQueryV1Request Req = new ExecuteQueryV1Request("select * from tracklets limit 5;");
+            ExecuteQueryV1Request Req = new ExecuteQueryV1Request("SELECT * FROM tiny.region");
 
             // ACT
             ExecuteQueryV1Response Res = await Client.ExecuteQueryV1(Req);
@@ -193,7 +192,7 @@ namespace PrestoClient.Tests
         public async Task TestListQueries()
         {
             //ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Schema)
+            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("tpch", Schema)
             {
                 Host = "localhost",
                 Port = 8080
@@ -211,10 +210,11 @@ namespace PrestoClient.Tests
         public async Task TestGetQuery()
         {
             //ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Schema)
+            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("tpch", Schema)
             {
                 Host = "localhost",
-                Port = 8080
+                Port = 8080,
+                User = "test"
             };
             IPrestoClient Client = new PrestodbClient(Config);
 
