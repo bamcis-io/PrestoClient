@@ -19,9 +19,9 @@ IPrestoClient client = new PrestodbClient(config);
 ExecuteQueryV1Request request = new ExecuteQueryV1Request("select * from tracklets limit 5;");
 ExecuteQueryV1Response queryResponse = await client.ExecuteQueryV1(request);
 
-Console.WriteLine(String.Join("\n", queryResponse.Response.DataToCsv()));
+Console.WriteLine(String.Join("\n", queryResponse.DataToCsv()));
 Console.WriteLine("-------------------------------------------------------------------");
-Console.WriteLine(String.Join("\n", queryResponse.Response.DataToJson()));
+Console.WriteLine(String.Join("\n", queryResponse.DataToJson()));
 ```
 
 ## Revision History
