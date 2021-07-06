@@ -11,6 +11,11 @@ namespace BAMCIS.PrestoClient.Model.Client
     public enum StatementState
     {
         /// <summary>
+        /// Query has been accepted and is waiting for its prerequisites to be complete.
+        /// </summary>
+        WAITING_FOR_PREREQUISITES,
+
+        /// <summary>
         /// Query has been accepted and is awaiting execution.
         /// </summary>
         QUEUED,
