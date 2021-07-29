@@ -13,6 +13,9 @@ namespace BAMCIS.PrestoClient.Model.Client
         public StatementState State { get; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool WaitingForPrerequisites { get; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public bool Queued { get; }
 
         public bool Scheduled { get; }
@@ -34,6 +37,8 @@ namespace BAMCIS.PrestoClient.Model.Client
         public Int64 WallTimeMillis { get; }
 
         public Int64 QueuedTimeMillis { get; }
+
+        public Int64 WaitingForPrerequisitesTimeMillis { get; }
 
         public Int64 ElapsedTimeMillis { get; }
 
@@ -69,6 +74,7 @@ namespace BAMCIS.PrestoClient.Model.Client
         [JsonConstructor]
         public StatementStats(
             string state,
+            bool waitingForPrerequisites,
             bool queued,
             bool scheduled,
             int nodes,
@@ -79,6 +85,7 @@ namespace BAMCIS.PrestoClient.Model.Client
             long userTimeMillis,
             long cpuTimeMillis,
             long wallTimeMillis,
+            long waitingForPrerequisitesTimeMillis,
             long queuedTimeMillis,
             long elapsedTimeMillis,
             long processedRows,
@@ -88,6 +95,7 @@ namespace BAMCIS.PrestoClient.Model.Client
         )
         {
             this.State = (StatementState)Enum.Parse(typeof(StatementState), state);
+            this.WaitingForPrerequisites = waitingForPrerequisites;
             this.Queued = queued;
             this.Scheduled = scheduled;
             this.Nodes = nodes;
@@ -98,6 +106,7 @@ namespace BAMCIS.PrestoClient.Model.Client
             this.UserTimeMillis = userTimeMillis;
             this.CpuTimeMillis = cpuTimeMillis;
             this.WallTimeMillis = wallTimeMillis;
+            this.WaitingForPrerequisitesTimeMillis = waitingForPrerequisitesTimeMillis;
             this.QueuedTimeMillis = queuedTimeMillis;
             this.ElapsedTimeMillis = elapsedTimeMillis;
             this.ProcessedRows = processedRows;
@@ -114,6 +123,7 @@ namespace BAMCIS.PrestoClient.Model.Client
         {
             return StringHelper.Build(this)
                 .Add("state", this.State)
+                .Add("waitingForPrerequisites", this.WaitingForPrerequisites)
                 .Add("queued", this.Queued)
                 .Add("scheduled", this.Scheduled)
                 .Add("nodes", this.Nodes)
@@ -123,6 +133,7 @@ namespace BAMCIS.PrestoClient.Model.Client
                 .Add("completedSplits", this.CompletedSplits)
                 .Add("userTimeMillis", this.UserTimeMillis)
                 .Add("cpuTimeMillis", this.CpuTimeMillis)
+                .Add("waitingForPrerequisitesTimeMillis", this.WaitingForPrerequisitesTimeMillis)
                 .Add("wallTimeMillis", this.WallTimeMillis)
                 .Add("queuedTimeMillis", this.QueuedTimeMillis)
                 .Add("elapsedTimeMillis", this.ElapsedTimeMillis)

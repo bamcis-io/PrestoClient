@@ -4,10 +4,10 @@
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <AssemblyName>PrestoClient</AssemblyName>
     <RootNamespace>BAMCIS.PrestoClient</RootNamespace>
-    <Version>0.198.5</Version>
+    <Version>0.256.0-beta</Version>
     <Authors>Michael Haken</Authors>
     <Company>bamcis.io</Company>
-    <PackageReleaseNotes>This is a presto db .NET client for Presto version 0.198.</PackageReleaseNotes>
+    <PackageReleaseNotes>This is a presto db .NET client for Presto version 0.256. This is a beta release, full functionality has not been completely tested.</PackageReleaseNotes>
     <Copyright>2021 bamcis.io</Copyright>
     <PackageProjectUrl>https://github.com/bamcis-io/PrestoClient</PackageProjectUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -17,7 +17,7 @@
     <RepositoryType>Git</RepositoryType>
     <Description>A .NET Core client for Presto.</Description>
     <PackageLicenseUrl></PackageLicenseUrl>
-    <AssemblyVersion>0.198.5.0</AssemblyVersion>
+    <AssemblyVersion>0.256.0.0</AssemblyVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>prestoclient.snk</AssemblyOriginatorKeyFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
