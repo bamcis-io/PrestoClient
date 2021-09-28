@@ -26,6 +26,12 @@ Console.WriteLine(String.Join("\n", queryResponse.DataToJson()));
 
 ## Revision History
 
+### 0.351-beta
+Updates to switch to new `Trino` naming standard.
+
+### 0.256-beta
+Updates to support .NET 5 and updated `StatementStats.cs` to add the new `WAITING_FOR_PREREQUISITES` header.
+
 ### 0.198.5
 Converted `Thread.Sleep` to `Task.Delay`.
 

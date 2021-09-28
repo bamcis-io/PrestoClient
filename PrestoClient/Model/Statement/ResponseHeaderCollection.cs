@@ -29,17 +29,17 @@ namespace BAMCIS.PrestoClient.Model.Statement
 
         #region Constructors
 
-        public ResponseHeaderCollection(HttpResponseHeaders headers)
+        public ResponseHeaderCollection(HttpResponseHeaders headers, ProtocolHeaders pHeaders)
         {
             IEnumerable<string> Temp;
 
             // Extract the catalog and schema
-            if (headers.TryGetValues(PrestoHeader.PRESTO_SET_CATALOG.Value, out Temp))
+            if (headers.TryGetValues(pHeaders.RESPONSE_SET_CATALOG, out Temp))
             {
                 this.Catalog = Temp.FirstOrDefault();
             }
 
-            if (headers.TryGetValues(PrestoHeader.PRESTO_SET_SCHEMA.Value, out Temp))
+            if (headers.TryGetValues(pHeaders.RESPONSE_SET_SCHEMA, out Temp))
             {
                 this.Schema = Temp.FirstOrDefault();
             }
@@ -47,7 +47,7 @@ namespace BAMCIS.PrestoClient.Model.Statement
             // Extract the session properties
             this.SessionProperties = new Dictionary<string, string>();
 
-            if (headers.TryGetValues(PrestoHeader.PRESTO_SET_SESSION.Value, out Temp))
+            if (headers.TryGetValues(pHeaders.RESPONSE_SET_SESSION, out Temp))
             {
                 foreach (string Value in Temp)
                 {
@@ -63,7 +63,7 @@ namespace BAMCIS.PrestoClient.Model.Statement
             }
 
             // Extract the reset session properties
-            if (headers.TryGetValues(PrestoHeader.PRESTO_CLEAR_SESSION.Value, out Temp))
+            if (headers.TryGetValues(pHeaders.RESPONSE_CLEAR_SESSION, out Temp))
             {
                 this.ResetSessionProperties = new HashSet<string>(Temp);
             }
@@ -75,7 +75,7 @@ namespace BAMCIS.PrestoClient.Model.Statement
             // Extract added prepare
             this.AddedPrepare = new Dictionary<string, string>();
 
-            if (headers.TryGetValues(PrestoHeader.PRESTO_ADDED_PREPARE.Value, out Temp))
+            if (headers.TryGetValues(pHeaders.RESPONSE_ADDED_PREPARE, out Temp))
             {
                 foreach (string Value in Temp)
                 {
@@ -91,7 +91,7 @@ namespace BAMCIS.PrestoClient.Model.Statement
             }
 
             // Get the deallocated prepared statements
-            if (headers.TryGetValues(PrestoHeader.PRESTO_DEALLOCATED_PREPARE.Value, out Temp))
+            if (headers.TryGetValues(pHeaders.RESPONSE_DEALLOCATED_PREPARE, out Temp))
             {
                 this.DeallocatedPreparedStatements = new HashSet<string>(Temp.Select(x => WebUtility.UrlDecode(x)));
             }
@@ -101,13 +101,13 @@ namespace BAMCIS.PrestoClient.Model.Statement
             }
 
             // Get the started transactionid
-            if (headers.TryGetValues(PrestoHeader.PRESTO_STARTED_TRANSACTION_ID.Value, out Temp))
+            if (headers.TryGetValues(pHeaders.RESPONSE_STARTED_TRANSACTION_ID, out Temp))
             {
                 this.StartedTransactionId = Temp.FirstOrDefault();
             }
 
             // Check is clear transaction id was set
-            bool ClearTransactionId = headers.Contains(PrestoHeader.PRESTO_CLEAR_TRANSACTION_ID.Value);
+            bool clearTransactionId = headers.Contains(pHeaders.RESPONSE_CLEAR_TRANSACTION_ID);
         }
 
         #endregion

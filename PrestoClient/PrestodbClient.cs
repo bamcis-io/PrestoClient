@@ -97,6 +97,8 @@ namespace BAMCIS.PrestoClient
             this.IgnoreSslErrorClient = new HttpClient(this.IgnoreSslErrorHandler);
         }
 
+        private ProtocolHeaders protocolHeaders;
+
         #endregion
 
         #region Public Properties
@@ -113,6 +115,8 @@ namespace BAMCIS.PrestoClient
             this.Configuration = new PrestoClientSessionConfig();
 
             this.InitializeHttpClients();
+
+            this.protocolHeaders = this.GetProtocolHeaders();
         }
 
         public PrestodbClient(PrestoClientSessionConfig config)
@@ -120,6 +124,8 @@ namespace BAMCIS.PrestoClient
             this.Configuration = config ?? throw new ArgumentNullException("config", "The presto client configuration cannot be null.");
 
             this.InitializeHttpClients();
+
+            this.protocolHeaders = this.GetProtocolHeaders();
         }
 
         #endregion
@@ -563,59 +569,59 @@ namespace BAMCIS.PrestoClient
             }
 
             // Track all of the incremental results as they are returned
-            List<QueryResultsV1> Results = new List<QueryResultsV1>();
+            List<QueryResultsV1> results = new List<QueryResultsV1>();
 
             // Choose the correct client to use for ssl errors
-            HttpClient LocalClient = (this.Configuration.IgnoreSslErrors) ? this.IgnoreSslErrorClient : this.NormalClient;
+            HttpClient localClient = (this.Configuration.IgnoreSslErrors) ? this.IgnoreSslErrorClient : this.NormalClient;
 
             // Build the url path
-            Uri Path = this.BuildUri("/statement");
+            Uri path = this.BuildUri("/statement");
 
             // Create a new request to post with the query
-            HttpRequestMessage Request = this.BuildRequest(Path, HttpMethod.Post, new StringContent(request.Query));
+            HttpRequestMessage httpRequest = this.BuildRequest(path, HttpMethod.Post, new StringContent(request.Query));
 
             // Add all of the configured headers to the request
-            this.BuildQueryHeaders(ref Request, request.Options);
+            this.BuildQueryHeaders(ref httpRequest, request.Options);
 
             // Use the stopwatch to measure if we've exceeded the specified timeout
-            Stopwatch SW = new Stopwatch();
+            Stopwatch sw = new Stopwatch();
 
             if (this.Configuration.ClientRequestTimeout > 0)
             {
-                SW.Start();
+                sw.Start();
             }
 
             // This is the original submission result, will contain the nextUri
             // property to follow in order to get the results
-            HttpResponseMessage ResponseMessage = await this.MakeHttpRequest(LocalClient, Request, cancellationToken: cancellationToken);
+            HttpResponseMessage responseMessage = await this.MakeHttpRequest(localClient, httpRequest, cancellationToken: cancellationToken);
 
             // This doesn't really do anything but evaluate the headers right now
-            this.ProcessResponseHeaders(ResponseMessage);
+            ResponseHeaderCollection responseHeaders = this.ProcessResponseHeaders(responseMessage);
 
-            string Content = await ResponseMessage.Content.ReadAsStringAsync();
+            string content = await responseMessage.Content.ReadAsStringAsync();
 
             // If parsing the submission response fails, return and exit
-            if (!QueryResultsV1.TryParse(Content, out QueryResultsV1 Response, out Exception ParseEx))
+            if (!QueryResultsV1.TryParse(content, out QueryResultsV1 response, out Exception parseEx))
             {
-                throw new PrestoException($"The query submission response could not be parsed.", Content, ParseEx);
+                throw new PrestoException($"The query submission response could not be parsed.", content, parseEx);
             }
             else
             {
                 // Check to make sure there wasn't an error provided
-                if (Response.Error != null)
+                if (response.Error != null)
                 {
-                    throw new PrestoQueryException(Response.Error);
+                    throw new PrestoQueryException(response.Error);
                 }
 
-                Results.Add(Response);
+                results.Add(response);
 
                 // Keep track of the last, non-null uri so we can
                 // send a delete request to it at the end
-                Uri LastUri = Path;
+                Uri lastUri = path;
 
                 // Hold the new path to request against which will
                 // be updated in the do/while loop
-                Path = Response.NextUri;
+                path = response.NextUri;
 
                 try
                 {
@@ -624,9 +630,9 @@ namespace BAMCIS.PrestoClient
                     // finished, use  a while loop since the data may have 
                     // all been returned in the first request and no nextUri
                     // property was returned
-                    while (Path != null && 
+                    while (path != null && 
                         ((this.Configuration.ClientRequestTimeout > 0) ? 
-                        SW.Elapsed.TotalSeconds <= this.Configuration.ClientRequestTimeout : 
+                        sw.Elapsed.TotalSeconds <= this.Configuration.ClientRequestTimeout : 
                         true 
                         ))
                     {
@@ -634,52 +640,53 @@ namespace BAMCIS.PrestoClient
                         await Task.Delay(this.Configuration.CheckInterval, cancellationToken);
 
                         // This is the last non-null uri
-                        LastUri = Path;
+                        lastUri = path;
 
                         // Make the request and get back a valid response, otherwise
                         // the MakeRequest method will throw an exception
-                        Request = BuildRequest(Path, HttpMethod.Get);
+                        httpRequest = BuildRequest(path, HttpMethod.Get);
 
-                        ResponseMessage = await this.MakeHttpRequest(LocalClient, Request, cancellationToken: cancellationToken);
+                        responseMessage = await this.MakeHttpRequest(localClient, httpRequest, cancellationToken: cancellationToken);
 
-                        this.ProcessResponseHeaders(ResponseMessage);
+                        // Again, doesn't do anything, but can be evaluated in the future
+                        responseHeaders = this.ProcessResponseHeaders(responseMessage);
 
-                        Content = await ResponseMessage.Content.ReadAsStringAsync();
+                        content = await responseMessage.Content.ReadAsStringAsync();
 
                         // Make sure deserialization succeeded
-                        if (QueryResultsV1.TryParse(Content, out Response, out ParseEx))
+                        if (QueryResultsV1.TryParse(content, out response, out parseEx))
                         {
-                            Results.Add(Response);
+                            results.Add(response);
 
                             // Check to make sure there wasn't an error provided
-                            if (Response.Error != null)
+                            if (response.Error != null)
                             {
-                                throw new PrestoQueryException(Response.Error);
+                                throw new PrestoQueryException(response.Error);
                             }
 
                             // Update the path to the returned nextUri (which could be null)
-                            Path = Response.NextUri;
+                            path = response.NextUri;
                         }
                         else
                         {
-                            throw new PrestoException("The response from presto could not be deserialized.", Content, ParseEx);
+                            throw new PrestoException("The response from presto could not be deserialized.", content, parseEx);
                         }
                     }
 
-                    bool Closed = false;
+                    bool closed = false;
 
                     // Explicitly closes the query
-                    ResponseMessage = await LocalClient.SendAsync(new HttpRequestMessage(HttpMethod.Delete, LastUri), cancellationToken);
+                    responseMessage = await localClient.SendAsync(new HttpRequestMessage(HttpMethod.Delete, lastUri), cancellationToken);
 
                     // If a 204 is not returned, the query was not successfully closed
-                    if (ResponseMessage.StatusCode == HttpStatusCode.NoContent)
+                    if (responseMessage.StatusCode == HttpStatusCode.NoContent)
                     {
-                        Closed = true;
+                        closed = true;
                     }
 
-                    ExecuteQueryV1Response QueryResponse = new ExecuteQueryV1Response(Results, Closed);
+                    ExecuteQueryV1Response queryResponse = new ExecuteQueryV1Response(results, closed);
 
-                    return QueryResponse;
+                    return queryResponse;
                 }
                 catch (PrestoException e)
                 {
@@ -696,6 +703,8 @@ namespace BAMCIS.PrestoClient
         /// This API is not yet available in Presto as of version 0.197
         /// Submits a statement to Presto for execution. The Presto client
         /// executes queries on behalf of a user against a catalog and a schema.
+        /// 
+        /// https://github.com/prestodb/presto/wiki/Presto-v2-client-protocol
         /// </summary>
         /// <param name="request">The query execution request</param>
         /// <returns>
@@ -711,6 +720,8 @@ namespace BAMCIS.PrestoClient
         /// This API is not yet available in Presto as of version 0.197
         /// Submits a statement to Presto for execution. The Presto client
         /// executes queries on behalf of a user against a catalog and a schema.
+        /// 
+        /// https://github.com/prestodb/presto/wiki/Presto-v2-client-protocol
         /// </summary>
         /// <param name="request">The query execution request</param>
         /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
@@ -812,9 +823,9 @@ namespace BAMCIS.PrestoClient
                                             DataRows.Add(Row);
                                         }
 
-                                        if (DataResponse.Headers.Contains(PrestoHeader.PRESTO_DATA_NEXT_URI.Value))
+                                        if (DataResponse.Headers.Contains(this.protocolHeaders.RESPONSE_DATA_NEXT_URI))
                                         {
-                                            NextDataUri = new Uri(DataResponse.Headers.GetValues(PrestoHeader.PRESTO_DATA_NEXT_URI.Value).First());
+                                            NextDataUri = new Uri(DataResponse.Headers.GetValues(this.protocolHeaders.RESPONSE_DATA_NEXT_URI).First());
                                         }
                                         else
                                         {
@@ -1051,38 +1062,40 @@ namespace BAMCIS.PrestoClient
             request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             // Timezone will always be set
-            request.Headers.Add(PrestoHeader.PRESTO_TIME_ZONE.Value, this.Configuration.TimeZone.Id);
+            request.Headers.Add(this.protocolHeaders.REQUEST_TIME_ZONE, this.Configuration.TimeZone.Id);
 
             // Catalog
             if (!String.IsNullOrEmpty(this.Configuration.Catalog))
             {
-                request.Headers.Add(PrestoHeader.PRESTO_CATALOG.Value, this.Configuration.Catalog);
+                request.Headers.Add(this.protocolHeaders.REQUEST_CATALOG, this.Configuration.Catalog);
             }
 
             // Schema
             if (!String.IsNullOrEmpty(this.Configuration.Schema))
             {
-                request.Headers.Add(PrestoHeader.PRESTO_SCHEMA.Value, this.Configuration.Schema);
+                request.Headers.Add(this.protocolHeaders.REQUEST_SCHEMA, this.Configuration.Schema);
             }
 
             // ClientInfo
             if (!String.IsNullOrEmpty(this.Configuration.ClientInfo))
             {
-                request.Headers.Add(PrestoHeader.PRESTO_CLIENT_INFO.Value, this.Configuration.ClientInfo);
+                request.Headers.Add(this.protocolHeaders.REQUEST_CLIENT_INFO, this.Configuration.ClientInfo);
             }
 
             // Language
             if (this.Configuration.Locale != null)
             {
-                request.Headers.Add(PrestoHeader.PRESTO_LANGUAGE.Value, this.Configuration.Locale.Name);
+                request.Headers.Add(this.protocolHeaders.REQUEST_LANGUAGE, this.Configuration.Locale.Name);
             }
+
+            List<string> sessionValues = new List<string>();
 
             // Session properties
             if (this.Configuration.Properties != null)
-            {
+            {               
                 foreach (KeyValuePair<string, string> Property in this.Configuration.Properties)
                 {
-                    request.Headers.Add(PrestoHeader.PRESTO_SESSION.Value, $"{Property.Key}={Property.Value}");
+                    sessionValues.Add($"{Property.Key}={Property.Value}");
                 }
             }
 
@@ -1140,18 +1153,23 @@ namespace BAMCIS.PrestoClient
                 {
                     foreach (KeyValuePair<string, string> Property in options.Properties)
                     {
-                        request.Headers.Add(PrestoHeader.PRESTO_SESSION.Value, $"{Property.Key}={Property.Value}");
+                        sessionValues.Add($"{Property.Key}={Property.Value}");
                     }
                 }
 
                 if (!String.IsNullOrEmpty(options.TransactionId))
                 {
-                    request.Headers.Add(PrestoHeader.PRESTO_TRANSACTION_ID.Value, options.TransactionId);
+                    request.Headers.Add(this.protocolHeaders.REQUEST_TRANSACTION_ID, options.TransactionId);
                 }
                 else
                 {
-                    request.Headers.Add(PrestoHeader.PRESTO_TRANSACTION_ID.Value, "NONE");
+                    request.Headers.Add(this.protocolHeaders.REQUEST_TRANSACTION_ID, "NONE");
                 }
+            }
+
+            if (sessionValues.Any())
+            {
+                request.Headers.Add(this.protocolHeaders.REQUEST_SESSION, sessionValues);
             }
 
             // If any session or query prepared statements were provided, add them
@@ -1159,14 +1177,14 @@ namespace BAMCIS.PrestoClient
             {
                 foreach (KeyValuePair<string, string> Statement in PreparedStatements)
                 {
-                    request.Headers.Add(PrestoHeader.PRESTO_PREPARED_STATEMENT.Value, $"{WebUtility.UrlDecode(Statement.Key)}={WebUtility.UrlDecode(Statement.Value)}");
+                    request.Headers.Add(this.protocolHeaders.REQUEST_PREPARED_STATEMENT, $"{WebUtility.UrlDecode(Statement.Key)}={WebUtility.UrlDecode(Statement.Value)}");
                 }
             }
 
             // If any session or query client tags were provided, add tem
             if (Tags.Any())
             {
-                request.Headers.Add(PrestoHeader.PRESTO_CLIENT_TAGS.Value, String.Join(",", Tags));
+                request.Headers.Add(this.protocolHeaders.REQUEST_CLIENT_TAGS, String.Join(",", Tags));
             }
         }
 
@@ -1199,11 +1217,11 @@ namespace BAMCIS.PrestoClient
 
             request.Headers.Add("Accept", "application/json");
             request.Headers.Add("User-Agent", $"bamcis_presto_dotnet_core_sdk/{AssemblyVersion}");
-            request.Headers.Add(PrestoHeader.PRESTO_SOURCE.Value, "bamcis_presto_dotnet_core_sdk");
+            request.Headers.Add(this.protocolHeaders.REQUEST_SOURCE, "bamcis_presto_dotnet_core_sdk");
 
             if (!String.IsNullOrEmpty(this.Configuration.User))
             {
-                request.Headers.Add(PrestoHeader.PRESTO_USER.Value, this.Configuration.User.Replace(":", ""));
+                request.Headers.Add(this.protocolHeaders.REQUEST_USER, this.Configuration.User.Replace(":", ""));
 
                 if (!String.IsNullOrEmpty(this.Configuration.Password))
                 {
@@ -1221,9 +1239,13 @@ namespace BAMCIS.PrestoClient
         /// <returns>The collection of values that were set by presto in the http headers</returns>
         private ResponseHeaderCollection ProcessResponseHeaders(HttpResponseMessage response)
         {
-            return new ResponseHeaderCollection(response.Headers);
+            return new ResponseHeaderCollection(response.Headers, this.protocolHeaders);
         }
 
+        private ProtocolHeaders GetProtocolHeaders()
+        {
+            return new ProtocolHeaders(this.Configuration.EnableLegacyHeaderCompatibility ? "Presto" : "Trino");
+        }
         #endregion
     }
 }

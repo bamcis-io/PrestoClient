@@ -172,7 +172,7 @@ namespace BAMCIS.PrestoClient
         /// 
         /// { "optimize_hash_generation", "true" }
         /// 
-        /// See https://prestodb.io/docs/current/admin/properties.html for information on
+        /// See https://trino.io/docs/current/admin/properties.html for information on
         /// available properties that can be set
         /// </summary>
         public IDictionary<string, string> Properties
@@ -263,6 +263,12 @@ namespace BAMCIS.PrestoClient
         /// </summary>
         public long ClientRequestTimeout { get; set; }
 
+        /// <summary>
+        /// Starting in Trino version 0.351, the server began using the X-Trino- header
+        /// prefix. Set this to true to use the legacy X-Presto-X header prefix.
+        /// </summary>
+        public bool EnableLegacyHeaderCompatibility { get; set; }
+
         #endregion
 
         #region Constructor
@@ -286,6 +292,7 @@ namespace BAMCIS.PrestoClient
             this.TimeZone = TimeZoneKey.GetTimeZoneKey(0);
             this.Locale = CultureInfo.CurrentCulture;
             this.ClientRequestTimeout = _DEFAULT_TIMEOUT;
+            this.EnableLegacyHeaderCompatibility = false;
         }
 
         /// <summary>
