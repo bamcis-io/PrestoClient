@@ -24,6 +24,24 @@ Console.WriteLine("-------------------------------------------------------------
 Console.WriteLine(String.Join("\n", queryResponse.DataToJson()));
 ```
 
+## Setup
+
+### Development
+
+This project has most of the batteries included to test and verify that the app works
+
+1. Install docker and docker-compose
+
+2. Launch dev environment
+    ```bash
+    $ make env-up
+    ```
+
+3. Run test(s)
+    ```bash
+    $ make test
+    ```
+
 ## Revision History
 
 ### 0.351-beta
