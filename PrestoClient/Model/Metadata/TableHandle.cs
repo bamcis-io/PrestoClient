@@ -11,7 +11,7 @@ namespace BAMCIS.PrestoClient.Model.Metadata
     {
         #region Public Properties
 
-        public ConnectorId ConnectorId { get; }
+        public CatalogHandle catalogHandle { get; }
 
         /// <summary>
         /// TODO: Supposed to be an IConnectorTableHandle
@@ -23,9 +23,9 @@ namespace BAMCIS.PrestoClient.Model.Metadata
         #region Constructors
 
         [JsonConstructor]
-        public TableHandle(ConnectorId connectorId, dynamic connectorHandle)
+        public TableHandle(CatalogHandle catalogHandle, dynamic connectorHandle)
         {
-            this.ConnectorId = connectorId ?? throw new ArgumentNullException("connectorId");
+            this.catalogHandle = catalogHandle ?? throw new ArgumentNullException("catalogHandle");
             this.ConnectorHandle = connectorHandle ?? throw new ArgumentNullException("connectorHandle");
         }
 
@@ -35,7 +35,7 @@ namespace BAMCIS.PrestoClient.Model.Metadata
 
         public override string ToString()
         {
-            return $"{this.ConnectorId}:{this.ConnectorHandle}";
+            return $"{this.catalogHandle}:{this.ConnectorHandle}";
         }
 
         #endregion

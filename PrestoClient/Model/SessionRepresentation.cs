@@ -67,7 +67,7 @@ namespace BAMCIS.PrestoClient.Model
         public IDictionary<string, string> SystemProperties { get; set; }
 
 
-        public IDictionary<ConnectorId, IDictionary<string, string>> CatalogProperties { get; set; }
+        public IDictionary<CatalogHandle, IDictionary<string, string>> CatalogProperties { get; set; }
 
 
         public IDictionary<string, string> PreparedStatements { get; set; }

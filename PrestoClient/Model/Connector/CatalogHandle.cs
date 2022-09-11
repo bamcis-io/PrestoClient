@@ -5,10 +5,10 @@ using System;
 namespace BAMCIS.PrestoClient.Model.Connector
 {
     /// <summary>
-    /// From com.facebook.presto.connector.ConnectorId.java
+    /// From com.facebook.presto.connector.CatalogHandle.java
     /// </summary>
     [JsonConverter(typeof(ToStringJsonConverter))]
-    public class ConnectorId
+    public class CatalogHandle
     {
         #region Private Fields
 
@@ -26,7 +26,7 @@ namespace BAMCIS.PrestoClient.Model.Connector
         #region Constructors
 
         [JsonConstructor]
-        public ConnectorId(string catalogName)
+        public CatalogHandle(string catalogName)
         {
             if (String.IsNullOrEmpty(catalogName))
             {
@@ -45,20 +45,20 @@ namespace BAMCIS.PrestoClient.Model.Connector
             return this.CatalogName;
         }
 
-        public static bool IsInternalSystemConnector(ConnectorId connectorId)
+        public static bool IsInternalSystemConnector(CatalogHandle catalogHandle)
         {
-            return connectorId.CatalogName.StartsWith(SYSTEM_TABLES_CONNECTOR_PREFIX) ||
-                    connectorId.CatalogName.StartsWith(INFORMATION_SCHEMA_CONNECTOR_PREFIX);
+            return catalogHandle.CatalogName.StartsWith(SYSTEM_TABLES_CONNECTOR_PREFIX) ||
+                    catalogHandle.CatalogName.StartsWith(INFORMATION_SCHEMA_CONNECTOR_PREFIX);
         }
 
-        public static ConnectorId CreateInformationSchemaConnectorId(ConnectorId connectorId)
+        public static CatalogHandle CreateInformationSchemaConnectorId(CatalogHandle catalogHandle)
         {
-            return new ConnectorId(INFORMATION_SCHEMA_CONNECTOR_PREFIX + connectorId.CatalogName);
+            return new CatalogHandle(INFORMATION_SCHEMA_CONNECTOR_PREFIX + catalogHandle.CatalogName);
         }
 
-        public static ConnectorId CreateSystemTablesConnectorId(ConnectorId connectorId)
+        public static CatalogHandle CreateSystemTablesConnectorId(CatalogHandle catalogHandle)
         {
-            return new ConnectorId(SYSTEM_TABLES_CONNECTOR_PREFIX + connectorId.CatalogName);
+            return new CatalogHandle(SYSTEM_TABLES_CONNECTOR_PREFIX + catalogHandle.CatalogName);
         }
 
         #endregion

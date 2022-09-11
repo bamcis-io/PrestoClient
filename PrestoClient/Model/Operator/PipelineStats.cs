@@ -44,8 +44,6 @@ namespace BAMCIS.PrestoClient.Model.Operator
 
         public DataSize RevocableMemoryReservation { get; }
 
-        public DataSize SystemMemoryReservation { get; }
-
         public DistributionSnapshot QueuedTime { get; }
 
         public DistributionSnapshot ElapsedTime { get; }
@@ -109,7 +107,6 @@ namespace BAMCIS.PrestoClient.Model.Operator
 
             DataSize userMemoryReservation,
             DataSize revocableMemoryReservation,
-            DataSize systemMemoryReservation,
 
             DistributionSnapshot queuedTime,
             DistributionSnapshot elapsedTime,
@@ -167,7 +164,6 @@ namespace BAMCIS.PrestoClient.Model.Operator
 
             this.UserMemoryReservation = userMemoryReservation ?? throw new ArgumentNullException("userMemoryReservation");
             this.RevocableMemoryReservation = revocableMemoryReservation ?? throw new ArgumentNullException("revocableMemoryReservation");
-            this.SystemMemoryReservation = systemMemoryReservation ?? throw new ArgumentNullException("systemMemoryReservation");
 
             this.QueuedTime = queuedTime;
             this.ElapsedTime = elapsedTime;

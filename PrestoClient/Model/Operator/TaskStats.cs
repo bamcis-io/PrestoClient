@@ -49,8 +49,6 @@ namespace BAMCIS.PrestoClient.Model.Operator
 
         public DataSize RevocableMemoryReservation { get; }
 
-        public DataSize SystemMemoryReservation { get; }
-
         [JsonConverter(typeof(TimeSpanConverter))]
         public TimeSpan TotalScheduledTime { get; }
 
@@ -108,7 +106,6 @@ namespace BAMCIS.PrestoClient.Model.Operator
             double cumulativeUserMemory,
             DataSize userMemoryReservation,
             DataSize revocableMemoryReservation,
-            DataSize systemMemoryReservation,
 
             TimeSpan totalScheduledTime,
             TimeSpan totalCpuTime,
@@ -163,7 +160,6 @@ namespace BAMCIS.PrestoClient.Model.Operator
             this.CumulativeUserMemory = cumulativeUserMemory;
             this.UserMemoryReservation = userMemoryReservation ?? throw new ArgumentNullException("userMemoryReservation");
             this.RevocableMemoryReservation = revocableMemoryReservation ?? throw new ArgumentNullException("revocableMemoryReservation");
-            this.SystemMemoryReservation = systemMemoryReservation ?? throw new ArgumentNullException("systemMemoryReservation");
 
             this.TotalScheduledTime = totalScheduledTime;
             this.TotalCpuTime = totalCpuTime;

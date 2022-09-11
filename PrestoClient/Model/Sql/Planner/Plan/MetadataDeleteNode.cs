@@ -16,18 +16,15 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
 
         public Symbol Output { get; }
 
-        public TableLayoutHandle TableLayout { get; }
-
         #endregion
 
         #region Constructors
 
         [JsonConstructor]
-        public MetadataDeleteNode(PlanNodeId id, DeleteHandle target, Symbol output, TableLayoutHandle tableLayout) : base(id)
+        public MetadataDeleteNode(PlanNodeId id, DeleteHandle target, Symbol output) : base(id)
         {
             this.Target = target ?? throw new ArgumentNullException("target");
             this.Output = output ?? throw new ArgumentNullException("output");
-            this.TableLayout = tableLayout ?? throw new ArgumentNullException("tableLayout");
         }
 
         #endregion

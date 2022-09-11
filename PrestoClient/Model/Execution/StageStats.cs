@@ -18,10 +18,6 @@ namespace BAMCIS.PrestoClient.Model.Execution
 
         public DistributionSnapshot GetSplitDistribution { get; }
 
-        public DistributionSnapshot ScheduleTaskDistribution { get; }
-
-        public DistributionSnapshot AddSplitDistribution { get; }
-
         public int TotalTasks { get; }
 
         public int RunningTasks { get; }
@@ -85,8 +81,6 @@ namespace BAMCIS.PrestoClient.Model.Execution
             DateTime schedulingComplete,
             
             DistributionSnapshot getSplitDistribution,
-            DistributionSnapshot scheduleTaskDistribution,
-            DistributionSnapshot addSplitDistribution,
 
             int totalTasks,
             int runningTasks,
@@ -123,8 +117,6 @@ namespace BAMCIS.PrestoClient.Model.Execution
         {
             this.SchedulingComplete = schedulingComplete;
             this.GetSplitDistribution = getSplitDistribution ?? throw new ArgumentNullException("getSplitDistribution");
-            this.ScheduleTaskDistribution = scheduleTaskDistribution ?? throw new ArgumentNullException("scheduleTaskDistribution");
-            this.AddSplitDistribution = addSplitDistribution ?? throw new ArgumentNullException("addSplitDistribution");
 
             ParameterCheck.OutOfRange(totalTasks >= 0, "totalTasks", "The total tasks cannot less than 0.");
             ParameterCheck.OutOfRange(runningTasks >= 0, "runningTasks", "The running tasks cannot less than 0.");

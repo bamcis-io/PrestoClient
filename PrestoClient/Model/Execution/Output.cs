@@ -11,7 +11,7 @@ namespace BAMCIS.PrestoClient.Model.Execution
     {
         #region Public Properties
 
-        public ConnectorId ConnectorId { get; }
+        public CatalogHandle CatalogHandle { get; }
 
         public string Schema { get; }
 
@@ -22,8 +22,13 @@ namespace BAMCIS.PrestoClient.Model.Execution
         #region Constructors
 
         [JsonConstructor]
-        public Output(ConnectorId connectorId, string schema, string table)
+        public Output(string catalogName, string schema, string table)
         {
+            if (String.IsNullOrEmpty(catalogName))
+            {
+                throw new ArgumentNullException("catalogName", "catalogName cannot be null or empty.");
+            }
+
             if (String.IsNullOrEmpty(schema))
             {
                 throw new ArgumentNullException("schema", "Schema cannot be null or empty.");
@@ -34,7 +39,7 @@ namespace BAMCIS.PrestoClient.Model.Execution
                 throw new ArgumentNullException("table", "Table cannot be null or empty.");
             }
 
-            this.ConnectorId = connectorId ?? throw new ArgumentNullException("connectorId", "The connector id cannot be null.");
+            this.CatalogHandle = new CatalogHandle(catalogName);
         }
 
         #endregion
