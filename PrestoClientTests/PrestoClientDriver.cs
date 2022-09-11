@@ -3,9 +3,11 @@ using BAMCIS.PrestoClient.Interfaces;
 using BAMCIS.PrestoClient.Model.Query;
 using BAMCIS.PrestoClient.Model.Server;
 using BAMCIS.PrestoClient.Model.Statement;
+using BAMCIS.PrestoClient.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -21,7 +23,7 @@ namespace PrestoClient.Tests
         private string S3Location(string table){
             string bucket = Environment.GetEnvironmentVariable("S3_BUCKET") ?? "bucket";
             string prefix = Environment.GetEnvironmentVariable("S3_PREFIX") ?? "prefix";
-            return $"s3a://{bucket}/{prefix}/{table}";
+            return $"s3a://{bucket}/{prefix}/{Schema}.db/{table}/";
         }
 
         private PrestoClientSessionConfig GetConfigBasic()
@@ -57,14 +59,15 @@ namespace PrestoClient.Tests
             //mock.Verify(x => x.ExecuteQueryV1(captor.Capture()));
             //req.
             
-            ExecuteQueryV1Response res = await client.ExecuteQueryV1(req);
+            Func<Task> act = () => client.ExecuteQueryV1(req);
 
             // ASSERT
-            Assert.NotNull(res);
+            var exception = await Assert.ThrowsAsync<PrestoWebException>(act);
+            Assert.Contains("Password not allowed for insecure authentication", exception.Message);
         }
 
         [Fact]
-        public async Task CreateSchema()
+        public async Task TestCreateSchema()
         {
             // ARRANGE
             PrestoClientSessionConfig Config = GetConfigBasic();
@@ -81,7 +84,7 @@ namespace PrestoClient.Tests
         }
 
         [Fact]
-        public async Task CreateTable()
+        public async Task TestCreateTable()
         {
             // ARRANGE
             PrestoClientSessionConfig Config = GetConfig();
@@ -210,12 +213,20 @@ namespace PrestoClient.Tests
 
             foreach (BasicQueryInfo Item in Res.QueryInfo)
             {
-                GetQueryV1Response QRes = await Client.GetQuery(Item.QueryId);
-                Info.Add(QRes);
+                try
+                {
+                    GetQueryV1Response QRes = await Client.GetQuery(Item.QueryId);
+                    Info.Add(QRes);
+                }
+                catch (PrestoWebException e) when (e.StatusCode == HttpStatusCode.Gone)
+                {
+                    // Sometimes a query is _gone_ when iterating really deep into the list
+                }
             }
 
             // ASSERT
             Assert.True(Res != null && Info.All(x => x.DeserializationSucceeded == true));
+            Assert.True(Info.Count > 3, "Expected at-least some GetQuery requests to pass");
         }
     }
 }

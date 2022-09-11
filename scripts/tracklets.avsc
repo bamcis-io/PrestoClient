@@ -1,0 +1,35 @@
+{
+  "namespace": "PrestoClient.avro",
+  "type": "record",
+  "name": "Tracklets",
+  "fields": [
+    {
+      "name": "id",
+      "type": "long"
+    },
+    {
+      "name": "objectclass",
+      "type": "string"
+    },
+    {
+      "name": "length",
+      "type": "double"
+    },
+    {
+      "name": "trackdata",
+      "type": ["null", {"type": "array", "items": "string"}]
+    },
+    {
+      "name": "platform",
+      "type": "string"
+    },
+    {
+      "name": "spectrum",
+      "type": "string"
+    },
+    {
+      "name": "timestamp",
+      "type": "long"
+    }
+  ]
+}

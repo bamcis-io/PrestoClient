@@ -27,10 +27,17 @@ services:
     depends_on:
       localstack:
         condition: service_healthy
-    entrypoint: ["aws", "--endpoint-url", "http://localstack:4566", "s3api", "create-bucket", "--bucket", "${S3_BUCKET}"]
+    entrypoint: ["bash"]
+    command: ["./scripts/s3_setup.sh"]
+    volumes:
+      - ./scripts:/tmp/scripts
+    working_dir: /tmp
     environment:
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
+      - S3_ENDPOINT_URL=http://localstack:${LOCALSTACK_PORT}
+      - S3_BUCKET
+      - S3_PREFIX
 
   metastore:
     image: naushadh/hive-metastore:latest
