@@ -503,7 +503,7 @@ namespace BAMCIS.PrestoClient
 
             HttpRequestMessage Request = this.BuildRequest(Path, HttpMethod.Get);
 
-            HttpResponseMessage Response = await LocalClient.GetAsync(Path, CancellationToken);
+            HttpResponseMessage Response = await LocalClient.SendAsync(Request, CancellationToken);
 
             // Expect a 200 response
             if (Response.StatusCode != HttpStatusCode.OK)

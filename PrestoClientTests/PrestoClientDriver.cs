@@ -3,9 +3,11 @@ using BAMCIS.PrestoClient.Interfaces;
 using BAMCIS.PrestoClient.Model.Query;
 using BAMCIS.PrestoClient.Model.Server;
 using BAMCIS.PrestoClient.Model.Statement;
+using BAMCIS.PrestoClient.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -14,21 +16,40 @@ namespace PrestoClient.Tests
     public class PrestoClientDriver
     {
         private static string Schema = "cars";
-        private static string S3_Location = "";
 
         public PrestoClientDriver()
         { }
+
+        private string S3Location(string table){
+            string bucket = Environment.GetEnvironmentVariable("S3_BUCKET") ?? "bucket";
+            string prefix = Environment.GetEnvironmentVariable("S3_PREFIX") ?? "prefix";
+            return $"s3a://{bucket}/{prefix}/{Schema}.db/{table}/";
+        }
+
+        private PrestoClientSessionConfig GetConfigBasic()
+        {
+            return new PrestoClientSessionConfig()
+            {
+                Host = Environment.GetEnvironmentVariable("HOST") ?? "localhost",
+                Port = 8080,
+            };
+        }
+
+        private PrestoClientSessionConfig GetConfig()
+        {
+            PrestoClientSessionConfig basic = GetConfigBasic();
+            basic.Catalog = "hive";
+            basic.Schema = Schema;
+
+            return basic;
+        }
 
         [Fact]
         public async Task TestPassword()
         {
             // ARRANGE
-            PrestoClientSessionConfig config = new PrestoClientSessionConfig()
-            {
-                Host = "localhost",
-                Port = 8080,
-                Password = "password1!2@3#4$AA"
-            };
+            PrestoClientSessionConfig config = GetConfigBasic();
+            config.Password = "password1!2@3#4$AA";
 
             IPrestoClient client = new PrestodbClient(config);
 
@@ -38,21 +59,18 @@ namespace PrestoClient.Tests
             //mock.Verify(x => x.ExecuteQueryV1(captor.Capture()));
             //req.
             
-            ExecuteQueryV1Response res = await client.ExecuteQueryV1(req);
+            Func<Task> act = () => client.ExecuteQueryV1(req);
 
             // ASSERT
-            Assert.NotNull(res);
+            var exception = await Assert.ThrowsAsync<PrestoWebException>(act);
+            Assert.Contains("Password not allowed for insecure authentication", exception.Message);
         }
 
         [Fact]
-        public async Task CreateSchema()
+        public async Task TestCreateSchema()
         {
             // ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig()
-            {
-                Host = "localhost",
-                Port = 8080
-            };
+            PrestoClientSessionConfig Config = GetConfigBasic();
 
             IPrestoClient Client = new PrestodbClient(Config);
 
@@ -66,18 +84,14 @@ namespace PrestoClient.Tests
         }
 
         [Fact]
-        public async Task CreateTable()
+        public async Task TestCreateTable()
         {
             // ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Schema)
-            {
-                Host = "localhost",
-                Port = 8080
-            };
+            PrestoClientSessionConfig Config = GetConfig();
 
             IPrestoClient Client = new PrestodbClient(Config);
 
-            ExecuteQueryV1Request Req = new ExecuteQueryV1Request($"CREATE TABLE IF NOT EXISTS tracklets (id bigint, objectclass varchar, length double, trackdata array(varchar), platform varchar,spectrum varchar, timestamp bigint) WITH (format = 'AVRO', external_location = '{S3_Location}');");
+            ExecuteQueryV1Request Req = new ExecuteQueryV1Request($"CREATE TABLE IF NOT EXISTS tracklets (id bigint, objectclass varchar, length double, trackdata array(varchar), platform varchar,spectrum varchar, timestamp bigint) WITH (format = 'AVRO', external_location = '{S3Location("tracklets")}');");
 
             // ACT
             ExecuteQueryV1Response Res = await Client.ExecuteQueryV1(Req);
@@ -90,10 +104,7 @@ namespace PrestoClient.Tests
         public async Task TestExecuteStatement()
         { 
             //ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Schema) {
-                Host = "localhost",
-                Port = 8080
-            };
+            PrestoClientSessionConfig Config = GetConfig();
             IPrestoClient Client = new PrestodbClient(Config);
 
             ExecuteQueryV1Request Req = new ExecuteQueryV1Request("select * from tracklets limit 5;");
@@ -109,11 +120,7 @@ namespace PrestoClient.Tests
         public async Task TestExecuteStatementOrderBy()
         {
             //ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Schema)
-            {
-                Host = "localhost",
-                Port = 8080
-            };
+            PrestoClientSessionConfig Config = GetConfig();
             IPrestoClient Client = new PrestodbClient(Config);
 
             ExecuteQueryV1Request Req = new ExecuteQueryV1Request("select * from tracklets ORDER BY length limit 5;");
@@ -129,11 +136,7 @@ namespace PrestoClient.Tests
         public async Task TestExecuteStatementWhere()
         {
             //ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Schema)
-            {
-                Host = "localhost",
-                Port = 8080
-            };
+            PrestoClientSessionConfig Config = GetConfig();
             IPrestoClient Client = new PrestodbClient(Config);
 
             ExecuteQueryV1Request Req = new ExecuteQueryV1Request("select id,length,objectclass from tracklets WHERE length > 1000 LIMIT 5;");
@@ -149,11 +152,7 @@ namespace PrestoClient.Tests
         public async Task TestQueryResultDataToJson()
         {
             //ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Schema)
-            {
-                Host = "localhost",
-                Port = 8080
-            };
+            PrestoClientSessionConfig Config = GetConfig();
             IPrestoClient Client = new PrestodbClient(Config);
 
             ExecuteQueryV1Request Req = new ExecuteQueryV1Request("select * from tracklets limit 5;");
@@ -171,11 +170,7 @@ namespace PrestoClient.Tests
         public async Task TestQueryResultDataToCsv()
         {
             //ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Schema)
-            {
-                Host = "localhost",
-                Port = 8080
-            };
+            PrestoClientSessionConfig Config = GetConfig();
             IPrestoClient Client = new PrestodbClient(Config);
 
             ExecuteQueryV1Request Req = new ExecuteQueryV1Request("select * from tracklets limit 5;");
@@ -184,6 +179,7 @@ namespace PrestoClient.Tests
             ExecuteQueryV1Response Res = await Client.ExecuteQueryV1(Req);
 
             string Csv = String.Join("\n", Res.DataToCsv());
+            Console.WriteLine(Csv);
 
             // ASSERT
             Assert.True(Res.QueryClosed == true && !String.IsNullOrEmpty(Csv));
@@ -193,11 +189,7 @@ namespace PrestoClient.Tests
         public async Task TestListQueries()
         {
             //ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Schema)
-            {
-                Host = "localhost",
-                Port = 8080
-            };
+            PrestoClientSessionConfig Config = GetConfig();
             IPrestoClient Client = new PrestodbClient(Config);
 
             // ACT
@@ -211,11 +203,7 @@ namespace PrestoClient.Tests
         public async Task TestGetQuery()
         {
             //ARRANGE
-            PrestoClientSessionConfig Config = new PrestoClientSessionConfig("hive", Schema)
-            {
-                Host = "localhost",
-                Port = 8080
-            };
+            PrestoClientSessionConfig Config = GetConfig();
             IPrestoClient Client = new PrestodbClient(Config);
 
             // ACT
@@ -225,12 +213,20 @@ namespace PrestoClient.Tests
 
             foreach (BasicQueryInfo Item in Res.QueryInfo)
             {
-                GetQueryV1Response QRes = await Client.GetQuery(Item.QueryId);
-                Info.Add(QRes);
+                try
+                {
+                    GetQueryV1Response QRes = await Client.GetQuery(Item.QueryId);
+                    Info.Add(QRes);
+                }
+                catch (PrestoWebException e) when (e.StatusCode == HttpStatusCode.Gone)
+                {
+                    // Sometimes a query is _gone_ when iterating really deep into the list
+                }
             }
 
             // ASSERT
             Assert.True(Res != null && Info.All(x => x.DeserializationSucceeded == true));
+            Assert.True(Info.Count > 3, "Expected at-least some GetQuery requests to pass");
         }
     }
 }
