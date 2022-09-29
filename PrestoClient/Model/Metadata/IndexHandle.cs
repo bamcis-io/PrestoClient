@@ -11,7 +11,7 @@ namespace BAMCIS.PrestoClient.Model.Metadata
     {
         #region Public Properties
 
-        public ConnectorId ConnectorId { get; }
+        public CatalogHandle CatalogHandle { get; }
 
         /// <summary>
         /// TODO: Supposed to be IConnectorTransactionHandle
@@ -28,9 +28,9 @@ namespace BAMCIS.PrestoClient.Model.Metadata
         #region Constructors
 
         [JsonConstructor]
-        public IndexHandle(ConnectorId connectorId, dynamic transactionHandle, dynamic connectorHandle)
+        public IndexHandle(CatalogHandle catalogHandle, dynamic transactionHandle, dynamic connectorHandle)
         {
-            this.ConnectorId = connectorId ?? throw new ArgumentNullException("connectorId");
+            this.CatalogHandle = catalogHandle ?? throw new ArgumentNullException("catalogHandle");
             this.TransactionHandle = transactionHandle ?? throw new ArgumentNullException("transactionHandle");
             this.ConnectorHandle = connectorHandle ?? throw new ArgumentNullException("connectorHandle");
         }
@@ -41,7 +41,7 @@ namespace BAMCIS.PrestoClient.Model.Metadata
 
         public override string ToString()
         {
-            return $"{this.ConnectorId}:{this.TransactionHandle}:{this.ConnectorHandle}";
+            return $"{this.CatalogHandle}:{this.TransactionHandle}:{this.ConnectorHandle}";
         }
 
         #endregion

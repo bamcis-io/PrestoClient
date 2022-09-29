@@ -13,7 +13,7 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         [Optional]
-        public ConnectorId ConnectorId { get; }
+        public CatalogHandle CatalogHandle { get; }
 
         /// <summary>
         /// TODO: This should be an IConnectorTransactionHandle, but all of the 
@@ -34,14 +34,14 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner
         #region Constructors
 
         [JsonConstructor]
-        public PartitioningHandle(ConnectorId connectorId, dynamic transactionHandle, dynamic connectorHandle)
+        public PartitioningHandle(CatalogHandle catalogHandle, dynamic transactionHandle, dynamic connectorHandle)
         {
-            this.ConnectorId = connectorId;
+            this.CatalogHandle = catalogHandle;
             this.TransactionHandle = transactionHandle;
             this.ConnectorHandle = connectorHandle ?? throw new ArgumentNullException("connectorHandle");
 
             // If connector id is not null, then it will check the second condition
-            ParameterCheck.Check(this.ConnectorId == null || this.TransactionHandle != null, "Transaction handle required when connector id is present.");
+            ParameterCheck.Check(this.CatalogHandle == null || this.TransactionHandle != null, "Transaction handle required when connector id is present.");
         }
 
         #endregion
@@ -64,9 +64,9 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner
 
         public override string ToString()
         {
-            if (this.ConnectorId != null)
+            if (this.CatalogHandle != null)
             {
-                return $"{this.ConnectorId.ToString()}:{this.ConnectorHandle.ToString()}";
+                return $"{this.CatalogHandle.ToString()}:{this.ConnectorHandle.ToString()}";
             }
             else
             {

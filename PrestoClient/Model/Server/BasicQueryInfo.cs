@@ -1,6 +1,5 @@
 ﻿using BAMCIS.PrestoClient.Model.Execution;
 using BAMCIS.PrestoClient.Model.SPI;
-using BAMCIS.PrestoClient.Model.SPI.Memory;
 using Newtonsoft.Json;
 using System;
 
@@ -20,8 +19,6 @@ namespace BAMCIS.PrestoClient.Model.Server
         public SessionRepresentation Session { get;  }
 
         public QueryState State { get;  }
-
-        public MemoryPoolId MemoryPool { get; }
 
         public bool Scheduled { get; }
 
@@ -46,7 +43,6 @@ namespace BAMCIS.PrestoClient.Model.Server
             QueryId queryId,
             SessionRepresentation session,
             QueryState state,
-            MemoryPoolId memoryPool,
             bool scheduled,
             Uri self,
             string query,
@@ -60,7 +56,6 @@ namespace BAMCIS.PrestoClient.Model.Server
             this.QueryId = queryId ?? throw new ArgumentNullException("queryId");
             this.Session = session ?? throw new ArgumentNullException("session");
             this.State = state;
-            this.MemoryPool = memoryPool;
             this.ErrorType = errorType;
             this.ErrorCode = errorCode;
             this.Scheduled = scheduled;
@@ -70,7 +65,7 @@ namespace BAMCIS.PrestoClient.Model.Server
         }
 
         public BasicQueryInfo(QueryInfo queryInfo) : 
-            this(queryInfo.QueryId, queryInfo.Session, queryInfo.State, queryInfo.MemoryPool, queryInfo.Scheduled, queryInfo.Self,
+            this(queryInfo.QueryId, queryInfo.Session, queryInfo.State, queryInfo.Scheduled, queryInfo.Self,
                 queryInfo.Query, new BasicQueryStats(queryInfo.QueryStats), queryInfo.ErrorType, queryInfo.ErrorCode)
         {            
         }

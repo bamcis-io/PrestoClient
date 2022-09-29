@@ -15,27 +15,27 @@ namespace BAMCIS.PrestoClient.Model.Execution
 
         public double Total { get; }
 
-        public long P01 { get; }
+        public double P01 { get; }
 
-        public long P05 { get; }
+        public double P05 { get; }
 
-        public long P10 { get; }
+        public double P10 { get; }
 
-        public long P25 { get; }
+        public double P25 { get; }
 
-        public long P50 { get; }
+        public double P50 { get; }
 
-        public long P75 { get; }
+        public double P75 { get; }
 
-        public long P90 { get; }
+        public double P90 { get; }
 
-        public long P95 { get; }
+        public double P95 { get; }
 
-        public long P99 { get; }
+        public double P99 { get; }
 
-        public long Min { get; }
+        public double Min { get; }
 
-        public long Max { get; }
+        public double Max { get; }
 
         #endregion
 
@@ -46,17 +46,17 @@ namespace BAMCIS.PrestoClient.Model.Execution
             double maxError,
             double count,
             double total,
-            long p01,
-            long p05,
-            long p10,
-            long p25,
-            long p50,
-            long p75,
-            long p90,
-            long p95,
-            long p99,
-            long min,
-            long max
+            double p01,
+            double p05,
+            double p10,
+            double p25,
+            double p50,
+            double p75,
+            double p90,
+            double p95,
+            double p99,
+            double min,
+            double max
             )
         {
             this.MaxError = maxError;

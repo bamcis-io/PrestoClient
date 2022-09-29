@@ -17,8 +17,6 @@ namespace BAMCIS.PrestoClient.Model.Execution
 
         public StageState State { get; }
 
-        public Uri Self { get; }
-
         public PlanFragment Plan { get; }
 
         /// <summary>
@@ -42,7 +40,6 @@ namespace BAMCIS.PrestoClient.Model.Execution
         public StageInfo(
             StageId stageId,
             StageState state,
-            Uri self,
             PlanFragment plan,
             IEnumerable<string> types,
             StageStats stageStats,
@@ -53,7 +50,6 @@ namespace BAMCIS.PrestoClient.Model.Execution
         {
             this.StageId = stageId ?? throw new ArgumentNullException("stageId");
             this.State = state;
-            this.Self = self ?? throw new ArgumentNullException("self");
             this.Plan = plan;
             this.Types = types;
             this.StageStats = stageStats ?? throw new ArgumentNullException("stageStats");

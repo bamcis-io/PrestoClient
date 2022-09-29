@@ -25,15 +25,6 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
         /// </summary>
         public IDictionary<string, dynamic> Assignments { get; }
 
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        [Optional]
-        public TableLayoutHandle Layout { get; }
-
-        /// <summary>
-        /// TODO: TupleDomain<IColumnHandle>
-        /// </summary>
-        public TupleDomainPlaceHolder<dynamic> CurrentConstraint { get; }
-
         /// <summary>
         /// TODO: Supposed to be Expression
         /// </summary>
@@ -49,7 +40,6 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
             TableHandle table, 
             IEnumerable<Symbol> outputSymbols, 
             IDictionary<string, dynamic> assignments, 
-            TableLayoutHandle layout,
             TupleDomainPlaceHolder<dynamic> currentConstraint,
             dynamic originalConstraint
             ) : base(id)
@@ -58,8 +48,6 @@ namespace BAMCIS.PrestoClient.Model.Sql.Planner.Plan
             this.OutputSymbols = outputSymbols ?? throw new ArgumentNullException("outputSymbols");
             this.Assignments = assignments ?? throw new ArgumentNullException("assignments");
             this.OriginalConstraint = originalConstraint;
-            this.Layout = layout ?? throw new ArgumentNullException("layout");
-            this.CurrentConstraint = currentConstraint ?? throw new ArgumentNullException("currentConstraint");
 
             ParameterCheck.Check(this.OutputSymbols.All(x => this.Assignments.Keys.Contains(x.ToString())), "Assignments does not cover all of outputs.");
         }

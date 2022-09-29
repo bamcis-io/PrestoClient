@@ -12,7 +12,7 @@ namespace BAMCIS.PrestoClient.Model.Execution
     {
         #region Public Properties
 
-        public ConnectorId ConnectorId { get;  }
+        public string CatalogName { get;  }
 
         public string Schema { get;  }
 
@@ -31,7 +31,7 @@ namespace BAMCIS.PrestoClient.Model.Execution
 
         #region Constructors
 
-        public Input(ConnectorId connectorId, string schema, string table, IEnumerable<Column> columns, PrestoQueryConnectorInfo connectorInfo = null)
+        public Input(string CatalogName, string schema, string table, IEnumerable<Column> columns, PrestoQueryConnectorInfo connectorInfo = null)
         {
             if (String.IsNullOrEmpty(schema))
             {
@@ -43,7 +43,7 @@ namespace BAMCIS.PrestoClient.Model.Execution
                 throw new ArgumentNullException("table", "The table cannot be null or empty.");
             }
 
-            this.ConnectorId = connectorId ?? throw new ArgumentNullException("connectorId", "The connector id cannot be null.");
+            this.CatalogName = CatalogName ?? throw new ArgumentNullException("catalogName", "The catalogName cannot be null.");
             this.Columns = columns ?? throw new ArgumentNullException("columns", "The columns cannot be null.");
             this.ConnectorInfo = connectorInfo;
         }

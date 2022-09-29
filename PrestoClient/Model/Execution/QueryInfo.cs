@@ -1,6 +1,5 @@
 ﻿using BAMCIS.PrestoClient.Model.Client;
 using BAMCIS.PrestoClient.Model.SPI;
-using BAMCIS.PrestoClient.Model.SPI.Memory;
 using BAMCIS.PrestoClient.Model.Transaction;
 using Newtonsoft.Json;
 using System;
@@ -20,8 +19,6 @@ namespace BAMCIS.PrestoClient.Model.Execution
         public SessionRepresentation Session { get; }
 
         public QueryState State { get; }
-
-        public MemoryPoolId MemoryPool { get; }
 
         public bool Scheduled { get; }
 
@@ -99,7 +96,6 @@ namespace BAMCIS.PrestoClient.Model.Execution
             QueryId queryId,
             SessionRepresentation session,
             QueryState state,
-            MemoryPoolId memoryPool,
             bool scheduled,
             Uri self,
             IEnumerable<string> fieldNames,
@@ -131,7 +127,6 @@ namespace BAMCIS.PrestoClient.Model.Execution
             this.QueryId = queryId ?? throw new ArgumentNullException("queryId");
             this.Session = session ?? throw new ArgumentNullException("session");
             this.State = state;
-            this.MemoryPool = memoryPool ?? throw new ArgumentNullException("memoryPool");
             this.Scheduled = scheduled;
             this.Self = self ?? throw new ArgumentNullException("self");
             this.FieldNames = fieldNames ?? throw new ArgumentNullException("fieldNames");

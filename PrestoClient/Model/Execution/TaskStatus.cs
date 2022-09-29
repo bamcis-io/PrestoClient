@@ -43,9 +43,7 @@ namespace BAMCIS.PrestoClient.Model.Execution
 
         public Uri Self { get; }
 
-        public Guid NodeId { get; }
-
-        public HashSet<Lifespan> CompletedDriverGroups { get; }
+        public string NodeId { get; }
 
         public IEnumerable<ExecutionFailureInfo> Failures { get; }
 
@@ -59,8 +57,6 @@ namespace BAMCIS.PrestoClient.Model.Execution
 
         public DataSize MemoryReservation { get; }
 
-        public DataSize SystemMemoryReservation { get; }
-
         #endregion
 
         #region Constructors
@@ -72,15 +68,13 @@ namespace BAMCIS.PrestoClient.Model.Execution
             long version,
             TaskState state,
             Uri self,
-            Guid nodeId,
-            HashSet<Lifespan> completedDriverGroups,
+            string nodeId,
             IEnumerable<ExecutionFailureInfo> failures,
             int queuedPartitionDrivers,
             int runningPartitionDrivers,
             bool outputBufferOverutilized,
             DataSize physicalWrittenDataSize,
-            DataSize memoryReservation,
-            DataSize systemMemoryReservation
+            DataSize memoryReservation
             )
         {
             ParameterCheck.OutOfRange(version >= MIN_VERSION, "version", $"The version cannot be less than the minimum version of {MIN_VERSION}.");
@@ -93,14 +87,12 @@ namespace BAMCIS.PrestoClient.Model.Execution
             this.State = state;
             this.Self = self ?? throw new ArgumentNullException("self");
             this.NodeId = nodeId;
-            this.CompletedDriverGroups = completedDriverGroups ?? throw new ArgumentNullException("completedDriverGroups");
 
             this.QueuedPartitionedDrivers = queuedPartitionDrivers;
             this.RunningPartitionedDrivers = runningPartitionDrivers;
             this.OutputBufferOverutilized = outputBufferOverutilized;
             this.PhysicalWrittenDataSize = physicalWrittenDataSize ?? throw new ArgumentNullException("physicalWrittenDataSize");
             this.MemoryReservation = memoryReservation ?? throw new ArgumentNullException("memoryReservation");
-            this.SystemMemoryReservation = systemMemoryReservation ?? throw new ArgumentNullException("systemMemoryReservation");
             this.Failures = failures ?? throw new ArgumentNullException("failures");
         }
 
@@ -124,13 +116,11 @@ namespace BAMCIS.PrestoClient.Model.Execution
                 MIN_VERSION,
                 TaskState.PLANNED,
                 location,
-                 Guid.Parse(nodeId),
-                 new HashSet<Lifespan>(),
+                 nodeId,
                  new ExecutionFailureInfo[0],
                  0,
                  0,
                  false,
-                 new DataSize(0, DataSizeUnit.BYTE),
                  new DataSize(0, DataSizeUnit.BYTE),
                  new DataSize(0, DataSizeUnit.BYTE)
             );
@@ -145,14 +135,12 @@ namespace BAMCIS.PrestoClient.Model.Execution
                 state,
                 taskStatus.Self,
                 taskStatus.NodeId,
-                taskStatus.CompletedDriverGroups,
                 exceptions,
                 taskStatus.QueuedPartitionedDrivers,
                 taskStatus.RunningPartitionedDrivers,
                 taskStatus.OutputBufferOverutilized,
                 taskStatus.PhysicalWrittenDataSize,
-                taskStatus.MemoryReservation,
-                taskStatus.SystemMemoryReservation
+                taskStatus.MemoryReservation
             );
         }
 
