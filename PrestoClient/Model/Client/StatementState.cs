@@ -10,20 +10,22 @@ namespace BAMCIS.PrestoClient.Model.Client
     [JsonConverter(typeof(StringEnumConverter))]
     public enum StatementState
     {
+         WAITING_FOR_PREREQUISITES,
+
         /// <summary>
         /// Query has been accepted and is awaiting execution.
         /// </summary>
         QUEUED,
+
+        WAITING_FOR_RESOURCES,
+
+        DISPATCHING,
 
         /// <summary>
         /// Query is being planned.
         /// </summary>
         PLANNING,
 
-        /// <summary>
-        /// Query has been scheduled for execution.
-        /// </summary>
-        SCHEDULED,
 
         /// <summary>
         /// Query execution is being started.
