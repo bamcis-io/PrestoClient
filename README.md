@@ -24,6 +24,38 @@ Console.WriteLine("-------------------------------------------------------------
 Console.WriteLine(String.Join("\n", queryResponse.DataToJson()));
 ```
 
+### Batched Example 1
+
+This demonstrates how to execute a query and return the response in batches for "streaming" consumption, which is
+useful when processing large result sets without having to keep the entire deserialized resultset in memory.
+
+```csharp
+PrestoClientSessionConfig config = new PrestoClientSessionConfig("hive", "cars")
+{
+   Host = "localhost",
+   Port = 8080
+};
+
+IPrestoClient client = new PrestodbClient(config);
+ExecuteQueryV1Request request = new ExecuteQueryV1Request("select * from tracklets limit 500000;");
+ExecuteQueryV1BatchedResponse queryResponseBatched = await client.ExecuteQueryV1Batched(request);
+
+IReadOnlyList<Column> columns = await queryResponse.GetColumnsAsync(); // Gets column information
+
+// Iterate through the data row-by-row, fetching the next response batch only when needed
+await foreach (List<dynamic> dataRow in queryResponse.GetDataAsync())
+{
+   Console.WriteLine(String.Join("\n", dataRow.ToString()));
+}
+```
+
+## Local Testing
+
+A suite of regression integration tests are located the `PrestoClient.DevTest` project.
+
+1. Add required secrets to the `appsettings.TEST.json`.
+2. Use a test runner to run the test suite in PrestoClientManualTest.
+
 ## Revision History
 
 ### 0.198.5

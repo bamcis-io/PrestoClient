@@ -21,6 +21,8 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using BAMCIS.PrestoClient.Model.NodeInfo;
 using BAMCIS.PrestoClient.Model.SPI;
+using System.Runtime.CompilerServices;
+using System.IO;
 
 namespace BAMCIS.PrestoClient
 {
@@ -691,6 +693,213 @@ namespace BAMCIS.PrestoClient
                 }
             }
         }
+
+        public Task<PostStatementV1Response> PostStatementV1(PostStatementV1Request request)
+        {
+            return PostStatementV1(request, CancellationToken.None);
+        }
+
+        public async Task<PostStatementV1Response> PostStatementV1(PostStatementV1Request request, CancellationToken cancellationToken)
+        {
+            // Choose the correct client to use for ssl errors
+            HttpClient localClient = (this.Configuration.IgnoreSslErrors) ? this.IgnoreSslErrorClient : this.NormalClient;
+
+            // Build the url path
+            Uri path = this.BuildUri("/statement");
+
+            // Create a new request to post with the query
+            HttpRequestMessage requestMessage = this.BuildRequest(path, HttpMethod.Post, new StringContent(request.Query));
+
+            // Add all of the configured headers to the request
+            this.BuildQueryHeaders(ref requestMessage, request.Options);
+
+            // This is the original submission result, will contain the nextUri
+            // property to follow in order to get the results
+            HttpResponseMessage responseMessage = await this.MakeHttpRequest(localClient, requestMessage, cancellationToken: cancellationToken);
+
+            // This doesn't really do anything but evaluate the headers right now
+            this.ProcessResponseHeaders(responseMessage);
+
+            string content = await responseMessage.Content.ReadAsStringAsync();
+
+            // If parsing the submission response fails, return and exit
+            if (!QueryResultsV1.TryParse(content, out QueryResultsV1 queryResults, out Exception parseEx))
+            {
+                throw new PrestoException($"The query submission response could not be parsed.", content, parseEx);
+            }
+
+            // Check to make sure there wasn't an error provided
+            if (queryResults.Error != null)
+            {
+                throw new PrestoQueryException(queryResults.Error);
+            }
+
+            return new PostStatementV1Response(queryResults);
+        }
+
+        public Task<GetNextUriV1Response> GetNextUriV1(GetNextUriV1Request request)
+        {
+            return GetNextUriV1(request, CancellationToken.None);
+        }
+
+        public async Task<GetNextUriV1Response> GetNextUriV1(GetNextUriV1Request request, CancellationToken cancellationToken)
+        {
+            // Choose the correct client to use for ssl errors
+            HttpClient localClient = (this.Configuration.IgnoreSslErrors) ? this.IgnoreSslErrorClient : this.NormalClient;
+
+            // Make the request and get back a valid response, otherwise
+            // the MakeRequest method will throw an exception
+            HttpRequestMessage requestMessage = BuildRequest(request.NextUri, HttpMethod.Get);
+
+            HttpResponseMessage responseMessage = await this.MakeHttpRequest(localClient, requestMessage, cancellationToken: cancellationToken);
+
+            this.ProcessResponseHeaders(responseMessage);
+
+            string content = await responseMessage.Content.ReadAsStringAsync();
+
+            // If parsing the submission response fails, return and exit
+            if (!QueryResultsV1.TryParse(content, out QueryResultsV1 queryResults, out Exception parseEx))
+            {
+                throw new PrestoException("The response from presto could not be deserialized.", content, parseEx);
+            }
+
+            // Check to make sure there wasn't an error provided
+            if (queryResults.Error != null)
+            {
+                throw new PrestoQueryException(queryResults.Error);
+            }
+
+            return new GetNextUriV1Response(queryResults);
+        }
+
+        public Task<DeleteLastUriV1Response> DeleteLastUriV1(DeleteLastUriV1Request request)
+        {
+            return DeleteLastUriV1(request, CancellationToken.None);
+        }
+
+        public async Task<DeleteLastUriV1Response> DeleteLastUriV1(DeleteLastUriV1Request request, CancellationToken cancellationToken)
+        {
+            // Explicitly closes the query
+
+            // Choose the correct client to use for ssl errors
+            HttpClient localClient = (this.Configuration.IgnoreSslErrors) ? this.IgnoreSslErrorClient : this.NormalClient;
+
+            HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Delete, request.LastUri);
+
+            HttpResponseMessage responseMessage = await localClient.SendAsync(requestMessage, cancellationToken);
+
+            bool closed = false;
+            // If a 204 is not returned, the query was not successfully closed
+            if (responseMessage.StatusCode == HttpStatusCode.NoContent)
+            {
+                closed = true;
+            }
+
+            return new DeleteLastUriV1Response(closed);
+        }
+
+        /// <summary>
+        /// Submits a Presto SQL statement for execution. The Presto client
+        /// executes queries on behalf of a user against a catalog and a schema.
+        /// </summary>
+        /// <param name="request">The query execution request.</param>
+        /// <returns>The resulting response data, batch by batch, from the query.</returns>
+        public Task<ExecuteQueryV1BatchedResponse> ExecuteQueryV1Batched(ExecuteQueryV1Request request)
+        {
+            return ExecuteQueryV1Batched(request, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Submits a Presto SQL statement for execution. The Presto client
+        /// executes queries on behalf of a user against a catalog and a schema.
+        /// </summary>
+        /// <param name="request">The query execution request.</param>
+        /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        /// <returns>The resulting response data, batch by batch, from the query.</returns>
+        public async Task<ExecuteQueryV1BatchedResponse> ExecuteQueryV1Batched(ExecuteQueryV1Request request, CancellationToken cancellationToken)
+        {
+            // Check the required configuration items before running the query
+            if (!CheckConfiguration(out Exception Ex))
+            {
+                throw Ex;
+            }
+
+            var statementRequest = new PostStatementV1Request(request.Query, request.Options);
+
+            // Use the stopwatch to measure if we've exceeded the specified timeout in total
+            Stopwatch sw = new Stopwatch();
+            long timeoutSeconds = this.Configuration.ClientRequestTimeout;
+            if (timeoutSeconds > 0)
+            {
+                sw.Start();
+            }
+            var statementResponse = await this.PostStatementV1(statementRequest, cancellationToken);
+            if (timeoutSeconds > 0)
+            {
+                sw.Stop();
+            }
+
+            IAsyncEnumerable<QueryResultsV1> batchEnumerable = new ExecuteQueryV1BatchEnumerable(statementResponse, this);
+
+            async IAsyncEnumerable<QueryResultsV1> withTimeout(IAsyncEnumerable<QueryResultsV1> batches, Stopwatch sw, long timeoutSeconds)
+            {
+                sw.Start();
+                await foreach (var batch in batches)
+                {
+                    // Check for timeout
+                    if (sw.Elapsed.TotalSeconds >= timeoutSeconds)
+                    {
+                        yield break;
+                    }
+
+                    // Pause stopwatch before relinquishing control to caller
+                    sw.Stop();
+                    yield return batch;
+                    sw.Start();
+                }
+                sw.Stop();
+            }
+
+            if (timeoutSeconds > 0)
+            {
+                batchEnumerable = withTimeout(batchEnumerable, sw, timeoutSeconds);
+            }
+
+            return new ExecuteQueryV1BatchedResponse(batchEnumerable, cancellationToken);
+        }
+
+        ///// <summary>
+        ///// Submits a Presto SQL statement for execution. The Presto client
+        ///// executes queries on behalf of a user against a catalog and a schema.
+        ///// </summary>
+        ///// <param name="request">The query execution request.</param>
+        ///// <returns>The resulting response data, row by row, from the query.</returns>
+        //public Task<ExecuteQueryV1SequentialResponse> ExecuteQueryV1Sequential(ExecuteQueryV1Request request)
+        //{
+        //    return ExecuteQueryV1Sequential(request, CancellationToken.None);
+        //}
+
+        ///// <summary>
+        ///// Submits a Presto SQL statement for execution. The Presto client
+        ///// executes queries on behalf of a user against a catalog and a schema.
+        ///// </summary>
+        ///// <param name="request">The query execution request.</param>
+        ///// <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        ///// <returns>The resulting response data, row by row, from the query.</returns>
+        //public async Task<ExecuteQueryV1SequentialResponse> ExecuteQueryV1Sequential(ExecuteQueryV1Request request, [EnumeratorCancellation] CancellationToken cancellationToken)
+        //{
+        //    // Check the required configuration items before running the query
+        //    if (!CheckConfiguration(out Exception Ex))
+        //    {
+        //        throw Ex;
+        //    }
+
+        //    var statementRequest = new PostStatementV1Request(request.Query, request.Options);
+        //    var statementResponse = await this.PostStatementV1(statementRequest, cancellationToken);
+        //    var batchEnumerable = new ExecuteQueryV1BatchEnumerable(statementResponse, this);
+
+        //    return new ExecuteQueryV1SequentialResponse(batchEnumerable, cancellationToken);
+        //}
 
         /// <summary>
         /// This API is not yet available in Presto as of version 0.197

@@ -2,9 +2,11 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+
     <AssemblyName>PrestoClient</AssemblyName>
     <RootNamespace>BAMCIS.PrestoClient</RootNamespace>
-    <Version>0.198.5</Version>
+    <Version>0.198.6</Version>
     <Authors>Michael Haken</Authors>
     <Company>bamcis.io</Company>
     <PackageReleaseNotes>This is a presto db .NET client for Presto version 0.198.</PackageReleaseNotes>
@@ -31,6 +33,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="System.ComponentModel" Version="4.3.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>

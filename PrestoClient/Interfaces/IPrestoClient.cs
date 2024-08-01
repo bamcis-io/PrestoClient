@@ -4,6 +4,8 @@ using BAMCIS.PrestoClient.Model.Query;
 using BAMCIS.PrestoClient.Model.SPI;
 using BAMCIS.PrestoClient.Model.Statement;
 using BAMCIS.PrestoClient.Model.Thread;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -174,6 +176,23 @@ namespace BAMCIS.PrestoClient.Interfaces
         /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
         /// <returns>The resulting response object from the query.</returns>
         Task<ExecuteQueryV1Response> ExecuteQueryV1(ExecuteQueryV1Request request, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Submits a Presto SQL statement for execution. The Presto client
+        /// executes queries on behalf of a user against a catalog and a schema.
+        /// </summary>
+        /// <param name="request">The query execution request.</param>
+        /// <returns>The resulting response data, batch by batch, from the query.</returns>
+        Task<ExecuteQueryV1BatchedResponse> ExecuteQueryV1Batched(ExecuteQueryV1Request request);
+
+        /// <summary>
+        /// Submits a Presto SQL statement for execution. The Presto client
+        /// executes queries on behalf of a user against a catalog and a schema.
+        /// </summary>
+        /// <param name="request">The query execution request.</param>
+        /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        /// <returns>The resulting response data, batch by batch, from the query.</returns>
+        Task<ExecuteQueryV1BatchedResponse> ExecuteQueryV1Batched(ExecuteQueryV1Request request, CancellationToken cancellationToken);
 
         // Not yet available as of Presto 0.198
         // Task<ExecuteQueryResponse<QueryResultsV2>> ExecuteQueryV2(ExecuteQueryV2Request request);
