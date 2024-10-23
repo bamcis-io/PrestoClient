@@ -274,7 +274,7 @@ namespace BAMCIS.PrestoClient
         {
             this.Host = _DEFAULT_HOST;
             this.Port = _DEFAULT_PORT;
-            this.User = Environment.GetEnvironmentVariable("USERNAME") ?? Environment.GetEnvironmentVariable("USER");
+            this._User = Environment.GetEnvironmentVariable("USERNAME") ?? Environment.GetEnvironmentVariable("USER");
             this.CheckInterval = _QUERY_STATE_CHECK_INTERVAL;
             this.IgnoreSslErrors = false;
             this.UseSsl = false;
